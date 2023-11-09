@@ -50,6 +50,7 @@ namespace NExtractTools
 namespace NExtractTools
 {
 	_UINT32 docx2doct_bin(const std::wstring &sFrom, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params);
+	_UINT32 docx2doc(const std::wstring &sFrom, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params);
 	_UINT32 docx2doct(const std::wstring &sFrom, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params);
 	_UINT32 docx_dir2doct(const std::wstring &sFrom, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params, const std::wstring &sDocxFile);
 	_UINT32 docx_dir2doct_bin(const std::wstring &sFrom, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params, const std::wstring &sDocxFile);

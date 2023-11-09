@@ -41,6 +41,7 @@
 
 #include "../../OOXML/PPTXFormat/DrawingConverter/ASCOfficePPTXFile.h"
 #include "../../OOXML/XlsbFormat/Xlsb.h"
+#include "../../OOXML/DocxFormat/ConvertDocxToDoc.h"
 
 #include "../../MsBinaryFile/DocFile/Main/DocFormatLib.h"
 #include "../../MsBinaryFile/PptFile/Main/PPTFormatLib.h"
@@ -367,6 +368,12 @@ namespace NExtractTools
 		}
 
 		return nRes;
+	}
+	// docx -> doc
+	_UINT32 docx2doc(const std::wstring &sFrom, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params)
+	{
+		Docx2Doc::Converter convert;
+		return convert.SaveToFile(sFrom, sTo, params.getXmlOptions());
 	}
 	// docx -> doct
 	_UINT32 docx2doct(const std::wstring &sFrom, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params)
@@ -2939,6 +2946,7 @@ namespace NExtractTools
 		}
 		return nRes;
 	}
+	// docx -> txt
 	_UINT32 docx2txt(const std::wstring &sDocxDir, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params)
 	{
 		std::wstring sTempUnpackedDOCX = sTemp + FILE_SEPARATOR_STR + _T("docx_unpacked");
@@ -5595,6 +5603,10 @@ namespace NExtractTools
 			case TCD_NON_AUTO:
 			{
 				result = AVS_FILEUTILS_ERROR_CONVERT_DETECT;
+			}break;
+			case TCD_DOCX2DOC:
+			{
+				result = docx2doc (sFileFrom, sFileTo, sTempDir, oInputParams);
 			}break;
 			case TCD_DOCX2DOCT:
 			{

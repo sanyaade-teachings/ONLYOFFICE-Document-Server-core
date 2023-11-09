@@ -64,6 +64,7 @@ namespace NExtractTools
 		TCD_AUTO,
 		TCD_NON_AUTO,
 
+		TCD_DOCX2DOC,
 		TCD_DOCX2DOCT,
 		TCD_DOCT2DOCX,
 		TCD_DOCT2DOTX,
@@ -1265,6 +1266,10 @@ namespace NExtractTools
 		if (0 == sArg3.compare(_T("auto")))
 		{
 			res = TCD_AUTO;
+		}
+		else if (0 == sArg3.compare(_T("docx2doc")))
+		{
+			res = TCD_DOCX2DOC;
 		}
 		else if (0 == sArg3.compare(_T("docx2doct")))
 		{

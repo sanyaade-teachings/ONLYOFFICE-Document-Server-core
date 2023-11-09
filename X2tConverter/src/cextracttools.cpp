@@ -128,6 +128,8 @@ namespace NExtractTools
 				case AVS_OFFICESTUDIO_FILE_DOCUMENT_OFORM:
 				case AVS_OFFICESTUDIO_FILE_DOCUMENT_DOCXF:
 				{
+					if (0 == sExt2.compare(L".doc"))
+						res = TCD_DOCX2DOC;
 					if (0 == sExt2.compare(L".doct"))
 						res = TCD_DOCX2DOCT;
 					else if (0 == sExt2.compare(L".bin"))
