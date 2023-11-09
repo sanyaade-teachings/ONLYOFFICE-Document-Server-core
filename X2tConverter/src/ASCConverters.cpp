@@ -5632,6 +5632,11 @@ namespace NExtractTools
 			result = AVS_FILEUTILS_ERROR_CONVERT_DETECT;
 		}
 		break;
+		case TCD_DOCX2DOC:
+		{
+			result = docx2doc(sFileFrom, sFileTo, sTempDir, oInputParams);
+		}
+		break;
 		case TCD_DOCX2DOCT:
 		{
 			result = docx2doct(sFileFrom, sFileTo, sTempDir, oInputParams);
