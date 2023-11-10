@@ -102,8 +102,8 @@ SOURCES += \
 	../../../XlsxFormat/Controls/Controls.cpp \
 	../../../DocxFormat/Settings/Settings.cpp \
 	../../../DocxFormat/Settings/WebSettings.cpp \
-    ../../../DocxFormat/ConvertDocxToDoc.cpp \
-    ../../../DocxFormat/App.cpp \
+	../../../DocxFormat/ConvertDocxToDoc.cpp \
+	../../../DocxFormat/App.cpp \
 	../../../DocxFormat/Core.cpp \
 	../../../DocxFormat/Bibliography.cpp \
 	../../../DocxFormat/ContentTypes.cpp \
@@ -166,8 +166,8 @@ SOURCES += \
 	../../../XlsxFormat/Slicer/SlicerCache.cpp \
 	../../../XlsxFormat/Slicer/SlicerCacheExt.cpp \
 	../../../XlsxFormat/Slicer/Slicer.cpp \
-        ../../../XlsxFormat/Timelines/Timeline.cpp \
-        ../../../XlsxFormat/NamedSheetViews/NamedSheetViews.cpp \
+	../../../XlsxFormat/Timelines/Timeline.cpp \
+	../../../XlsxFormat/NamedSheetViews/NamedSheetViews.cpp \
 	../../../XlsxFormat/Pivot/PivotCacheDefinitionExt.cpp \
 	../../../XlsxFormat/Workbook/Workbook.cpp \
 	../../../XlsxFormat/Workbook/BookViews.cpp \
@@ -254,7 +254,7 @@ HEADERS += \
 	../../../DocxFormat/Media/VbaProject.h \
 	../../../DocxFormat/Settings/Settings.h \
 	../../../DocxFormat/Settings/WebSettings.h \
-    ../../../DocxFormat/ConvertDocxToDoc.h \
+	../../../DocxFormat/ConvertDocxToDoc.h \
 	../../../DocxFormat/App.h \
 	../../../DocxFormat/Bibliography.h \
 	../../../DocxFormat/Comments.h \
@@ -340,8 +340,8 @@ HEADERS += \
 	../../../XlsxFormat/Worksheets/Worksheet.h \
 	../../../XlsxFormat/Worksheets/WorksheetChildOther.h \
 	../../../XlsxFormat/Controls/Controls.h \
-        ../../../XlsxFormat/Timelines/Timeline.h \
-        ../../../XlsxFormat/Common.h \
+	../../../XlsxFormat/Timelines/Timeline.h \
+	../../../XlsxFormat/Common.h \
 	../../../XlsxFormat/CommonInclude.h \
 	../../../XlsxFormat/ComplexTypes_Spreadsheet.h \
 	../../../XlsxFormat/FileFactory_Spreadsheet.h \

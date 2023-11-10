@@ -32,17 +32,34 @@
 
 #pragma once
 
+#include <map>
 #include <string>
+
 #include "../../DesktopEditor/common/ASCVariant.h"
+#include "../../OOXML/DocxFormat/Docx.h"
+
+#include "../../OOXML/DocxFormat/Logic/Paragraph.h"
 
 namespace Docx2Doc
 {
 	class Converter
 	{
+	private:
+		OOX::CDocx m_Docx;
+
+		std::map<std::wstring, size_t> m_fontTableMap;
+
 	public:
 		Converter();
 		~Converter();
 
-		_UINT32 SaveToFile(const std::wstring & sSrcPath, const std::wstring & sDstFileName, const std::wstring & sXMLOptions);
+		_UINT32 SaveToFile(const std::wstring & sSrcPath, const std::wstring & sDstPath, const std::wstring & sXMLOptions);
+
+	private:
+		void ConvertDocument(OOX::CDocument* pDocument);
+		void ConvertNumbering(OOX::CNumbering* pNumbering);
+		void ConvertStyles(OOX::CStyles* pStyles);
+
+		std::wstring GetStyleID(const OOX::Logic::CParagraph& oParagraph);
 	};
 }

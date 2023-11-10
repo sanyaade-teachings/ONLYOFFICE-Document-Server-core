@@ -372,8 +372,15 @@ namespace NExtractTools
 	// docx -> doc
 	_UINT32 docx2doc(const std::wstring &sFrom, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params)
 	{
-		Docx2Doc::Converter convert;
-		return convert.SaveToFile(sFrom, sTo, params.getXmlOptions());
+		std::wstring sTempUnpackedDOCX = sTemp + FILE_SEPARATOR_STR + _T("docx_unpacked");
+		NSDirectory::CreateDirectory(sTempUnpackedDOCX);
+
+		COfficeUtils oCOfficeUtils(NULL);
+		if (S_OK == oCOfficeUtils.ExtractToDirectory(sFrom, sTempUnpackedDOCX, NULL, 0))
+		{
+			return docx_dir2doc(sTempUnpackedDOCX, sTo, sTemp, params);
+		}
+		return AVS_FILEUTILS_ERROR_CONVERT;
 	}
 	// docx -> doct
 	_UINT32 docx2doct(const std::wstring &sFrom, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params)
@@ -2823,7 +2830,8 @@ namespace NExtractTools
 	}
 	_UINT32 docx_dir2doc(const std::wstring &sDocxDir, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params)
 	{
-		return AVS_FILEUTILS_ERROR_CONVERT;
+		Docx2Doc::Converter convert;
+		return convert.SaveToFile(sDocxDir, sTo, params.getXmlOptions());
 	}
 
 	// doct -> rtf
