@@ -239,7 +239,15 @@ void OoxConverter::convert(PPTX::Logic::Xfrm *oox_xfrm)
 	if (oox_xfrm->flipV.get_value_or(false))	odf_context()->drawing_context()->set_flip_V(true);
 	
 	if (oox_xfrm->rot.get_value_or(0) > 0)
-		odf_context()->drawing_context()->set_rotate(360. - oox_xfrm->rot.get_value_or(0)/60000.);
+	{
+		double angle = 360.0 - oox_xfrm->rot.get_value_or(0) / 60000.0;
+		
+		if (oox_xfrm->flipV.get_value_or(false))
+			angle = -angle;
+
+		odf_context()->drawing_context()->set_rotate(angle);
+	}
+		
 }
 void OoxConverter::convert(PPTX::Logic::Xfrm *oox_txbx, PPTX::Logic::Xfrm *oox_xfrm)
 {
