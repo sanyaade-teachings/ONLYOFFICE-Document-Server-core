@@ -1046,19 +1046,38 @@ void odf_drawing_context::end_shape()
 		{
 			double angle = *rotate;//impl_->current_drawing_state_.rotateAngle_ ? *impl_->current_drawing_state_.rotateAngle_ : 0;
 
-            if (line->draw_line_attlist_.svg_x1_)
-                line->draw_line_attlist_.svg_x1_ = *line->draw_line_attlist_.svg_x1_ / 2 - (*line->draw_line_attlist_.svg_x1_ / 2 * cos(-angle) - *line->draw_line_attlist_.svg_y1_ / 2 * sin(-angle) );
-            if (line->draw_line_attlist_.svg_y1_)
-                line->draw_line_attlist_.svg_y1_ = *line->draw_line_attlist_.svg_y1_ / 2 - (*line->draw_line_attlist_.svg_x1_ / 2 * sin(-angle) + *line->draw_line_attlist_.svg_y1_ / 2 * cos(-angle) );
+			if (line->draw_line_attlist_.svg_x1_ && 
+				line->draw_line_attlist_.svg_x2_ && 
+				line->draw_line_attlist_.svg_y1_ && 
+				line->draw_line_attlist_.svg_y2_)
+			{
+				using namespace odf_types;
 
-            if (line->draw_line_attlist_.svg_x2_)
-                line->draw_line_attlist_.svg_x2_ = *line->draw_line_attlist_.svg_x2_ / 2 - (*line->draw_line_attlist_.svg_x2_ / 2 * cos(-angle) - *line->draw_line_attlist_.svg_y2_ / 2 * sin(-angle) );
-            if (line->draw_line_attlist_.svg_y2_)
-                line->draw_line_attlist_.svg_y2_ = *line->draw_line_attlist_.svg_y2_ / 2 - (*line->draw_line_attlist_.svg_x2_ / 2 * sin(-angle) + *line->draw_line_attlist_.svg_y2_ / 2 * cos(-angle) );
+				length& x1 = *line->draw_line_attlist_.svg_x1_;
+				length& x2 = *line->draw_line_attlist_.svg_x2_;
+				length& y1 = *line->draw_line_attlist_.svg_y1_;
+				length& y2 = *line->draw_line_attlist_.svg_y2_;
 
-			line->common_draw_attlists_.shape_with_text_and_styles_.common_shape_draw_attlist_.draw_transform_= L"";
+				length origin_x = (x1 + x2) / 2.0;
+				length origin_y = (y1 + y2) / 2.0;
+				 
+				length x, y;
+				
+				x = x1 - origin_x;
+				y = y1 - origin_y;
 
-			impl_->current_drawing_state_.rotateAngle_ = boost::none;
+				x1 = x * cos(angle) + y * sin(angle) + origin_x;
+				y1 = y * cos(angle) - x * sin(angle) + origin_y;
+
+				x = x2 - origin_x;
+				y = y2 - origin_y;
+
+				x2 = x * cos(angle) + y * sin(angle) + origin_x;
+				y2 = y * cos(angle) - x * sin(angle) + origin_y;
+
+				line->common_draw_attlists_.shape_with_text_and_styles_.common_shape_draw_attlist_.draw_transform_ = boost::none;
+				impl_->current_drawing_state_.rotateAngle_ = boost::none;
+			}
 		}
 		impl_->current_drawing_state_.svg_height_ = boost::none;
 		impl_->current_drawing_state_.svg_width_ = boost::none;
