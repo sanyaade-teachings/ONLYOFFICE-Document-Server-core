@@ -35,10 +35,11 @@
 #include <map>
 #include <string>
 
-#include "../../DesktopEditor/common/ASCVariant.h"
-#include "../../OOXML/DocxFormat/Docx.h"
+#include "Defines.h"
+#include "../../../DesktopEditor/common/ASCVariant.h"
+#include "../../../OOXML/DocxFormat/Docx.h"
 
-#include "../../OOXML/DocxFormat/Logic/Paragraph.h"
+#include "../../../OOXML/DocxFormat/Logic/Paragraph.h"
 
 namespace Docx2Doc
 {
@@ -48,6 +49,10 @@ namespace Docx2Doc
 		OOX::CDocx m_Docx;
 
 		std::map<std::wstring, size_t> m_fontTableMap;
+		std::vector<std::wstring> m_arrInternalFonts;
+
+		std::map<std::wstring, size_t> m_styleIdDefaultMap;
+		std::map<std::wstring, size_t> m_styleSheetMap;
 
 	public:
 		Converter();
@@ -58,8 +63,16 @@ namespace Docx2Doc
 	private:
 		void ConvertDocument(OOX::CDocument* pDocument);
 		void ConvertNumbering(OOX::CNumbering* pNumbering);
-		void ConvertStyles(OOX::CStyles* pStyles);
+		void ConvertStyleSheet(OOX::CStyles* pStyles);
+		void ConvertFontTable(OOX::CFontTable* pFontTable);
 
 		std::wstring GetStyleID(const OOX::Logic::CParagraph& oParagraph);
+
+		// Write to doc
+		bool WriteInformationBlock ();
+		bool WriteDocument();
+		bool WriteNumbering();
+		bool WriteStyleSheet();
+		bool WriteFontTable();
 	};
 }

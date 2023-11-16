@@ -30,30 +30,37 @@
  *
  */
 
-#include "ConvertDocxToDoc.h"
+#include "Converter.h"
 
-#include "../../OOXML/DocxFormat/Document.h"
-#include "../../OOXML/DocxFormat/Numbering.h"
-#include "../../OOXML/DocxFormat/Styles.h"
-#include "../../OOXML/DocxFormat/Footnote.h"
-#include "../../OOXML/DocxFormat/Endnote.h"
-#include "../../OOXML/DocxFormat/FtnEdn.h"
-#include "../../OOXML/DocxFormat/FontTable.h"
-#include "../../OOXML/DocxFormat/Logic/Table.h"
-#include "../../OOXML/DocxFormat/Logic/Sdt.h"
-#include "../../OOXML/DocxFormat/Logic/FldSimple.h"
-#include "../../OOXML/DocxFormat/Logic/Hyperlink.h"
-#include "../../OOXML/DocxFormat/Logic/ParagraphProperty.h"
-#include "../../OOXML/DocxFormat/Logic/SectionProperty.h"
-#include "../../OOXML/DocxFormat/Logic/Run.h"
-#include "../../OOXML/DocxFormat/Logic/FldChar.h"
+#include "../../../Common/OfficeFileErrorDescription.h"
 
-#include "../../Common/OfficeFileErrorDescription.h"
+#include "../../../OOXML/DocxFormat/Document.h"
+#include "../../../OOXML/DocxFormat/Numbering.h"
+#include "../../../OOXML/DocxFormat/Styles.h"
+#include "../../../OOXML/DocxFormat/Footnote.h"
+#include "../../../OOXML/DocxFormat/Endnote.h"
+#include "../../../OOXML/DocxFormat/FtnEdn.h"
+#include "../../../OOXML/DocxFormat/FontTable.h"
+#include "../../../OOXML/DocxFormat/Logic/Table.h"
+#include "../../../OOXML/DocxFormat/Logic/Sdt.h"
+#include "../../../OOXML/DocxFormat/Logic/FldSimple.h"
+#include "../../../OOXML/DocxFormat/Logic/Hyperlink.h"
+#include "../../../OOXML/DocxFormat/Logic/ParagraphProperty.h"
+#include "../../../OOXML/DocxFormat/Logic/SectionProperty.h"
+#include "../../../OOXML/DocxFormat/Logic/Run.h"
+#include "../../../OOXML/DocxFormat/Logic/FldChar.h"
+
+#include "../../../MsBinaryFile/DocFile/StyleSheetDescription.h"
 
 namespace Docx2Doc
 {
 	Converter::Converter()
-	{}
+	{
+		for (size_t i = 0; i < (sizeof(DocFileFormat::StyleIdentifierMap) / sizeof(DocFileFormat::StyleIdentifierMap[0])); i++)
+		{
+			m_styleIdDefaultMap.insert(std::pair<std::wstring, size_t>(DocFileFormat::StyleIdentifierMap[i], i));
+		}
+	}
 
 	Converter::~Converter()
 	{}
@@ -77,27 +84,30 @@ namespace Docx2Doc
 				}
 			}
 
-			// Document
-			ConvertDocument(m_Docx.m_oMain.document);
-
 			// Numbering
 			ConvertNumbering(m_Docx.m_oMain.numbering);
 
 			// Styles
-			ConvertStyles(m_Docx.m_oMain.styles);
+			ConvertStyleSheet(m_Docx.m_oMain.styles);
 
-			// Footnotes
+			// Document
+			ConvertDocument(m_Docx.m_oMain.document);
 
-			// Endnotes
+			// FontTable
+			ConvertFontTable(m_Docx.m_oMain.fontTable);
 
-			// Settings
-
-			// Comments
+			// Write to doc
+			bool WriteInformationBlock();
+			bool WriteDocument();
+			bool WriteFontTable();
+			bool WriteStyleSheet();
+			bool WriteNumbering();
 		}
 
 		return result ? 0 : AVS_FILEUTILS_ERROR_CONVERT;
 	}
 
+	// Converting
 	void Converter::ConvertNumbering(OOX::CNumbering* pNumbering)
 	{
 		if (pNumbering)
@@ -139,10 +149,28 @@ namespace Docx2Doc
 		}
 	}
 
-	void Converter::ConvertStyles(OOX::CStyles* pStyles)
+	void Converter::ConvertStyleSheet(OOX::CStyles* pStyles)
 	{
 		if (pStyles)
-		{}
+		{
+			std::vector<OOX::CStyle*> arrStyles = pStyles->m_arrStyle;
+			for (size_t i = 0; i < arrStyles.size(); i++)
+			{
+				std::wstring sId = arrStyles[i]->m_sStyleId.get();
+				int x = 1;
+			}
+		}
+	}
+
+	void Converter::ConvertFontTable(OOX::CFontTable* pFontTable)
+	{
+		if (pFontTable)
+		{
+			for (size_t i = 0; i < pFontTable->m_arrFonts.size(); i++)
+			{
+				//DocFileFormat::
+			}
+		}
 	}
 
 	std::wstring Converter::GetStyleID(const OOX::Logic::CParagraph& oParagraph)
@@ -159,5 +187,36 @@ namespace Docx2Doc
 		}
 
 		return sId;
+	}
+
+	// Write to doc
+	bool Converter::WriteInformationBlock()
+	{
+		bool bResult = false;
+		return bResult;
+	}
+
+	bool Converter::WriteDocument()
+	{
+		bool bResult = false;
+		return bResult;
+	}
+
+	bool Converter::WriteNumbering()
+	{
+		bool bResult = false;
+		return bResult;
+	}
+
+	bool Converter::WriteStyleSheet()
+	{
+		bool bResult = false;
+		return bResult;
+	}
+
+	bool Converter::WriteFontTable()
+	{
+		bool bResult = false;
+		return bResult;
 	}
 }

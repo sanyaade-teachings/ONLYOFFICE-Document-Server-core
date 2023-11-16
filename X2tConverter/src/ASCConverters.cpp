@@ -41,7 +41,7 @@
 
 #include "../../OOXML/PPTXFormat/DrawingConverter/ASCOfficePPTXFile.h"
 #include "../../OOXML/XlsbFormat/Xlsb.h"
-#include "../../OOXML/DocxFormat/ConvertDocxToDoc.h"
+#include "../../OOXML/DocxFormat/DocxToDoc/Converter.h"
 
 #include "../../MsBinaryFile/DocFile/Main/DocFormatLib.h"
 #include "../../MsBinaryFile/PptFile/Main/PPTFormatLib.h"
