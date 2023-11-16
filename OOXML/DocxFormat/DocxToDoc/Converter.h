@@ -51,8 +51,22 @@ namespace Docx2Doc
 		std::map<std::wstring, size_t> m_fontTableMap;
 		std::vector<std::wstring> m_arrInternalFonts;
 
-		std::map<std::wstring, size_t> m_styleIdDefaultMap;
 		std::map<std::wstring, size_t> m_styleSheetMap;
+		std::map<std::wstring, size_t> m_styleIdDefaultMap;
+
+		std::map<std::wstring, size_t> m_numFormatMap;
+		std::map<std::wstring, size_t> m_styleTypeMap;
+
+		std::map<std::wstring, size_t> m_kulMap;
+		std::map<std::wstring, size_t> m_sectionTypeMap;
+
+		std::map<std::wstring, size_t> m_verticalPositionMap;
+		std::map<std::wstring, size_t> m_horizontalPositionMap;
+		std::map<std::wstring, size_t> m_textFrameWrappingMap;
+
+		std::map<std::wstring, size_t> m_tableWidthMap;
+		std::map<std::wstring, size_t> m_tabStopMap;
+		std::map<std::wstring, size_t> m_tabLeaderMap;
 
 	public:
 		Converter();

@@ -50,7 +50,10 @@
 #include "../../../OOXML/DocxFormat/Logic/Run.h"
 #include "../../../OOXML/DocxFormat/Logic/FldChar.h"
 
+#include "../../../MsBinaryFile/DocFile/Global.h"
 #include "../../../MsBinaryFile/DocFile/StyleSheetDescription.h"
+#include "../../../MsBinaryFile/DocFile/SectionPropertiesMapping.h"
+#include "../../../MsBinaryFile/DocFile/TablePropertiesMapping.h"
 
 namespace Docx2Doc
 {
@@ -59,6 +62,56 @@ namespace Docx2Doc
 		for (size_t i = 0; i < (sizeof(DocFileFormat::StyleIdentifierMap) / sizeof(DocFileFormat::StyleIdentifierMap[0])); i++)
 		{
 			m_styleIdDefaultMap.insert(std::pair<std::wstring, size_t>(DocFileFormat::StyleIdentifierMap[i], i));
+		}
+
+		for (size_t i = 0; i < (sizeof(DocFileFormat::PageNumberFormatCodeMap) / sizeof(DocFileFormat::PageNumberFormatCodeMap[0])); i++)
+		{
+			m_numFormatMap.insert(std::pair<std::wstring, size_t>(DocFileFormat::PageNumberFormatCodeMap[i], i));
+		}
+
+		for (size_t i = 0; i < (sizeof(DocFileFormat::StyleKindMap) / sizeof(DocFileFormat::StyleKindMap[0])); i++)
+		{
+			m_styleTypeMap.insert(std::pair<std::wstring, size_t>(DocFileFormat::StyleKindMap[i], i));
+		}
+
+		for (size_t i = 0; i < (sizeof(Global::UnderlineCode) / sizeof(Global::UnderlineCode[0])); i++)
+		{
+			m_kulMap.insert(std::pair<std::wstring, size_t>(Global::UnderlineCode[i], i));
+		}
+
+		for (size_t i = 0; i < (sizeof(DocFileFormat::SectionTypeMap) / sizeof(DocFileFormat::SectionTypeMap[0])); i++)
+		{
+			m_sectionTypeMap.insert(std::pair<std::wstring, size_t>(DocFileFormat::SectionTypeMap[i], i));
+		}
+
+		for (size_t i = 0; i < (sizeof(Global::VerticalPositionCode) / sizeof(Global::VerticalPositionCode[0])); i++)
+		{
+			m_verticalPositionMap.insert(std::pair<std::wstring, size_t>(Global::VerticalPositionCode[i], i));
+		}
+
+		for (size_t i = 0; i < (sizeof(Global::HorizontalPositionCode) / sizeof(Global::HorizontalPositionCode[0])); i++)
+		{
+			m_horizontalPositionMap.insert(std::pair<std::wstring, size_t>(Global::HorizontalPositionCode[i], i));
+		}
+
+		for (size_t i = 0; i < (sizeof(Global::TextFrameWrapping) / sizeof(Global::TextFrameWrapping[0])); i++)
+		{
+			m_textFrameWrappingMap.insert(std::pair<std::wstring, size_t>(Global::TextFrameWrapping[i], i));
+		}
+
+		for (size_t i = 0; i < (sizeof(DocFileFormat::WidthType) / sizeof(DocFileFormat::WidthType[0])); i++)
+		{
+			m_tableWidthMap.insert(std::pair<std::wstring, size_t>(DocFileFormat::WidthType[i], i));
+		}
+
+		for (size_t i = 0; i < (sizeof(Global::TabStop) / sizeof(Global::TabStop[0])); i++)
+		{
+			m_tabStopMap.insert(std::pair<std::wstring, size_t>(Global::TabStop[i], i));
+		}
+
+		for (size_t i = 0; i < (sizeof(Global::TabLeader) / sizeof(Global::TabLeader[0])); i++)
+		{
+			m_tabLeaderMap.insert(std::pair<std::wstring, size_t>(Global::TabLeader[i], i));
 		}
 	}
 
