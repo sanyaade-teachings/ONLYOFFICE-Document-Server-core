@@ -945,7 +945,11 @@ void OoxConverter::convert(PPTX::Logic::SpPr *oox_spPr, PPTX::Logic::ShapeStyle*
 
 	bool bLine = odf_context()->drawing_context()->isLineShape();
 
-	if (custGeom && !custGeom->cxnLst.empty() && !odf_context()->drawing_context()->isCustomClosed())
+	if (custGeom && 
+		!custGeom->cxnLst.empty() &&
+		!odf_context()->drawing_context()->isCustomClosed() &&
+		oox_spPr->Fill.m_type == PPTX::Logic::UniFill::noFill
+		)
 		bLine = true;
 
 	odf_context()->drawing_context()->start_area_properties();
