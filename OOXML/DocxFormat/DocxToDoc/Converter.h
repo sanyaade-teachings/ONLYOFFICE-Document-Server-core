@@ -41,12 +41,16 @@
 
 #include "../../../OOXML/DocxFormat/Logic/Paragraph.h"
 
+#include "../../../MsBinaryFile/Common/Base/LanguageCodes.h"
+
 namespace Docx2Doc
 {
 	class Converter
 	{
 	private:
 		OOX::CDocx m_Docx;
+
+		std::map<std::wstring, DocFileFormat::LanguageCode> m_languageCodeMap;
 
 		std::map<std::wstring, size_t> m_fontTableMap;
 		std::vector<std::wstring> m_arrInternalFonts;
@@ -75,11 +79,15 @@ namespace Docx2Doc
 		_UINT32 SaveToFile(const std::wstring & sSrcPath, const std::wstring & sDstPath, const std::wstring & sXMLOptions);
 
 	private:
+		// Enums
+		void InitBasicEnums();
+		void InitLanguageCodes();
+
+		// Converting
 		void ConvertDocument(OOX::CDocument* pDocument);
 		void ConvertNumbering(OOX::CNumbering* pNumbering);
 		void ConvertStyleSheet(OOX::CStyles* pStyles);
 		void ConvertFontTable(OOX::CFontTable* pFontTable);
-
 		std::wstring GetStyleID(const OOX::Logic::CParagraph& oParagraph);
 
 		// Write to doc
