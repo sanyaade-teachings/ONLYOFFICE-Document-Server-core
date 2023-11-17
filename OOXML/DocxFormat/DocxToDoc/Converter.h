@@ -36,6 +36,8 @@
 #include <string>
 
 #include "Defines.h"
+#include "LSD.h"
+
 #include "../../../DesktopEditor/common/ASCVariant.h"
 #include "../../../OOXML/DocxFormat/Docx.h"
 
@@ -72,6 +74,8 @@ namespace Docx2Doc
 		std::map<std::wstring, size_t> m_tabStopMap;
 		std::map<std::wstring, size_t> m_tabLeaderMap;
 
+		std::map<int, int> m_idLsidMap;
+
 	public:
 		Converter();
 		~Converter();
@@ -96,5 +100,10 @@ namespace Docx2Doc
 		bool WriteNumbering();
 		bool WriteStyleSheet();
 		bool WriteFontTable();
+
+		// Misc
+		int HexChar2Int(const char value);
+		int HexString2Int(const std::wstring& value);
+		int StiToIstd (int nDef);
 	};
 }

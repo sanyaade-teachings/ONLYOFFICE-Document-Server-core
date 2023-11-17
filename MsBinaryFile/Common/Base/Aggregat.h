@@ -31,7 +31,8 @@
  */
 #pragma once
 
-#include "../../OOXML/Base/SmartPtr.h"
+#include <typeinfo>
+#include "../../../OOXML/Base/SmartPtr.h"
 
 template <class T, class I> class Aggregat
 {
@@ -46,7 +47,7 @@ public:
 
 	T& operator* ()
 	{
-		*return m_item;  
+		return *m_item;
 	}
 
 	T* get()

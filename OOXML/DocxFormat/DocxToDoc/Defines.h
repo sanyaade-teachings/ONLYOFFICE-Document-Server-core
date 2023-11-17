@@ -30,7 +30,6 @@
  *
  */
 
-
 #pragma once
 
 namespace Docx2Doc

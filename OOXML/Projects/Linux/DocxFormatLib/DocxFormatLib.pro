@@ -256,6 +256,7 @@ HEADERS += \
 	../../../DocxFormat/Settings/WebSettings.h \
 	../../../DocxFormat/DocxToDoc/Converter.h \
 	../../../DocxFormat/DocxToDoc/Defines.h \
+	../../../DocxFormat/DocxToDoc/LSD.h \
 	../../../DocxFormat/App.h \
 	../../../DocxFormat/Bibliography.h \
 	../../../DocxFormat/Comments.h \

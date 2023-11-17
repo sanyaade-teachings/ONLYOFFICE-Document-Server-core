@@ -54,6 +54,7 @@
 #include "../../../MsBinaryFile/DocFile/StyleSheetDescription.h"
 #include "../../../MsBinaryFile/DocFile/SectionPropertiesMapping.h"
 #include "../../../MsBinaryFile/DocFile/TablePropertiesMapping.h"
+#include "../../../MsBinaryFile/DocFile/ParagraphPropertiesMapping.h"
 
 namespace Docx2Doc
 {
@@ -351,6 +352,26 @@ namespace Docx2Doc
 		{
 			if (!pNumbering->m_arrNum.size() || !pNumbering->m_arrAbstractNum.size())
 				return;
+
+			// AbstractNum
+			int nId = 1;
+			for (size_t i = 0; i < pNumbering->m_arrAbstractNum.size(); i++)
+			{
+				OOX::Numbering::CAbstractNum* pNum = pNumbering->m_arrAbstractNum[i];
+
+				if (pNum->m_oNsid.IsInit())
+					nId = pNum->m_oAbstractNumId.get();
+				else
+				{
+					for (std::map<int, int>::const_iterator it = m_idLsidMap.begin(); it != m_idLsidMap.end(); it++)
+					{
+						nId = std::max(it->second, nId);
+					}
+					nId++;
+				}
+
+				m_idLsidMap.insert(std::pair<int, int>(pNum->m_oAbstractNumId.get(), nId));
+			}
 		}
 	}
 
@@ -367,20 +388,21 @@ namespace Docx2Doc
 					XmlUtils::CXmlNode oNode;
 					oNode.FromXmlString(pDocument->m_arrItems[i]->toXML());
 
+					// Convert
 					OOX::Logic::CParagraph oParagraph;
 					oParagraph.fromXML(oNode);
 
 					std::wstring sId = GetStyleID(oParagraph);
+
+					//DocFileFormat::
 				}
 				// Table
 				if (pDocument->m_arrItems[i]->getType() == OOX::EElementType::et_w_tbl)
 				{
-					int x = 1;
 				}
 				// Std
 				if (pDocument->m_arrItems[i]->getType() == OOX::EElementType::et_w_sdt)
 				{
-					int x = 1;
 				}
 			}
 		}
@@ -390,11 +412,26 @@ namespace Docx2Doc
 	{
 		if (pStyles)
 		{
+			std::vector<Docx2Doc::LSD> arrLatentStyles;
+			for (size_t i = 0; i < sizeof(Docx2Doc::LatentStylesTemplate) / sizeof(Docx2Doc::LatentStylesTemplate[0]); i++)
+			{
+				arrLatentStyles.push_back(Docx2Doc::LSD(Docx2Doc::LatentStylesTemplate[i]));
+			}
+
+			// Style defenitions
+			size_t nStyleIndex = 15;
+
 			std::vector<OOX::CStyle*> arrStyles = pStyles->m_arrStyle;
 			for (size_t i = 0; i < arrStyles.size(); i++)
 			{
 				std::wstring sId = arrStyles[i]->m_sStyleId.get();
-				int x = 1;
+				size_t nDefId = m_styleIdDefaultMap[sId];
+
+				int nStdId = StiToIstd(nDefId);
+				if (nStdId == -1)
+					nStdId = nStyleIndex++;
+
+				m_styleSheetMap.insert(std::pair<std::wstring, size_t>(sId, nStdId));
 			}
 		}
 	}
@@ -416,7 +453,7 @@ namespace Docx2Doc
 
 		if (oParagraph.m_oParagraphProperty->IsNoEmpty() && oParagraph.m_oParagraphProperty->m_oPStyle.IsInit())
 		{
-			sId = oParagraph.m_oParagraphProperty->m_oPStyle->ToString();
+			sId = oParagraph.m_oParagraphProperty->m_oPStyle->ToString2();
 		}
 		else
 		{
@@ -455,5 +492,40 @@ namespace Docx2Doc
 	{
 		bool bResult = false;
 		return bResult;
+	}
+
+	// Misc
+	int Converter::HexChar2Int(const char value)
+	{
+		if (value >= '0' && value <= '9')
+			return value - '0';
+		if (value >= 'a' && value <= 'f')
+			return 10 + value - 'a';
+		if (value >= 'A' && value <= 'F')
+			return 10 + value - 'A';
+		return 0;
+	}
+
+	int Converter::HexString2Int(const std::wstring& value)
+	{
+		int summa = 0;
+		for (int i = 0; i != value.length(); ++i)
+			summa += HexChar2Int((char)value[i]) << (4 * (value.length() - i - 1));
+		return summa;
+	}
+
+	int Converter::StiToIstd (int nDef)
+	{
+		if (nDef >= 0 && nDef <= 9)
+			return nDef;
+
+		if (65 == nDef)
+			return 10;
+		if (105 == nDef)
+			return 11;
+		if (107 == nDef)
+			return 12;
+
+		return -1;
 	}
 }
