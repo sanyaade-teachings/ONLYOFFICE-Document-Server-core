@@ -85,20 +85,20 @@ public:
 		return static_cast<const A&>(*this->m_item);
 	}
 
-	template <> const bool is<I>() const
+	/*template <> const bool is<I>() const
 	{ 
 		return true;
-	}
+	}*/
 
-	template <> I& as<I>()
+	/*template <> I& as<I>()
 	{ 
 		return static_cast<I&>(*this);
-	}
+	}*/
 
-	template <> const I& as<I>() const
+	/*template <> const I& as<I>() const
 	{ 
 		return static_cast<const I&>(*this);
-	}
+	}*/
 
 	inline bool IsInit() const
 	{ 
