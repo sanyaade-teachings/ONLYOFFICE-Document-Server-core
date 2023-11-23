@@ -1,10 +1,44 @@
+/*
+ * (c) Copyright Ascensio System SIA 2010-2023
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+
 #pragma once
 
 #include "Stdf.h"
 #include "Xstz.h"
 #include "GrLPUpxSw.h"
 
-namespace AVSDocFileFormat
+#include "../../../MsBinaryFile/Common/Base/FormatUtils.h"
+
+namespace Docx2Doc
 {
 	class STD: public IOperand
 	{
@@ -21,21 +55,21 @@ namespace AVSDocFileFormat
 			this->sizeInBytesWithoutPadding = ( _stdf.Size() + _xstzName.Size() + _grLPUpxSw.SizeWithoutPadding() );
 			this->properties = _grLPUpxSw.GetProperties();
 
-			this->bytes = new byte[this->sizeInBytes];
+			this->bytes = new BYTE[this->sizeInBytes];
 
 			if (bytes)
 			{
 				memset( this->bytes, 0, this->sizeInBytes );
 
-				memcpy( this->bytes, (byte*)_stdf, _stdf.Size() );
-				memcpy( ( this->bytes + _stdf.Size() ), (byte*)_xstzName, _xstzName.Size() );
-				memcpy( ( this->bytes + _stdf.Size() + _xstzName.Size() ), (byte*)_grLPUpxSw, _grLPUpxSw.Size() );
+				memcpy( this->bytes, (BYTE*)_stdf, _stdf.Size() );
+				memcpy( ( this->bytes + _stdf.Size() ), (BYTE*)_xstzName, _xstzName.Size() );
+				memcpy( ( this->bytes + _stdf.Size() + _xstzName.Size() ), (BYTE*)_grLPUpxSw, _grLPUpxSw.Size() );
 			}
 		}
 
 		STD( const STD& _sTD ) : properties(_sTD.properties), bytes(NULL), sizeInBytes(_sTD.sizeInBytes), sizeInBytesWithoutPadding(_sTD.sizeInBytesWithoutPadding)
 		{
-			this->bytes = new byte[this->sizeInBytes];
+			this->bytes = new BYTE[this->sizeInBytes];
 
 			if ( this->bytes != NULL )
 			{
@@ -50,19 +84,19 @@ namespace AVSDocFileFormat
 			RELEASEARRAYOBJECTS(bytes);
 		}
 
-		const vector<Prl> GetProperties() const
+		const std::vector<Prl> GetProperties() const
 		{
 			return this->properties;
 		}
 
-		virtual operator byte*() const
+		virtual operator BYTE*() const
 		{
 			return this->bytes;
 		}
 
-		virtual operator const byte*() const
+		virtual operator const BYTE*() const
 		{
-			return (const byte*)this->bytes;
+			return (const BYTE*)this->bytes;
 		}
 
 		virtual unsigned int Size() const
@@ -76,9 +110,9 @@ namespace AVSDocFileFormat
 		}
 	private:
 
-		vector<Prl> properties;
+		std::vector<Prl> properties;
 
-		byte* bytes;
+		BYTE* bytes;
 		unsigned int sizeInBytes;
 		unsigned int sizeInBytesWithoutPadding;
 	};
@@ -86,16 +120,16 @@ namespace AVSDocFileFormat
 	class LPStd: public IOperand
 	{
 	private:
-		vector<Prl> properties;
+		std::vector<Prl> properties;
 
-		byte* bytes;
+		BYTE* bytes;
 		unsigned int sizeInBytes;
 		unsigned int sizeInBytesWithoutPadding;
 
 	public:
 		LPStd() : bytes(NULL), sizeInBytes(sizeof(short)), sizeInBytesWithoutPadding(sizeof(short))
 		{
-			this->bytes = new byte[this->sizeInBytes];
+			this->bytes = new BYTE[this->sizeInBytes];
 
 			if ( this->bytes != NULL )
 			{
@@ -107,29 +141,29 @@ namespace AVSDocFileFormat
 		{
 			STD std(_std);
 
-			FormatUtils::SetBytes( ( std.bytes + 6 ), (unsigned short)std.Size()/*SizeWithoutPadding()*/ );
+			DocFileFormat::FormatUtils::SetBytes( ( std.bytes + 6 ), (unsigned short)std.Size()/*SizeWithoutPadding()*/ );
 
 			this->sizeInBytes = ( sizeof(short) + std.Size() );
 			this->sizeInBytesWithoutPadding = ( sizeof(short) + std.SizeWithoutPadding() );
 			this->properties = _std.GetProperties();
 
-			this->bytes = new byte[this->sizeInBytes];
+			this->bytes = new BYTE[this->sizeInBytes];
 
 			if ( this->bytes != NULL )
 			{
 				memset( this->bytes, 0, this->sizeInBytes );
 
-				FormatUtils::SetBytes( this->bytes, (short)std.Size()/*SizeWithoutPadding()*/ );
+				DocFileFormat::FormatUtils::SetBytes( this->bytes, (short)std.Size()/*SizeWithoutPadding()*/ );
 
-				memcpy( ( this->bytes + sizeof(short) ), (byte*)std, std.Size() );
-				// заполняем поле bchUpe StdfBase
-				FormatUtils::SetBytes( this->bytes + sizeof(short) + 6, (short)std.Size() );
+				memcpy( ( this->bytes + sizeof(short) ), (BYTE*)std, std.Size() );
+				// Р·Р°РїРѕР»РЅСЏРµРј РїРѕР»Рµ bchUpe StdfBase
+				DocFileFormat::FormatUtils::SetBytes( this->bytes + sizeof(short) + 6, (short)std.Size() );
 			}
 		}
 
 		LPStd( const LPStd& _lPStd ) : properties(_lPStd.properties), bytes(NULL), sizeInBytes(_lPStd.sizeInBytes), sizeInBytesWithoutPadding(_lPStd.sizeInBytesWithoutPadding)
 		{
-			this->bytes = new byte[this->sizeInBytes];
+			this->bytes = new BYTE[this->sizeInBytes];
 
 			if ( this->bytes != NULL )
 			{
@@ -160,7 +194,7 @@ namespace AVSDocFileFormat
 				this->sizeInBytesWithoutPadding = _lPStd.sizeInBytesWithoutPadding;
 				this->properties = _lPStd.properties;
 
-				this->bytes = new byte[this->sizeInBytes];
+				this->bytes = new BYTE[this->sizeInBytes];
 
 				if ( this->bytes != NULL )
 				{
@@ -176,19 +210,19 @@ namespace AVSDocFileFormat
 			RELEASEARRAYOBJECTS(bytes);
 		}
 
-		const vector<Prl> GetProperties() const
+		const std::vector<Prl> GetProperties() const
 		{
 			return this->properties;
 		}
 
-		virtual operator byte*() const
+		virtual operator BYTE*() const
 		{
 			return this->bytes;
 		}
 
-		virtual operator const byte*() const
+		virtual operator const BYTE*() const
 		{
-			return (const byte*)this->bytes;
+			return (const BYTE*)this->bytes;
 		}
 
 		virtual unsigned int Size() const

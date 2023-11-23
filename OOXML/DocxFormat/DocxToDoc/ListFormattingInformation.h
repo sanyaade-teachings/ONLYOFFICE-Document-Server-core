@@ -1,14 +1,46 @@
+/*
+ * (c) Copyright Ascensio System SIA 2010-2023
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+
 #pragma once
 
 #include "PlfLst.h"
 #include "LVL.h"
 
-namespace AVSDocFileFormat
+namespace Docx2Doc
 {
 	class ListFormattingInformation: public IOperand
 	{
 	private:
-		byte* bytes;
+		BYTE* bytes;
 		unsigned int sizeInBytes;
 		unsigned int listFormattingInformationSize;
 		unsigned int listLevelsSize;
@@ -19,11 +51,11 @@ namespace AVSDocFileFormat
 		{
 		}
 
-		explicit ListFormattingInformation( const PlfLst& _plfLst, const vector<LVL>& _lvls ) : bytes(NULL), sizeInBytes(0), listFormattingInformationSize(0), listLevelsSize(0)
+		explicit ListFormattingInformation( const PlfLst& _plfLst, const std::vector<LVL>& _lvls ) : bytes(NULL), sizeInBytes(0), listFormattingInformationSize(0), listLevelsSize(0)
 		{
 			this->listFormattingInformationSize = _plfLst.Size();
 
-			for ( vector<LVL>::const_iterator iter = _lvls.begin(); iter != _lvls.end(); iter++ )
+			for ( std::vector<LVL>::const_iterator iter = _lvls.begin(); iter != _lvls.end(); iter++ )
 			{
 				this->listLevelsSize += iter->Size();
 			}
@@ -32,19 +64,19 @@ namespace AVSDocFileFormat
 
 			if ( this->sizeInBytes != 0 )
 			{
-				this->bytes = new byte[this->sizeInBytes];
+				this->bytes = new BYTE[this->sizeInBytes];
 
 				if ( this->bytes != NULL )
 				{
 					memset( this->bytes, 0, this->sizeInBytes );
 
-					memcpy( this->bytes, (byte*)_plfLst, _plfLst.Size() );
+					memcpy( this->bytes, (BYTE*)_plfLst, _plfLst.Size() );
 
 					unsigned int offset = _plfLst.Size();
 
-					for ( vector<LVL>::const_iterator iter = _lvls.begin(); iter != _lvls.end(); iter++ )
+					for ( std::vector<LVL>::const_iterator iter = _lvls.begin(); iter != _lvls.end(); iter++ )
 					{
-						memcpy( ( this->bytes + offset ), (byte*)(*iter), iter->Size() );
+						memcpy( ( this->bytes + offset ), (BYTE*)(*iter), iter->Size() );
 						offset += iter->Size();
 					}
 				}
@@ -53,7 +85,7 @@ namespace AVSDocFileFormat
 
 		ListFormattingInformation( const ListFormattingInformation& _lfi ) : bytes(NULL), sizeInBytes(_lfi.sizeInBytes), listFormattingInformationSize(_lfi.listFormattingInformationSize), listLevelsSize(_lfi.listLevelsSize)
 		{
-			this->bytes = new byte[this->sizeInBytes];
+			this->bytes = new BYTE[this->sizeInBytes];
 
 			if ( this->bytes != NULL )
 			{
@@ -86,7 +118,7 @@ namespace AVSDocFileFormat
 				this->listFormattingInformationSize = _lfi.listFormattingInformationSize;
 				this->listLevelsSize = _lfi.listLevelsSize;
 
-				this->bytes = new byte[this->sizeInBytes];
+				this->bytes = new BYTE[this->sizeInBytes];
 
 				if ( this->bytes != NULL )
 				{
@@ -102,14 +134,14 @@ namespace AVSDocFileFormat
 			RELEASEARRAYOBJECTS (bytes);
 		}
 
-		virtual operator byte*() const
+		virtual operator BYTE*() const
 		{
 			return this->bytes;
 		}
 
-		virtual operator const byte*() const
+		virtual operator const BYTE*() const
 		{
-			return (const byte*)this->bytes;
+			return (const BYTE*)this->bytes;
 		}
 
 		virtual unsigned int Size() const

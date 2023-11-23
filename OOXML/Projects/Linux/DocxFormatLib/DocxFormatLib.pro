@@ -103,6 +103,7 @@ SOURCES += \
 	../../../DocxFormat/Settings/Settings.cpp \
 	../../../DocxFormat/Settings/WebSettings.cpp \
 	../../../DocxFormat/DocxToDoc/Converter.cpp \
+	#../../../DocxFormat/DocxToDoc/DocFile.cpp \
 	../../../DocxFormat/DocxToDoc/Paragraph.cpp \
 	../../../DocxFormat/DocxToDoc/Run.cpp \
 	../../../DocxFormat/DocxToDoc/Text.cpp \
@@ -271,6 +272,7 @@ HEADERS += \
 	../../../DocxFormat/Settings/Settings.h \
 	../../../DocxFormat/Settings/WebSettings.h \
 	../../../DocxFormat/DocxToDoc/Converter.h \
+	#../../../DocxFormat/DocxToDoc/DocFile.h \
 	../../../DocxFormat/DocxToDoc/Defines.h \
 	../../../DocxFormat/DocxToDoc/Constants.h \
 	../../../DocxFormat/DocxToDoc/LSD.h \
@@ -387,6 +389,9 @@ HEADERS += \
 	../../../DocxFormat/DocxToDoc/Header.h \
 	../../../DocxFormat/DocxToDoc/Footer.h \
 	../../../DocxFormat/DocxToDoc/PropertyReader.h \
+	../../../DocxFormat/DocxToDoc/ListFormattingInformation.h \
+	../../../DocxFormat/DocxToDoc/LPStd.h \
+	../../../DocxFormat/DocxToDoc/STSH.h \
 	../../../DocxFormat/DocxToDoc/OfficeArt/BlipFactory.h \
 	../../../DocxFormat/DocxToDoc/OfficeArt/Common.h \
 	../../../DocxFormat/DocxToDoc/OfficeArt/ComplexOfficeArtProperty.h \
