@@ -56,6 +56,7 @@
 #include "../../../MsBinaryFile/DocFile/TablePropertiesMapping.h"
 #include "../../../MsBinaryFile/DocFile/ParagraphPropertiesMapping.h"
 
+
 namespace Docx2Doc
 {
 	Converter::Converter()
@@ -393,8 +394,10 @@ namespace Docx2Doc
 					oParagraph.fromXML(oNode);
 
 					std::wstring sId = GetStyleID(oParagraph);
+					size_t nId = m_styleSheetMap[sId];
 
-					//DocFileFormat::
+					Docx2Doc::Paragraph docParagraph;
+					docParagraph.SetStyle(nId);
 				}
 				// Table
 				if (pDocument->m_arrItems[i]->getType() == OOX::EElementType::et_w_tbl)

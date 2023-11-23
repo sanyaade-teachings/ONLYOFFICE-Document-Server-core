@@ -386,6 +386,7 @@ HEADERS += \
 	../../../DocxFormat/DocxToDoc/BinaryStorage.h \
 	../../../DocxFormat/DocxToDoc/Header.h \
 	../../../DocxFormat/DocxToDoc/Footer.h \
+	../../../DocxFormat/DocxToDoc/PropertyReader.h \
 	../../../DocxFormat/DocxToDoc/OfficeArt/BlipFactory.h \
 	../../../DocxFormat/DocxToDoc/OfficeArt/Common.h \
 	../../../DocxFormat/DocxToDoc/OfficeArt/ComplexOfficeArtProperty.h \

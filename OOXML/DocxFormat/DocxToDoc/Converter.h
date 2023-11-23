@@ -45,6 +45,9 @@
 
 #include "../../../MsBinaryFile/Common/Base/LanguageCodes.h"
 
+#include "../../../OOXML/DocxFormat/DocxToDoc/Paragraph.h"
+#include "../../../OOXML/DocxFormat/DocxToDoc/PropertyReader.h"
+
 namespace Docx2Doc
 {
 	class Converter
