@@ -103,12 +103,13 @@ SOURCES += \
 	../../../DocxFormat/Settings/Settings.cpp \
 	../../../DocxFormat/Settings/WebSettings.cpp \
 	../../../DocxFormat/DocxToDoc/Converter.cpp \
-	#../../../DocxFormat/DocxToDoc/DocFile.cpp \
+	../../../DocxFormat/DocxToDoc/DocFile.cpp \
 	../../../DocxFormat/DocxToDoc/Paragraph.cpp \
 	../../../DocxFormat/DocxToDoc/Run.cpp \
 	../../../DocxFormat/DocxToDoc/Text.cpp \
 	../../../DocxFormat/DocxToDoc/Endnote.cpp \
 	../../../DocxFormat/DocxToDoc/Footnote.cpp \
+	../../../DocxFormat/DocxToDoc/TextBox.cpp \
 	#../../../DocxFormat/DocxToDoc/ShapeBuilder.cpp \
 	#../../../DocxFormat/DocxToDoc/ShapePath.cpp \
 	#../../../DocxFormat/DocxToDoc/ShapeSettings.cpp \
@@ -119,7 +120,9 @@ SOURCES += \
 	../../../DocxFormat/DocxToDoc/StyleBooleans.cpp \
 	../../../DocxFormat/DocxToDoc/Header.cpp \
 	../../../DocxFormat/DocxToDoc/Footer.cpp \
+	../../../DocxFormat/DocxToDoc/Hyperlink.cpp \
 	../../../DocxFormat/DocxToDoc/OfficeArt/BlipFactory.cpp \
+	../../../DocxFormat/DocxToDoc/List.cpp \
 	../../../DocxFormat/App.cpp \
 	../../../DocxFormat/Core.cpp \
 	../../../DocxFormat/Bibliography.cpp \
@@ -272,7 +275,7 @@ HEADERS += \
 	../../../DocxFormat/Settings/Settings.h \
 	../../../DocxFormat/Settings/WebSettings.h \
 	../../../DocxFormat/DocxToDoc/Converter.h \
-	#../../../DocxFormat/DocxToDoc/DocFile.h \
+	../../../DocxFormat/DocxToDoc/DocFile.h \
 	../../../DocxFormat/DocxToDoc/Defines.h \
 	../../../DocxFormat/DocxToDoc/Constants.h \
 	../../../DocxFormat/DocxToDoc/LSD.h \
@@ -319,6 +322,7 @@ HEADERS += \
 	../../../DocxFormat/DocxToDoc/PlcfSed.h \
 	../../../DocxFormat/DocxToDoc/PlcfSpa.h \
 	../../../DocxFormat/DocxToDoc/Spa.h \
+	../../../DocxFormat/DocxToDoc/List.h \
 	../../../DocxFormat/DocxToDoc/CellRangeVertAlign.h \
 	../../../DocxFormat/DocxToDoc/Copts60.h \
 	../../../DocxFormat/DocxToDoc/CSSAOperand.h \
@@ -374,6 +378,7 @@ HEADERS += \
 	../../../DocxFormat/DocxToDoc/SttbfFfn.h \
 	../../../DocxFormat/DocxToDoc/Header.h \
 	../../../DocxFormat/DocxToDoc/TDefTableOperand.h \
+	../../../DocxFormat/DocxToDoc/DocxToDocUtils.h \
 	../../../DocxFormat/DocxToDoc/TBD.h \
 	../../../DocxFormat/DocxToDoc/TableRow.h \
 	../../../DocxFormat/DocxToDoc/TableCellWidthOperand.h \
@@ -392,6 +397,9 @@ HEADERS += \
 	../../../DocxFormat/DocxToDoc/ListFormattingInformation.h \
 	../../../DocxFormat/DocxToDoc/LPStd.h \
 	../../../DocxFormat/DocxToDoc/STSH.h \
+	../../../DocxFormat/DocxToDoc/Hyperlink.h \
+	../../../DocxFormat/DocxToDoc/WordStreamWriter.h \
+	../../../DocxFormat/DocxToDoc/TextBox.h \
 	../../../DocxFormat/DocxToDoc/OfficeArt/BlipFactory.h \
 	../../../DocxFormat/DocxToDoc/OfficeArt/Common.h \
 	../../../DocxFormat/DocxToDoc/OfficeArt/ComplexOfficeArtProperty.h \

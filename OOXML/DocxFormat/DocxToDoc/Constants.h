@@ -34,6 +34,16 @@
 
 namespace Docx2Doc
 {
+	// Test build
+	#define PAN_ANY				0
+
+	#define DEFAULT_CHARSET		0x00
+	#define RUSSIAN_CHARSET		0xCC
+	#define ANSI_CHARSET		0x00
+	#define SYMBOL_CHARSET		0x02
+	#define SHIFTJIS_CHARSET	0x80
+	#define GB2312_CHARSET		0x86
+
 	namespace Constants
 	{
 		enum HorzMerge

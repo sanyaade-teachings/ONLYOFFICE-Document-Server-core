@@ -87,7 +87,7 @@ namespace Docx2Doc
 
 					for ( ; i < ( this->cpara + 1); i++ )
 					{
-						FormatUtils::SetBytes( ( bytes + ( i * sizeof(this->rgfc[i]) ) ), (int)this->rgfc[i] );
+						DocFileFormat::FormatUtils::SetBytes( ( bytes + ( i * sizeof(this->rgfc[i]) ) ), (int)this->rgfc[i] );
 					}
 
 					i = ( this->cpara + 1) * sizeof(this->rgfc[i]);

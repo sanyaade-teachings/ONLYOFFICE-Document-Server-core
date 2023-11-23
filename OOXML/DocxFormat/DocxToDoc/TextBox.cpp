@@ -1,7 +1,38 @@
-#include "stdafx.h"
+/*
+ * (c) Copyright Ascensio System SIA 2010-2023
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+ 
 #include "TextBox.h"
 
-namespace AVSDocFileFormat
+namespace Docx2Doc
 {
 	TextBox::TextBox (short _aFtnIdx) : textBoxItemsOffset(0), aFtnIdx(_aFtnIdx)
 	{
@@ -17,7 +48,7 @@ namespace AVSDocFileFormat
 	}
 }
 
-namespace AVSDocFileFormat
+namespace Docx2Doc
 {
 	void TextBox::AddTextItem(const ITextItem& oTextItem)
 	{
@@ -53,7 +84,7 @@ namespace AVSDocFileFormat
 	}
 
 
-	TextBox::operator wstring() const
+	TextBox::operator std::wstring() const
 	{
 		std::wstring allText;
 
@@ -83,16 +114,16 @@ namespace AVSDocFileFormat
 	}
 
 
-	vector<ITextItem*> TextBox::GetAllParagraphs()
+	std::vector<ITextItem*> TextBox::GetAllParagraphs()
 	{
-		vector<ITextItem*> allParagraphs;
+		std::vector<ITextItem*> allParagraphs;
 
-		for ( list<TextBoxItemWithOffset>::const_iterator iter = this->textItems.begin(); iter != this->textItems.end(); iter++ )
+		for ( std::list<TextBoxItemWithOffset>::const_iterator iter = this->textItems.begin(); iter != this->textItems.end(); iter++ )
 		{
 			ITextItem* item = (ITextItem*)iter->textBoxItem.operator->();
-			vector<ITextItem*> textItemParagraphs = item->GetAllParagraphs();
+			std::vector<ITextItem*> textItemParagraphs = item->GetAllParagraphs();
 
-			for ( vector<ITextItem*>::iterator textItemParagraphsIter = textItemParagraphs.begin(); textItemParagraphsIter != textItemParagraphs.end(); textItemParagraphsIter++ )
+			for ( std::vector<ITextItem*>::iterator textItemParagraphsIter = textItemParagraphs.begin(); textItemParagraphsIter != textItemParagraphs.end(); textItemParagraphsIter++ )
 			{
 				allParagraphs.push_back( *textItemParagraphsIter );
 			}
@@ -101,14 +132,14 @@ namespace AVSDocFileFormat
 		return allParagraphs;
 	}
 
-	std::vector<PapxInFkp> TextBox::GetAllParagraphsProperties( vector<unsigned int>* allParagraphsOffsets ) const
+	std::vector<PapxInFkp> TextBox::GetAllParagraphsProperties( std::vector<unsigned int>* allParagraphsOffsets ) const
 	{
 		std::vector<PapxInFkp> allParagraphsProperties;
 		unsigned int paragraphOffset = 0;
 
 		if (allParagraphsOffsets)
 		{
-			for ( list<TextBoxItemWithOffset>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
+			for ( std::list<TextBoxItemWithOffset>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
 			{
 				std::vector<unsigned int> footnoteItemParagraphsOffsets;
 				std::vector<PapxInFkp> itemParagraphsProperties = iter->textBoxItem->GetAllParagraphsProperties( &footnoteItemParagraphsOffsets );
@@ -126,7 +157,7 @@ namespace AVSDocFileFormat
 		return allParagraphsProperties;
 	}
 
-	std::vector<Chpx> TextBox::GetAllRunProperties(vector<unsigned int>* allRunsOffsets) const
+	std::vector<Chpx> TextBox::GetAllRunProperties(std::vector<unsigned int>* allRunsOffsets) const
 	{
 		std::vector<Chpx> allRunsProperties;
 		unsigned int runOffset = 0;
@@ -152,7 +183,7 @@ namespace AVSDocFileFormat
 	}
 
 
-	std::vector<IParagraphItemPtr> TextBox::GetAllRunsCopy(vector<unsigned int>* allRunsOffsets) const
+	std::vector<IParagraphItemPtr> TextBox::GetAllRunsCopy(std::vector<unsigned int>* allRunsOffsets) const
 	{
 		std::vector<IParagraphItemPtr> allRuns;
 
@@ -160,7 +191,7 @@ namespace AVSDocFileFormat
 		{
 			unsigned int runOffset = 0;
 
-			for ( list<TextBoxItemWithOffset>::const_iterator iter = this->textItems.begin(); iter != this->textItems.end(); iter++ )
+			for ( std::list<TextBoxItemWithOffset>::const_iterator iter = this->textItems.begin(); iter != this->textItems.end(); iter++ )
 			{
 				std::vector<unsigned int> allTextItemRunsOffsets;
 				std::vector<IParagraphItemPtr> allTextItemRuns = iter->textBoxItem->GetAllRunsCopy( &allTextItemRunsOffsets );
@@ -179,7 +210,7 @@ namespace AVSDocFileFormat
 	}
 
 
-	vector<IParagraphItemPtr> TextBox::GetAllParagraphItemsCopy( vector<unsigned int>* allParagraphItemsOffsets ) const
+	std::vector<IParagraphItemPtr> TextBox::GetAllParagraphItemsCopy( std::vector<unsigned int>* allParagraphItemsOffsets ) const
 	{
 		std::vector<IParagraphItemPtr> allParagraphItems;
 

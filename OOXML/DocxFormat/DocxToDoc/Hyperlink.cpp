@@ -1,15 +1,44 @@
-#include "stdafx.h"
+/*
+ * (c) Copyright Ascensio System SIA 2010-2023
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
 
 #include "Hyperlink.h"
 
-namespace AVSDocFileFormat
+namespace Docx2Doc
 {
 	Hyperlink::Hyperlink ()
 	{
-
 	}
 
-	Hyperlink::Hyperlink (const vector<Run>& runs)
+	Hyperlink::Hyperlink (const std::vector<Run>& runs)
 	{
 		for (size_t i = 0; i < runs.size(); ++i)
 		{
@@ -22,7 +51,7 @@ namespace AVSDocFileFormat
 	}
 }
 
-namespace AVSDocFileFormat
+namespace Docx2Doc
 {
 	void Hyperlink::BuildUrlRuns() const
 	{
@@ -32,14 +61,14 @@ namespace AVSDocFileFormat
 
 		text.push_back( TextMark::FieldBeginMark );
 
-		AVSDocFileFormat::Run fieldBeginRun( AVSDocFileFormat::Text( text.c_str() ) );
+		Docx2Doc::Run fieldBeginRun( Docx2Doc::Text( text.c_str() ) );
 		fieldBeginRun.AddProperty( (short)DocFileFormat::sprmCFSpec, (void*)&CFSpec );
 
-		text		=	wstring( _T( " HYPERLINK" ) );
+		text		=	std::wstring( _T( " HYPERLINK" ) );
 
 		if ( !url.empty() )
 		{
-			text	+=	wstring( _T( " \"" ) );
+			text	+=	std::wstring( _T( " \"" ) );
 			text	+=	url;
 			text.push_back( _T( '"' ) );
 			text.push_back( _T( ' ' ) );
@@ -47,23 +76,23 @@ namespace AVSDocFileFormat
 
 		if ( !locationInTheFile.empty() )
 		{
-			text	+=	wstring( _T( " \\l \"" ) );
+			text	+=	std::wstring( _T( " \\l \"" ) );
 			text	+=	locationInTheFile;
 			text.push_back( _T( '"' ) );
 		}
 
-		AVSDocFileFormat::Run specialRun (AVSDocFileFormat::Text(text.c_str()));
+		Docx2Doc::Run specialRun (Docx2Doc::Text(text.c_str()));
 
 		text.clear();
 		text.push_back( TextMark::FieldSeparator );
 
-		AVSDocFileFormat::Run fieldSeperatorRun( AVSDocFileFormat::Text( text.c_str() ) );
+		Docx2Doc::Run fieldSeperatorRun( Docx2Doc::Text( text.c_str() ) );
 		fieldSeperatorRun.AddProperty( (short)DocFileFormat::sprmCFSpec, (void*)&CFSpec );
 
 		text.clear();
 		text.push_back( TextMark::FieldEndMark );
 
-		AVSDocFileFormat::Run fieldEndRun( AVSDocFileFormat::Text( text.c_str() ) );
+		Docx2Doc::Run fieldEndRun( Docx2Doc::Text( text.c_str() ) );
 		fieldEndRun.AddProperty( (short)DocFileFormat::sprmCFSpec, (void*)&CFSpec );
 
 		specialRuns.push_back( ParagraphItem( fieldBeginRun ) );
@@ -85,11 +114,11 @@ namespace AVSDocFileFormat
 	{
 		if ( _url != NULL )
 		{
-			url = wstring( _url );
+			url = std::wstring( _url );
 		}
 	}
 
-	wstring Hyperlink::GetURL() const
+	std::wstring Hyperlink::GetURL() const
 	{
 		return url;
 	}
@@ -100,29 +129,28 @@ namespace AVSDocFileFormat
 	{
 		if ( _locationInTheFile != NULL )
 		{
-			locationInTheFile = wstring( _locationInTheFile );
+			locationInTheFile = std::wstring( _locationInTheFile );
 		}  
 	}
 
-	wstring Hyperlink::GetLocationInTheFile() const
+	std::wstring Hyperlink::GetLocationInTheFile() const
 	{
 		return locationInTheFile;
 	}
 
 	/*========================================================================================================*/
 
-	wstring Hyperlink::GetHyperlinkText() const
+	std::wstring Hyperlink::GetHyperlinkText() const
 	{
-		wstring hyperlinkText;
+		std::wstring hyperlinkText;
 
-		for (list<ParagraphItem>::const_iterator iter = textRuns.begin(); iter != textRuns.end(); ++iter)
+		for (std::list<ParagraphItem>::const_iterator iter = textRuns.begin(); iter != textRuns.end(); ++iter)
 		{
 			hyperlinkText += (*iter)->GetAllText();
 		}
 
 		return hyperlinkText;
 	}
-
 
 	/*========================================================================================================*/
 
@@ -133,11 +161,11 @@ namespace AVSDocFileFormat
 
 	/*========================================================================================================*/
 
-	wstring Hyperlink::GetAllText() const
+	std::wstring Hyperlink::GetAllText() const
 	{
 		BuildUrlRuns();
 
-		wstring allText;
+		std::wstring allText;
 
 		for (unsigned int i = 0; i < specialRuns.size() - 1; ++i)
 		{
@@ -152,9 +180,9 @@ namespace AVSDocFileFormat
 
 	/*========================================================================================================*/
 
-	vector<Chpx> Hyperlink::GetRunProperties( vector<unsigned int>* runOffsets ) const
+	std::vector<Chpx> Hyperlink::GetRunProperties( std::vector<unsigned int>* runOffsets ) const
 	{
-		vector<Chpx> allRunsProperties;
+		std::vector<Chpx> allRunsProperties;
 
 		if ( runOffsets != NULL )
 		{
@@ -164,8 +192,8 @@ namespace AVSDocFileFormat
 
 			for ( unsigned int i = 0; i < ( this->specialRuns.size() - 1 ); i++ )
 			{
-				vector<unsigned int> runOffset;
-				vector<Chpx> runProperties = this->specialRuns[i]->GetRunProperties( &runOffset );
+				std::vector<unsigned int> runOffset;
+				std::vector<Chpx> runProperties = this->specialRuns[i]->GetRunProperties( &runOffset );
 
 				for ( unsigned int j = 0; j < runProperties.size(); j++ )
 				{
@@ -176,10 +204,10 @@ namespace AVSDocFileFormat
 				allRunsOffset += ( sizeof(WCHAR) * this->specialRuns[i]->GetTextSize() );
 			}
 
-			for ( list<ParagraphItem>::const_iterator iter = this->textRuns.begin(); iter != this->textRuns.end(); iter++ )
+			for ( std::list<ParagraphItem>::const_iterator iter = this->textRuns.begin(); iter != this->textRuns.end(); iter++ )
 			{
-				vector<unsigned int> runOffset;
-				vector<Chpx> runProperties = (*iter)->GetRunProperties( &runOffset );
+				std::vector<unsigned int> runOffset;
+				std::vector<Chpx> runProperties = (*iter)->GetRunProperties( &runOffset );
 
 				for ( unsigned int i = 0; i < runProperties.size(); i++ )
 				{
@@ -190,8 +218,8 @@ namespace AVSDocFileFormat
 				allRunsOffset += ( sizeof(WCHAR) * (*iter)->GetTextSize() );
 			}
 
-			vector<unsigned int> runOffset;
-			vector<Chpx> runProperties = this->specialRuns.back()->GetRunProperties( &runOffset );
+			std::vector<unsigned int> runOffset;
+			std::vector<Chpx> runProperties = this->specialRuns.back()->GetRunProperties( &runOffset );
 
 			for ( unsigned int i = 0; i < runProperties.size(); i++ )
 			{
@@ -209,16 +237,16 @@ namespace AVSDocFileFormat
 
 	unsigned int Hyperlink::PrlSize () const
 	{
-		vector<unsigned int> runOffsets;
+		std::vector<unsigned int> runOffsets;
 
 		return (unsigned int)GetRunProperties( &runOffsets ).size();
 	}
 
 	/*========================================================================================================*/
 
-	vector<IParagraphItemPtr> Hyperlink::GetAllRunsCopy( vector<unsigned int>* runOffsets ) const
+	std::vector<IParagraphItemPtr> Hyperlink::GetAllRunsCopy( std::vector<unsigned int>* runOffsets ) const
 	{
-		vector<IParagraphItemPtr> allRunsCopy;
+		std::vector<IParagraphItemPtr> allRunsCopy;
 
 		if ( runOffsets != NULL )
 		{
@@ -233,7 +261,7 @@ namespace AVSDocFileFormat
 				runOffset += ( sizeof(WCHAR) * this->specialRuns[i]->GetTextSize() );
 			}
 
-			for ( list<ParagraphItem>::const_iterator iter = this->textRuns.begin(); iter != this->textRuns.end(); iter++ )
+			for ( std::list<ParagraphItem>::const_iterator iter = this->textRuns.begin(); iter != this->textRuns.end(); iter++ )
 			{
 				allRunsCopy.push_back( IParagraphItemPtr( static_cast<IParagraphItem*>((*iter)->Clone()) ) );
 				runOffsets->push_back( runOffset );
@@ -264,9 +292,9 @@ namespace AVSDocFileFormat
 
 	/*========================================================================================================*/
 
-	vector<CP> Hyperlink::GetFieldCharactersPositions() const
+	std::vector<CP> Hyperlink::GetFieldCharactersPositions() const
 	{
-		vector<CP> fieldCharactersPositions;
+		std::vector<CP> fieldCharactersPositions;
 
 		BuildUrlRuns();
 
@@ -295,19 +323,19 @@ namespace AVSDocFileFormat
 
 	/*========================================================================================================*/
 
-	vector<Fld> Hyperlink::GetFieldCharactersProperties() const
+	std::vector<Fld> Hyperlink::GetFieldCharactersProperties() const
 	{
-		vector<Fld> fieldCharactersProperties;
+		std::vector<Fld> fieldCharactersProperties;
 
 		fieldCharactersProperties.push_back (Fld (FldChar::FldCharBegin, Constants::fltHYPERLINK ) );
 		fieldCharactersProperties.push_back (Fld (FldChar::FldCharSeparate, 0 ) );
-		fieldCharactersProperties.push_back (Fld (FldChar::FldCharEnd, (byte)grffldEnd( false, false, false, false, false, false, false, true ) ) );
+		fieldCharactersProperties.push_back (Fld (FldChar::FldCharEnd, (BYTE)grffldEnd( false, false, false, false, false, false, false, true ) ) );
 
 		return fieldCharactersProperties;
 	}
 }
 
-namespace AVSDocFileFormat
+namespace Docx2Doc
 {
 	Hyperlink::const_iterator Hyperlink::begin() const
 	{

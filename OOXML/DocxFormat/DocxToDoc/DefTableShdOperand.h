@@ -60,7 +60,7 @@ namespace Docx2Doc
 		{
 			if ( _rgShd.size() <= 22 )
 			{
-				this->sizeInBytes = ( ( _rgShd.size() * 10 ) + sizeof(byBYTEte) );
+				this->sizeInBytes = ( ( _rgShd.size() * 10 ) + sizeof(BYTE) );
 
 				if ( this->sizeInBytes != 0 )
 				{

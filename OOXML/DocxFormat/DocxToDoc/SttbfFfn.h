@@ -108,6 +108,16 @@ namespace Docx2Doc
 		}
 	};
 
+	struct FONTSIGNATURE
+	{
+		unsigned int UnicodeSubsetBitfield0;
+		unsigned int UnicodeSubsetBitfield1;
+		unsigned int UnicodeSubsetBitfield2;
+		unsigned int UnicodeSubsetBitfield3;
+		unsigned int CodePageBitfield0;
+		unsigned int CodePageBitfield1;
+	};
+
 	class FFN: public IOperand
 	{
 	private:

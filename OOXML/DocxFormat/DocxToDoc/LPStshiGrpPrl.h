@@ -112,7 +112,7 @@ namespace Docx2Doc
 		}
 	private:
 
-		vector<Prl> grpprl;
+		std::vector<Prl> grpprl;
 
 		BYTE* bytes;
 		unsigned int sizeInBytes;

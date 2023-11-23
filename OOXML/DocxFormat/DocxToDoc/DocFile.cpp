@@ -31,8 +31,12 @@
  */
 
 #include "DocFile.h"
+#include "TextBox.h"
+#include "FldChar.h"
 
-#include <AtlFile.h>
+#include "../../../MsBinaryFile/Common/Base/FormatUtils.h"
+
+//#include <AtlFile.h>
 
 #define WRITE_STREAM_WORD(VAR)	hr=STREAMS::CSWordWriter::Instance()->Write(FIB_OFFSET::VAR,&VAR,sizeof(VAR))
 #define WRITE_STREAM_TABLE(VAR,BUFFER) m_nBuffOk=0;hr=Write(m_pTableStream,fc##VAR,(byte*)BUFFER,lcb##VAR,&m_nBuffOk);
@@ -51,7 +55,7 @@ namespace Docx2Doc
 		ccpTxbx								=	0;
 		ccpHdrTxbx							=	0;
 
-		m_pIStorage							=	NULL;
+		//m_pIStorage							=	NULL;
 
 		m_pTableStream						=	NULL;
 		m_pSummaryInformationStream			=	NULL;
@@ -60,14 +64,14 @@ namespace Docx2Doc
 
 	CDocFile::~CDocFile()
 	{
-		RELEASEINTERFACE(m_pIStorage);
-		RELEASEINTERFACE(m_pTableStream);
-		RELEASEINTERFACE(m_pSummaryInformationStream);
-		RELEASEINTERFACE(m_pDocumentSummaryInformationStream);
+		//RELEASEINTERFACE(m_pIStorage);
+		//RELEASEINTERFACE(m_pTableStream);
+		//RELEASEINTERFACE(m_pSummaryInformationStream);
+		//RELEASEINTERFACE(m_pDocumentSummaryInformationStream);
 	}
 }
 
-namespace AVSDocFileFormat
+namespace Docx2Doc
 {
 	void CDocFile::AddTextItem (const ITextItem& oItem)
 	{
@@ -95,8 +99,10 @@ namespace AVSDocFileFormat
 	}
 }
 
-namespace AVSDocFileFormat
-{	
+namespace Docx2Doc
+{
+	using namespace DocFileFormat;
+
 	long CDocFile::WriteInformationBlock ()
 	{
 		long hr	= S_FALSE;
@@ -108,7 +114,7 @@ namespace AVSDocFileFormat
 #define WRITE_FIELD(OFFSET,POINTER,SIZE) hr=pBin->Write(OFFSET,&POINTER,SIZE)	
 
 #define SIZE_F	4096	// 2048		//	начальную область обнуляем 
-		byte NILL[SIZE_F];	memset(NILL, 0, SIZE_F);		WRITE_FIELD(0,NILL,SIZE_F);
+		BYTE NILL[SIZE_F];	memset(NILL, 0, SIZE_F);		WRITE_FIELD(0,NILL,SIZE_F);
 
 		// FibBase
 
@@ -118,7 +124,7 @@ namespace AVSDocFileFormat
 		Bool16 lid		=	0x419;							WRITE_FIELD(FIB_OFFSET::lid,			lid,		sizeof(Bool16));	
 		Bool16 pnNext	=	0;								WRITE_FIELD(FIB_OFFSET::pnNext,			pnNext,		sizeof(Bool16));
 
-		AVSDocFormatUtils::BitSet oBits(1);
+		DocFileFormat::BitSet oBits(1);
 
 		oBits.SetBit(false,0);								//	fDot
 		oBits.SetBit(false,1);								//	fGlsy
@@ -126,7 +132,7 @@ namespace AVSDocFileFormat
 		oBits.SetBit(false,3);								//	fHasPic
 		oBits.SetBits<Bool16>(0xF,4,4);						//	cQuickSaves
 
-		AVSDocFormatUtils::BitSet oBits2(1);
+		DocFileFormat::BitSet oBits2(1);
 
 		oBits2.SetBit(false,0);								//	fEncrypted
 		oBits2.SetBit(true, 1);								//+	fWhichTblStm
@@ -144,7 +150,7 @@ namespace AVSDocFileFormat
 		Bool32 lKey		=	0;								WRITE_FIELD(FIB_OFFSET::lKey,			lKey,		sizeof(Bool32));	
 		Bool16 envr		=	0;								WRITE_FIELD(FIB_OFFSET::envr,			envr,		sizeof(Bool16));	
 
-		AVSDocFormatUtils::BitSet oBits3(1);
+		DocFileFormat::BitSet oBits3(1);
 
 		oBits3.SetBit(false,0);								//	fMac
 		oBits3.SetBit(false,1);								//	fEmptySpecial
@@ -200,7 +206,7 @@ namespace AVSDocFileFormat
 	{
 		long hr	= S_FALSE;
 
-		STREAMS::CSWordWriter* pBin	= STREAMS::CSWordWriter::Instance();
+		/*STREAMS::CSWordWriter* pBin	= STREAMS::CSWordWriter::Instance();
 		if (NULL == pBin)
 			return hr;
 
@@ -219,8 +225,8 @@ namespace AVSDocFileFormat
 		{
 			m_oartStorage			=	COArtStorage::Instance();
 
-			vector<CP> AllFootnotesReferences;
-			vector<CP> AllEndnotesReferences;
+			std::vector<CP> AllFootnotesReferences;
+			std::vector<CP> AllEndnotesReferences;
 
 			WriteMainDocument(&textPosition, &AllFootnotesReferences, &AllEndnotesReferences);
 
@@ -260,8 +266,8 @@ namespace AVSDocFileFormat
 			hr = pBin->Write (28, &fcMac, sizeof(fcMac));
 
 			//write Clx
-			vector<unsigned int> aCP;
-			vector<Pcd> aPcd;
+			std::vector<unsigned int> aCP;
+			std::vector<Pcd> aPcd;
 
 			aCP.push_back(0);
 
@@ -296,10 +302,10 @@ namespace AVSDocFileFormat
 			const unsigned int PlcBteOffset		=	oStatus.cbSize.LowPart;
 
 			// Write paragraphs properties
-			vector<PapxFkp> allPapxFkps			=	PapxFkp::GetAllPapxFkps(m_arParagraphsOffSets, m_arPapxInFkp);
+			std::vector<PapxFkp> allPapxFkps			=	PapxFkp::GetAllPapxFkps(m_arParagraphsOffSets, m_arPapxInFkp);
 
-			vector<unsigned int> _aFC;
-			vector<unsigned int> aPnBtePapx;
+			std::vector<unsigned int> _aFC;
+			std::vector<unsigned int> aPnBtePapx;
 
 			_aFC.push_back( TEXT_OFFSET_POSITION );
 
@@ -326,10 +332,10 @@ namespace AVSDocFileFormat
 			plcBtePapx.WriteToStream( m_pTableStream, PlcBteOffset );
 
 			//write runs properties
-			vector<ChpxFkp> allChpxFkps = ChpxFkp::GetAllChpxFkps(m_arRunsOffsets, m_arChpx);
+			std::vector<ChpxFkp> allChpxFkps = ChpxFkp::GetAllChpxFkps(m_arRunsOffsets, m_arChpx);
 
 			_aFC.clear();
-			vector<unsigned int> aPnBteChpx;
+			std::vector<unsigned int> aPnBteChpx;
 
 			_aFC.push_back(TEXT_OFFSET_POSITION);
 
@@ -358,12 +364,12 @@ namespace AVSDocFileFormat
 
 			if (m_oartStorage)
 				m_oartStorage->WriteBlips ();
-		}
+		}*/
 
 		return hr;
 	}
 
-	long CDocFile::WriteMainDocument (unsigned int* _textPosition, vector<CP>* _AllFootnotesReferences, vector<CP>* _AllEndnotesReferences)
+	long CDocFile::WriteMainDocument (unsigned int* _textPosition, std::vector<CP>* _AllFootnotesReferences, std::vector<CP>* _AllEndnotesReferences)
 	{
 		long hr	= S_FALSE;
 
@@ -373,16 +379,16 @@ namespace AVSDocFileFormat
 
 			WriteFibRgLw97 ();
 
-			map<CP, Fld> cpFldMap;
-			vector<pair<CP, wstring>> bookmarksStartsCPsWithIDs;
-			vector<pair<CP, wstring>> bookmarksEndsCPsWithIDs;
-			vector<wstring> bookmarksNames;
+			std::map<CP, Fld> cpFldMap;
+			std::vector<std::pair<CP, std::wstring>> bookmarksStartsCPsWithIDs;
+			std::vector<std::pair<CP, std::wstring>> bookmarksEndsCPsWithIDs;
+			std::vector<std::wstring> bookmarksNames;
 
 			//write all text to the document
-			for (list<TextItem>::iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
+			for (std::list<TextItem>::iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
 			{
-				vector<unsigned int> allTextItemOffsets;
-				vector<PapxInFkp> allTextItemProperties = (*iter)->GetAllParagraphsProperties( &allTextItemOffsets );
+				std::vector<unsigned int> allTextItemOffsets;
+				std::vector<PapxInFkp> allTextItemProperties = (*iter)->GetAllParagraphsProperties( &allTextItemOffsets );
 
 				for (unsigned int i = 0; i < allTextItemProperties.size(); ++i)
 				{
@@ -390,8 +396,8 @@ namespace AVSDocFileFormat
 					m_arParagraphsOffSets.push_back(*_textPosition + allTextItemOffsets[i]); 
 				}
 
-				vector<unsigned int> allTextItemRunsOffsets;
-				vector<Chpx> allTextItemChpxs = (*iter)->GetAllRunProperties( &allTextItemRunsOffsets );
+				std::vector<unsigned int> allTextItemRunsOffsets;
+				std::vector<Chpx> allTextItemChpxs = (*iter)->GetAllRunProperties( &allTextItemRunsOffsets );
 
 				for (unsigned int i = 0; i < allTextItemChpxs.size(); ++i)
 				{
@@ -399,23 +405,23 @@ namespace AVSDocFileFormat
 					m_arRunsOffsets.push_back(*_textPosition + allTextItemRunsOffsets[i]);
 				}
 
-				vector<ParagraphItem> allTextItemFootnotes = iter->GetAllRunItemsByType<FootnoteReference>();
+				std::vector<ParagraphItem> allTextItemFootnotes = iter->GetAllRunItemsByType<FootnoteReference>();
 
-				for (vector<ParagraphItem>::const_iterator footnotesIter = allTextItemFootnotes.begin(); footnotesIter != allTextItemFootnotes.end(); ++footnotesIter)
+				for (std::vector<ParagraphItem>::const_iterator footnotesIter = allTextItemFootnotes.begin(); footnotesIter != allTextItemFootnotes.end(); ++footnotesIter)
 				{
 					_AllFootnotesReferences->push_back(OffsetToCP( *_textPosition + footnotesIter->GetOffset()));
 				}
 
-				vector<ParagraphItem> allTextItemEndnotes = iter->GetAllRunItemsByType<EndnoteReference>();
+				std::vector<ParagraphItem> allTextItemEndnotes = iter->GetAllRunItemsByType<EndnoteReference>();
 
-				for (vector<ParagraphItem>::const_iterator endnotesIter = allTextItemEndnotes.begin(); endnotesIter != allTextItemEndnotes.end(); ++endnotesIter)
+				for (std::vector<ParagraphItem>::const_iterator endnotesIter = allTextItemEndnotes.begin(); endnotesIter != allTextItemEndnotes.end(); ++endnotesIter)
 				{
 					_AllEndnotesReferences->push_back(OffsetToCP( *_textPosition + endnotesIter->GetOffset() ) );
 				}
 
-				vector<ParagraphItem> allTextItemBookmarksStarts = iter->GetAllParagraphItemsByType<BookmarkStart>();
+				std::vector<ParagraphItem> allTextItemBookmarksStarts = iter->GetAllParagraphItemsByType<BookmarkStart>();
 
-				for ( vector<ParagraphItem>::const_iterator bookmarksStartsIter = allTextItemBookmarksStarts.begin(); bookmarksStartsIter != allTextItemBookmarksStarts.end(); bookmarksStartsIter++ )
+				for ( std::vector<ParagraphItem>::const_iterator bookmarksStartsIter = allTextItemBookmarksStarts.begin(); bookmarksStartsIter != allTextItemBookmarksStarts.end(); bookmarksStartsIter++ )
 				{
 					if ( bookmarksStartsIter->is<BookmarkStart>() )
 					{
@@ -426,9 +432,9 @@ namespace AVSDocFileFormat
 					}
 				}
 
-				vector<ParagraphItem> allTextItemBookmarksEnds = iter->GetAllParagraphItemsByType<BookmarkEnd>();
+				std::vector<ParagraphItem> allTextItemBookmarksEnds = iter->GetAllParagraphItemsByType<BookmarkEnd>();
 
-				for ( vector<ParagraphItem>::const_iterator bookmarksEndsIter = allTextItemBookmarksEnds.begin(); bookmarksEndsIter != allTextItemBookmarksEnds.end(); bookmarksEndsIter++ )
+				for ( std::vector<ParagraphItem>::const_iterator bookmarksEndsIter = allTextItemBookmarksEnds.begin(); bookmarksEndsIter != allTextItemBookmarksEnds.end(); bookmarksEndsIter++ )
 				{
 					if ( bookmarksEndsIter->is<BookmarkEnd>() )
 					{
@@ -453,27 +459,28 @@ namespace AVSDocFileFormat
 		return hr;
 	}
 
-	void CDocFile::AddFldCharsData (unsigned int nTextPos, const TextItem& oItem, map<CP, Fld>* cpFldMap)
+	void CDocFile::AddFldCharsData (unsigned int nTextPos, const TextItem& oItem, std::map<CP, Fld>* cpFldMap)
 	{
 		if(cpFldMap)
 		{
-			vector<ParagraphItem>& arrFldChars	=	oItem.GetAllRunItemsByType<FldChar>();
+			//std::vector<ParagraphItem>& arrFldChars	=	oItem.GetAllRunItemsByType<FldChar>();
+			std::vector<ParagraphItem> arrFldChars;
 			if (arrFldChars.empty())
 				return;
 
-			for (vector<ParagraphItem>::const_iterator fldCharsIter = arrFldChars.begin(); fldCharsIter != arrFldChars.end(); ++fldCharsIter)
+			for (std::vector<ParagraphItem>::const_iterator fldCharsIter = arrFldChars.begin(); fldCharsIter != arrFldChars.end(); ++fldCharsIter)
 			{
 				if (fldCharsIter->is<Run>())
 				{
 					const Run& run = fldCharsIter->as<Run>();
 
-					for (list<RunItem>::const_iterator runIter = run.begin(); runIter != run.end(); ++runIter)
+					for (std::list<RunItem>::const_iterator runIter = run.begin(); runIter != run.end(); ++runIter)
 					{
 						if (runIter->is<FldChar>())
 						{
 							const FldChar& fldChar = runIter->as<FldChar>();
 
-							cpFldMap->insert( make_pair( OffsetToCP( nTextPos + fldCharsIter->GetOffset() ), fldChar.GetField() ) );
+							cpFldMap->insert( std::make_pair( OffsetToCP( nTextPos + fldCharsIter->GetOffset() ), fldChar.GetField() ) );
 						}
 					}
 				}
@@ -481,11 +488,11 @@ namespace AVSDocFileFormat
 		}
 	}
 
-	void CDocFile::AddHyperlinksData (unsigned int nTextPos, const TextItem& oItem, map<CP, Fld>* cpFldMap)
+	void CDocFile::AddHyperlinksData (unsigned int nTextPos, const TextItem& oItem, std::map<CP, Fld>* cpFldMap)
 	{
 		if (cpFldMap)
 		{
-			const vector<ParagraphItem>& oHyperlinks	=	oItem.GetAllParagraphItemsByType<Hyperlink>();
+			const std::vector<ParagraphItem>& oHyperlinks	=	oItem.GetAllParagraphItemsByType<Hyperlink>();
 			if (oHyperlinks.empty())
 				return;
 
@@ -495,12 +502,12 @@ namespace AVSDocFileFormat
 				{
 					Hyperlink oHyperlink			=	oHyperlinks[j].as<Hyperlink>();
 
-					vector<CP> hyperlinkACP			=	oHyperlink.GetFieldCharactersPositions();
-					vector<Fld> hyperlinkAFld		=	oHyperlink.GetFieldCharactersProperties();
+					std::vector<CP> hyperlinkACP			=	oHyperlink.GetFieldCharactersPositions();
+					std::vector<Fld> hyperlinkAFld		=	oHyperlink.GetFieldCharactersProperties();
 
 					for (size_t i = 0; i < hyperlinkACP.size(); ++i)
 					{
-						cpFldMap->insert ( make_pair( CP(OffsetToCP(nTextPos + oHyperlinks[j].GetOffset()) + hyperlinkACP[i] ), hyperlinkAFld[i]));  
+						cpFldMap->insert ( std::make_pair( CP(OffsetToCP(nTextPos + oHyperlinks[j].GetOffset()) + hyperlinkACP[i] ), hyperlinkAFld[i]));
 					}
 				}
 			}  
@@ -508,11 +515,11 @@ namespace AVSDocFileFormat
 	}  	  
 
 
-	void CDocFile::AddInlineShapesData (unsigned int nTextPos, const TextItem& oItem, map<CP, Fld>* cpFldMap)
+	void CDocFile::AddInlineShapesData (unsigned int nTextPos, const TextItem& oItem, std::map<CP, Fld>* cpFldMap)
 	{
-		if (cpFldMap)
+		/*if (cpFldMap)
 		{
-			const vector<ParagraphItem>& oInlineShapes	=	oItem.GetAllParagraphItemsByType<InlineShape>();
+			const std::vector<ParagraphItem>& oInlineShapes	=	oItem.GetAllParagraphItemsByType<InlineShape>();
 			if (oInlineShapes.empty())
 				return;
 
@@ -522,8 +529,8 @@ namespace AVSDocFileFormat
 				{
 					InlineShape oShape			=	oInlineShapes[j].as<InlineShape>();
 
-					vector<CP> oShapeACP		=	oShape.GetFieldCharactersPositions();
-					vector<Fld> oShapeAFld		=	oShape.GetFieldCharactersProperties();
+					std::vector<CP> oShapeACP		=	oShape.GetFieldCharactersPositions();
+					std::vector<Fld> oShapeAFld		=	oShape.GetFieldCharactersProperties();
 
 					for (size_t i = 0; i < oShapeACP.size(); ++i)
 					{
@@ -531,21 +538,19 @@ namespace AVSDocFileFormat
 					}
 				}
 			}  
-		}
-	}  	  
+		}*/
+	}
 
-
-
-	long CDocFile::WriteMainDocumentFields( const map<CP, Fld>& _cpFldMap )
+	long CDocFile::WriteMainDocumentFields( const std::map<CP, Fld>& _cpFldMap )
 	{
 		long hr	= S_FALSE;
 
-		if ( !_cpFldMap.empty() )
+		/*if ( !_cpFldMap.empty() )
 		{
-			vector<CP> _aCP;
-			vector<Fld> _aFld;
+			std::vector<CP> _aCP;
+			std::vector<Fld> _aFld;
 
-			for ( map<CP, Fld>::const_iterator iter = _cpFldMap.begin(); iter != _cpFldMap.end(); iter++ )
+			for ( std::map<CP, Fld>::const_iterator iter = _cpFldMap.begin(); iter != _cpFldMap.end(); iter++ )
 			{
 				_aCP.push_back( iter->first );
 				_aFld.push_back( iter->second );
@@ -567,21 +572,21 @@ namespace AVSDocFileFormat
 
 			hr = STREAMS::CSWordWriter::Instance()->Write (282, &fcPlcfFldMom, sizeof(fcPlcfFldMom));
 			hr = STREAMS::CSWordWriter::Instance()->Write (286, &lcbPlcfFldMom, sizeof(lcbPlcfFldMom));
-		}
+		}*/
 
 		return hr;
 	}
 
-	long CDocFile::WriteFootnoteDocumentFields (const map<CP, Fld>& _cpFldMap)
+	long CDocFile::WriteFootnoteDocumentFields (const std::map<CP, Fld>& _cpFldMap)
 	{
 		long hr	= S_FALSE;
 
-		if ( !_cpFldMap.empty() )
+		/*if ( !_cpFldMap.empty() )
 		{
 			std::vector<CP> _aCP;
 			std::vector<Fld> _aFld;
 
-			for (map<CP, Fld>::const_iterator iter = _cpFldMap.begin(); iter != _cpFldMap.end(); ++iter)
+			for (std::map<CP, Fld>::const_iterator iter = _cpFldMap.begin(); iter != _cpFldMap.end(); ++iter)
 			{
 				_aCP.push_back(iter->first);
 				_aFld.push_back(iter->second);
@@ -603,21 +608,21 @@ namespace AVSDocFileFormat
 
 			hr = STREAMS::CSWordWriter::Instance()->Write (298, &fcPlcfFldFtn, sizeof(fcPlcfFldFtn));
 			hr = STREAMS::CSWordWriter::Instance()->Write (302, &lcbPlcfFldFtn, sizeof(lcbPlcfFldFtn));
-		}
+		}*/
 
 		return hr;
 	}
 
-	long CDocFile::WriteEndnoteDocumentFields( const map<CP, Fld>& _cpFldMap )
+	long CDocFile::WriteEndnoteDocumentFields( const std::map<CP, Fld>& _cpFldMap )
 	{
 		long hr	= S_FALSE;
 
-		if ( !_cpFldMap.empty() )
+		/*if ( !_cpFldMap.empty() )
 		{
-			vector<CP> _aCP;
-			vector<Fld> _aFld;
+			std::vector<CP> _aCP;
+			std::vector<Fld> _aFld;
 
-			for (map<CP, Fld>::const_iterator iter = _cpFldMap.begin(); iter != _cpFldMap.end(); ++iter)
+			for (std::map<CP, Fld>::const_iterator iter = _cpFldMap.begin(); iter != _cpFldMap.end(); ++iter)
 			{
 				_aCP.push_back( iter->first );
 				_aFld.push_back( iter->second );
@@ -639,21 +644,21 @@ namespace AVSDocFileFormat
 
 			hr = STREAMS::CSWordWriter::Instance()->Write (538, &fcPlcfFldEdn, sizeof(fcPlcfFldEdn));
 			hr = STREAMS::CSWordWriter::Instance()->Write (542, &lcbPlcfFldEdn, sizeof(lcbPlcfFldEdn));
-		}
+		}*/
 
 		return hr;
 	}
 
-	long CDocFile::WriteHeadersAndFootersDocumentFields( const map<CP, Fld>& _cpFldMap )
+	long CDocFile::WriteHeadersAndFootersDocumentFields( const std::map<CP, Fld>& _cpFldMap )
 	{
 		long hr	= S_FALSE;
 
-		if ( !_cpFldMap.empty() )
+		/*if ( !_cpFldMap.empty() )
 		{
-			vector<CP> _aCP;
-			vector<Fld> _aFld;
+			std::vector<CP> _aCP;
+			std::vector<Fld> _aFld;
 
-			for (map<CP, Fld>::const_iterator iter = _cpFldMap.begin(); iter != _cpFldMap.end(); ++iter)
+			for (std::map<CP, Fld>::const_iterator iter = _cpFldMap.begin(); iter != _cpFldMap.end(); ++iter)
 			{
 				_aCP.push_back( iter->first );
 				_aFld.push_back( iter->second );
@@ -675,21 +680,21 @@ namespace AVSDocFileFormat
 
 			hr = STREAMS::CSWordWriter::Instance()->Write (290, &fcPlcfFldHdr, sizeof(fcPlcfFldHdr));
 			hr = STREAMS::CSWordWriter::Instance()->Write (294, &lcbPlcfFldHdr, sizeof(lcbPlcfFldHdr));
-		}
+		}*/
 
 		return hr;
 	}
 
-	long CDocFile::WriteBookmarks( const vector<pair<CP, wstring>>& _bookmarksStartsCPsWithIDs, const vector<pair<CP, wstring>>& _bookmarksEndsCPsWithIDs, const vector<wstring>& _bookmarksNames )
+	long CDocFile::WriteBookmarks( const std::vector<std::pair<CP, std::wstring>>& _bookmarksStartsCPsWithIDs, const std::vector<std::pair<CP, std::wstring>>& _bookmarksEndsCPsWithIDs, const std::vector<std::wstring>& _bookmarksNames )
 	{
 		long hr	= S_FALSE;
 
-		if ( ( !_bookmarksStartsCPsWithIDs.empty() ) && ( !_bookmarksEndsCPsWithIDs.empty() ) && ( !_bookmarksNames.empty() ) )
+		/*if ( ( !_bookmarksStartsCPsWithIDs.empty() ) && ( !_bookmarksEndsCPsWithIDs.empty() ) && ( !_bookmarksNames.empty() ) )
 		{
-			vector<CP> aCP;
-			vector<FBKF> aData;
-			vector<bool> bookmarksNamesPresent( _bookmarksNames.size(), false );
-			vector<bool> bookmarksEndsPresent( _bookmarksEndsCPsWithIDs.size(), false );
+			std::vector<CP> aCP;
+			std::vector<FBKF> aData;
+			std::vector<bool> bookmarksNamesPresent( _bookmarksNames.size(), false );
+			std::vector<bool> bookmarksEndsPresent( _bookmarksEndsCPsWithIDs.size(), false );
 
 			for ( unsigned int i = 0; i < _bookmarksStartsCPsWithIDs.size(); i++ )
 			{
@@ -746,7 +751,7 @@ namespace AVSDocFileFormat
 			hr = STREAMS::CSWordWriter::Instance()->Write (338, &fcPlcfBkl, sizeof(fcPlcfBkl));
 			hr = STREAMS::CSWordWriter::Instance()->Write (342, &lcbPlcfBkl, sizeof(lcbPlcfBkl));
 
-			vector<BookmarkName> bookmarksNames;
+			std::vector<BookmarkName> bookmarksNames;
 
 			for ( unsigned int i = 0; i < _bookmarksNames.size(); i++ )
 			{
@@ -767,12 +772,12 @@ namespace AVSDocFileFormat
 
 			hr = STREAMS::CSWordWriter::Instance()->Write (322, &fcSttbfBkmk, sizeof(fcSttbfBkmk));
 			hr = STREAMS::CSWordWriter::Instance()->Write (326, &lcbSttbfBkmk, sizeof(lcbSttbfBkmk));
-		}
+		}*/
 
 		return hr;
 	}
 
-	short CDocFile::GetBookmarkIndexByID(const wstring& _id, const vector<pair<CP, wstring>>& _bookmarksCPsWithIDs)
+	short CDocFile::GetBookmarkIndexByID(const std::wstring& _id, const std::vector<std::pair<CP, std::wstring>>& _bookmarksCPsWithIDs)
 	{
 		for ( short index = 0; index < (short)_bookmarksCPsWithIDs.size(); index++ )
 		{
@@ -785,11 +790,11 @@ namespace AVSDocFileFormat
 		return -1;
 	}
 
-	long CDocFile::WriteFootnoteDocument( unsigned int* _textPosition, vector<CP>* _AllFootnotesReferences )
+	long CDocFile::WriteFootnoteDocument( unsigned int* _textPosition, std::vector<CP>* _AllFootnotesReferences )
 	{
 		long hr	= S_FALSE;
 
-		if ( ( _textPosition != NULL ) && ( _AllFootnotesReferences != NULL ))
+		/*if ( ( _textPosition != NULL ) && ( _AllFootnotesReferences != NULL ))
 		{  
 			ULONG writtenSize = 0;
 			STATSTG stg;
@@ -803,19 +808,19 @@ namespace AVSDocFileFormat
 				lastFootnote.AddTextItem( footnotesEndParagraph );
 			}
 
-			wstring allFootnotesText;
-			map<CP, Fld> cpFldMap;
-			vector<short> allFootnotesIndexes;
-			vector<CP> allFootnotesOffsets;
+			std::wstring allFootnotesText;
+			std::map<CP, Fld> cpFldMap;
+			std::vector<short> allFootnotesIndexes;
+			std::vector<CP> allFootnotesOffsets;
 			unsigned int footnotesOffset = *_textPosition;
 			unsigned int footnoteOffset = 0;
 
-			for (list<TextItem>::const_iterator iter = m_Footnotes.begin(); iter != m_Footnotes.end(); ++iter)
+			for (std::list<TextItem>::const_iterator iter = m_Footnotes.begin(); iter != m_Footnotes.end(); ++iter)
 			{
 				Footnote footnoteIter = iter->as<Footnote>();
 
-				vector<unsigned int> allFootnoteOffsets;
-				vector<PapxInFkp> allFootnoteProperties = footnoteIter.GetAllParagraphsProperties( &allFootnoteOffsets );
+				std::vector<unsigned int> allFootnoteOffsets;
+				std::vector<PapxInFkp> allFootnoteProperties = footnoteIter.GetAllParagraphsProperties( &allFootnoteOffsets );
 
 				for (unsigned int i = 0; i < allFootnoteProperties.size(); ++i)
 				{
@@ -823,8 +828,8 @@ namespace AVSDocFileFormat
 					m_arParagraphsOffSets.push_back( footnotesOffset + allFootnoteOffsets[i] ); 
 				}
 
-				vector<unsigned int> allFootnoteRunsOffsets;
-				vector<Chpx> allFootnoteChpxs = footnoteIter.GetAllRunProperties( &allFootnoteRunsOffsets );
+				std::vector<unsigned int> allFootnoteRunsOffsets;
+				std::vector<Chpx> allFootnoteChpxs = footnoteIter.GetAllRunProperties( &allFootnoteRunsOffsets );
 
 				for (unsigned int i = 0; i < allFootnoteChpxs.size(); ++i)
 				{
@@ -881,16 +886,16 @@ namespace AVSDocFileFormat
 				
 				*_textPosition += writtenSize;
 			}
-		}
+		}*/
 
 		return hr;
 	}
 
-	long CDocFile::WriteEndnoteDocument( unsigned int* _textPosition, vector<CP>* _AllEndnotesReferences)
+	long CDocFile::WriteEndnoteDocument( unsigned int* _textPosition, std::vector<CP>* _AllEndnotesReferences)
 	{
 		long hr	= S_FALSE;
 
-		if ( ( _textPosition != NULL ) && ( _AllEndnotesReferences != NULL ))
+		/*if ( ( _textPosition != NULL ) && ( _AllEndnotesReferences != NULL ))
 		{  
 			ULONG writtenSize = 0;
 			STATSTG stg;
@@ -904,10 +909,10 @@ namespace AVSDocFileFormat
 				lastEndnote.AddTextItem( endnotesEndParagraph );
 			}
 
-			wstring allEndnotesText;
-			map<CP, Fld> cpFldMap;
-			vector<short> allEndnotesIndexes;
-			vector<CP> allEndnotesOffsets;
+			std::wstring allEndnotesText;
+			std::map<CP, Fld> cpFldMap;
+			std::vector<short> allEndnotesIndexes;
+			std::vector<CP> allEndnotesOffsets;
 			unsigned int endnotesOffset = *_textPosition;
 			unsigned int endnoteOffset = 0;
 
@@ -915,8 +920,8 @@ namespace AVSDocFileFormat
 			{
 				Endnote endnoteIter = iter->as<Endnote>();
 
-				vector<unsigned int> allEndnoteOffsets;
-				vector<PapxInFkp> allEndnoteProperties = endnoteIter.GetAllParagraphsProperties( &allEndnoteOffsets );
+				std::vector<unsigned int> allEndnoteOffsets;
+				std::vector<PapxInFkp> allEndnoteProperties = endnoteIter.GetAllParagraphsProperties( &allEndnoteOffsets );
 
 				for ( unsigned int i = 0; i < allEndnoteProperties.size(); i++ )
 				{
@@ -924,8 +929,8 @@ namespace AVSDocFileFormat
 					m_arParagraphsOffSets.push_back( endnotesOffset + allEndnoteOffsets[i] ); 
 				}
 
-				vector<unsigned int> allEndnoteRunsOffsets;
-				vector<Chpx> allEndnoteChpxs = endnoteIter.GetAllRunProperties( &allEndnoteRunsOffsets );
+				std::vector<unsigned int> allEndnoteRunsOffsets;
+				std::vector<Chpx> allEndnoteChpxs = endnoteIter.GetAllRunProperties( &allEndnoteRunsOffsets );
 
 				for ( unsigned int i = 0; i < allEndnoteChpxs.size(); i++ )
 				{
@@ -982,20 +987,20 @@ namespace AVSDocFileFormat
 
 				*_textPosition += writtenSize;
 			}
-		}
+		}*/
 
 		return hr;  
 	}
 
-	std::wstring CDocFile::GetHeadersOrFootersProperties (const ITextItem* pHeaderOrFooter, unsigned int& _headersOrFootersOffset, unsigned int* _headerOrFooterOffset, map<CP, Fld>* cpFldMap )
+	std::wstring CDocFile::GetHeadersOrFootersProperties (const ITextItem* pHeaderOrFooter, unsigned int& _headersOrFootersOffset, unsigned int* _headerOrFooterOffset, std::map<CP, Fld>* cpFldMap )
 	{
 		if ( ( pHeaderOrFooter != NULL ) && ( _headerOrFooterOffset != NULL ) && ( cpFldMap != NULL ) )
 		{
-			vector<unsigned int> allParagraphsOffsets;
-			vector<PapxInFkp> allParagraphsProperties;
+			std::vector<unsigned int> allParagraphsOffsets;
+			std::vector<PapxInFkp> allParagraphsProperties;
 
-			vector<unsigned int> allRunsOffsets;
-			vector<Chpx> allChpxs;  
+			std::vector<unsigned int> allRunsOffsets;
+			std::vector<Chpx> allChpxs;
 
 			allParagraphsProperties = pHeaderOrFooter->GetAllParagraphsProperties(&allParagraphsOffsets);
 
@@ -1037,15 +1042,15 @@ namespace AVSDocFileFormat
 	{
 		long hr	= S_FALSE;
 
-		if ( ( NULL != _textPosition ))
+		/*if ( ( NULL != _textPosition ))
 		{  
 			ULONG writtenSize = 0;
 			STATSTG stg;
 			unsigned int headerOrFooterOffset = 0;
 			unsigned int headersOrFootersOffset = ( *_textPosition + ( headerOrFooterOffset * sizeof(WCHAR) ) );
-			vector<CP> _aCP;
-			map<CP, Fld> cpFldMap;
-			wstring allHeadersAndFootersDocumentText;
+			std::vector<CP> _aCP;
+			std::map<CP, Fld> cpFldMap;
+			std::wstring allHeadersAndFootersDocumentText;
 
 			_aCP.push_back( CP( headerOrFooterOffset ) );
 			_aCP.push_back( CP( headerOrFooterOffset ) );
@@ -1054,7 +1059,7 @@ namespace AVSDocFileFormat
 			_aCP.push_back( CP( headerOrFooterOffset ) );
 			_aCP.push_back( CP( headerOrFooterOffset ) );
 
-			for (list<SectionProperties>::const_iterator sectionIter = sectionProperties.begin(); sectionIter != sectionProperties.end(); ++sectionIter)
+			for (std::list<SectionProperties>::const_iterator sectionIter = sectionProperties.begin(); sectionIter != sectionProperties.end(); ++sectionIter)
 			{
 				_aCP.push_back( CP( headerOrFooterOffset ) );
 
@@ -1104,7 +1109,7 @@ namespace AVSDocFileFormat
 				hr = Write (STREAMS::CSWordWriter::Instance()->Get(), ( *_textPosition ), allHeadersAndFootersDocumentText.c_str(), ( allHeadersAndFootersDocumentText.size() * sizeof(WCHAR) ), &writtenSize );
 				*_textPosition += writtenSize;
 			}
-		}
+		}*/
 
 		return hr;
 	}
@@ -1113,17 +1118,17 @@ namespace AVSDocFileFormat
 	{
 		long hr	= S_FALSE;
 
-		STATSTG oStatus;
+		/*STATSTG oStatus;
 		STREAMS::CSWordWriter::Instance()->Get()->Stat(&oStatus, STATFLAG_NONAME);
 
 		int fcSepx = oStatus.cbSize.LowPart;
 
-		vector<CP> aCP;
+		std::vector<CP> aCP;
 		unsigned int cp = 0;
 
 		aCP.push_back( CP( cp ) );
 
-		for (list<TextItem>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
+		for (std::list<TextItem>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
 		{
 			if ( iter->is<SectionBreak>() )
 			{
@@ -1144,9 +1149,9 @@ namespace AVSDocFileFormat
 			aCP.back() = CP(ccpText);
 		}
 
-		vector<Sed> aSed;
+		std::vector<Sed> aSed;
 
-		for (list<SectionProperties>::const_iterator iter = sectionProperties.begin(); iter != sectionProperties.end(); ++iter)
+		for (std::list<SectionProperties>::const_iterator iter = sectionProperties.begin(); iter != sectionProperties.end(); ++iter)
 		{
 			aSed.push_back(Sed(fcSepx));
 			fcSepx += iter->GetSepx().Size();
@@ -1167,10 +1172,10 @@ namespace AVSDocFileFormat
 
 		unsigned int i = 0;
 
-		for (list<SectionProperties>::const_iterator iter = sectionProperties.begin(); iter != sectionProperties.end(); ++iter)
+		for (std::list<SectionProperties>::const_iterator iter = sectionProperties.begin(); iter != sectionProperties.end(); ++iter)
 		{
 			hr = Write(STREAMS::CSWordWriter::Instance()->Get(), aSed[i++].GetFcSepx(), (byte*)(iter->GetSepx()), iter->GetSepx().Size(), &writtenSize);
-		}
+		}*/
 	}
 
 	//
@@ -1178,7 +1183,7 @@ namespace AVSDocFileFormat
 	{
 		long hr	= S_OK;
 
-		STATSTG oStatus;
+		/*STATSTG oStatus;
 		if (SUCCEEDED(m_pTableStream->Stat (&oStatus, STATFLAG_NONAME)))
 		{
 			unsigned int fcSttbfFfn		=	oStatus.cbSize.LowPart;
@@ -1191,7 +1196,7 @@ namespace AVSDocFileFormat
 
 				hr	=	Write (m_pTableStream, fcSttbfFfn, (byte*)(m_oFontTable), lcbSttbfFfn);
 			}
-		}
+		}*/
 
 		return hr;
 	}
@@ -1200,7 +1205,7 @@ namespace AVSDocFileFormat
 	{
 		long hr	= S_OK;
 
-		STATSTG oSt;
+		/*STATSTG oSt;
 		if (SUCCEEDED(m_pTableStream->Stat(&oSt,STATFLAG_NONAME)))
 		{
 			unsigned int fcStshf		=	oSt.cbSize.LowPart;
@@ -1218,7 +1223,7 @@ namespace AVSDocFileFormat
 
 				hr	=	Write (m_pTableStream, fcStshf, (byte*)(m_oStyleSheet), lcbStshf);
 			}
-		}
+		}*/
 
 		return hr;
 	}
@@ -1227,7 +1232,7 @@ namespace AVSDocFileFormat
 	{
 		long hr	= S_FALSE;
 
-		STATSTG stg;
+		/*STATSTG stg;
 		ULONG writtenSize = 0;
 
 		m_pTableStream->Stat( &stg, STATFLAG_NONAME );
@@ -1250,7 +1255,7 @@ namespace AVSDocFileFormat
 				hr = STREAMS::CSWordWriter::Instance()->Write (750, &lcbPlfLfo, sizeof(lcbPlfLfo) );
 				hr = Write (m_pTableStream, fcPlfLfo, (byte*)(listFormatOverrideInfo), listFormatOverrideInfo.Size(), &writtenSize );
 			}
-		}
+		}*/
 
 		return hr;
 	}
@@ -1260,7 +1265,7 @@ namespace AVSDocFileFormat
 	{
 		std::wstring mainDocumentText;
 
-		for (list<TextItem>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
+		for (std::list<TextItem>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
 		{
 			mainDocumentText += (*iter)->GetAllText();
 		}
@@ -1277,17 +1282,17 @@ namespace AVSDocFileFormat
 	{
 		unsigned long documentTextSize = 0;
 
-		for (list<TextItem>::const_iterator iter = this->textItems.begin(); iter != this->textItems.end(); ++iter)
+		for (std::list<TextItem>::const_iterator iter = this->textItems.begin(); iter != this->textItems.end(); ++iter)
 		{
 			documentTextSize += (*iter)->GetAllText().size();  
 		}
 
-		for (list<TextItem>::const_iterator iter = m_Footnotes.begin(); iter != m_Footnotes.end(); ++iter)
+		for (std::list<TextItem>::const_iterator iter = m_Footnotes.begin(); iter != m_Footnotes.end(); ++iter)
 		{
 			documentTextSize += (*iter)->GetAllText().size();
 		}
 
-		for (list<TextItem>::const_iterator iter = this->endnotes.begin(); iter != this->endnotes.end(); ++iter)
+		for (std::list<TextItem>::const_iterator iter = this->endnotes.begin(); iter != this->endnotes.end(); ++iter)
 		{
 			documentTextSize += (*iter)->GetAllText().size();
 		}
@@ -1304,20 +1309,20 @@ namespace AVSDocFileFormat
 	{
 		std::wstring allText;
 
-		for (list<TextItem>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
+		for (std::list<TextItem>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
 			allText += (*iter)->GetAllText();  
 
-		for (list<TextItem>::const_iterator iter = m_Footnotes.begin(); iter != m_Footnotes.end(); ++iter)
+		for (std::list<TextItem>::const_iterator iter = m_Footnotes.begin(); iter != m_Footnotes.end(); ++iter)
 			allText += (*iter)->GetAllText();
 
-		for (list<TextItem>::const_iterator iter = endnotes.begin(); iter != endnotes.end(); ++iter)
+		for (std::list<TextItem>::const_iterator iter = endnotes.begin(); iter != endnotes.end(); ++iter)
 			allText += (*iter)->GetAllText();
 
 		return allText;  
 	}
 }
 
-namespace AVSDocFileFormat
+namespace Docx2Doc
 {	
 	int CDocFile::WriteFibRgLw97()
 	{
@@ -1338,7 +1343,7 @@ namespace AVSDocFileFormat
 	{
 		int documentTextSize = 0;
 
-		for (list<TextItem>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
+		for (std::list<TextItem>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
 			documentTextSize += (*iter)->GetAllText().size();  
 
 		return documentTextSize;
@@ -1348,7 +1353,7 @@ namespace AVSDocFileFormat
 	{
 		unsigned long tbMRefSize = 0;
 
-		if (m_oartStorage)
+		/*if (m_oartStorage)
 		{
 			const std::vector<CTextBoxRef*>& arMTbRefs = m_oartStorage->GetTbRefs(MAIN_DOCUMENT);
 			for (size_t i = 0; i < arMTbRefs.size(); ++i)
@@ -1357,7 +1362,7 @@ namespace AVSDocFileFormat
 				for (size_t j = 0; j < arText.size(); ++j)
 					tbMRefSize += arText[j]->GetAllText().size();
 			}
-		}
+		}*/
 
 		return tbMRefSize;
 	}
@@ -1366,7 +1371,7 @@ namespace AVSDocFileFormat
 	{
 		unsigned long tbHRefSize = 0;
 
-		if (m_oartStorage)
+		/*if (m_oartStorage)
 		{
 			const std::vector<CTextBoxRef*>& arHTbRefs = m_oartStorage->GetTbRefs(HEADER_DOCUMENT);
 			for (size_t i = 0; i < arHTbRefs.size(); ++i)
@@ -1375,7 +1380,7 @@ namespace AVSDocFileFormat
 				for (size_t j = 0; j < arText.size(); ++j)
 					tbHRefSize += arText[j]->GetAllText().size();
 			}
-		}
+		}*/
 
 		return tbHRefSize;
 	}
@@ -1384,7 +1389,7 @@ namespace AVSDocFileFormat
 	{
 		long hr	= S_OK;
 
-		m_arTxbxCP.clear();
+		/*m_arTxbxCP.clear();
 		m_arTxbxBkdCP.clear();
 
 		if (m_oartStorage)
@@ -1457,7 +1462,7 @@ namespace AVSDocFileFormat
 
 				return TRUE;
 			}
-		}
+		}*/
 
 		return FALSE;
 	}
@@ -1466,7 +1471,7 @@ namespace AVSDocFileFormat
 	{
 		long hr	= S_OK;
 
-		m_arTxbxHdrCP.clear();
+		/*m_arTxbxHdrCP.clear();
 		m_arTxbxHdrBkdCP.clear();
 
 		if (m_oartStorage)
@@ -1539,7 +1544,7 @@ namespace AVSDocFileFormat
 
 				return TRUE;
 			}
-		}
+		}*/
 
 		return FALSE;
 	}
@@ -1548,7 +1553,7 @@ namespace AVSDocFileFormat
 	{
 		// индексируем текст из "текстовых надписях"
 
-		if (m_oartStorage)
+		/*if (m_oartStorage)
 		{
 			//	MAIN_DOCUMENT
 
@@ -1559,8 +1564,8 @@ namespace AVSDocFileFormat
 
 				for (size_t ind = 0; ind < arText.size(); ++ind)
 				{
-					vector<unsigned int> allTextItemOffsets;
-					vector<PapxInFkp> allTextItemProperties	=	arText[ind]->GetAllParagraphsProperties(&allTextItemOffsets);
+					std::vector<unsigned int> allTextItemOffsets;
+					std::vector<PapxInFkp> allTextItemProperties	=	arText[ind]->GetAllParagraphsProperties(&allTextItemOffsets);
 
 					for (unsigned int j = 0; j < allTextItemProperties.size(); ++j)
 					{
@@ -1568,8 +1573,8 @@ namespace AVSDocFileFormat
 						m_arParagraphsOffSets.push_back(nBuffPos + allTextItemOffsets[j]); 
 					}
 
-					vector<unsigned int> allTextItemRunsOffsets;
-					vector<Chpx> allTextItemChpxs			=	arText[ind]->GetAllRunProperties(&allTextItemRunsOffsets);
+					std::vector<unsigned int> allTextItemRunsOffsets;
+					std::vector<Chpx> allTextItemChpxs			=	arText[ind]->GetAllRunProperties(&allTextItemRunsOffsets);
 
 					for (unsigned int j = 0; j < allTextItemChpxs.size(); ++j)
 					{
@@ -1589,8 +1594,8 @@ namespace AVSDocFileFormat
 				const std::vector<TextItem>& arText			=	arHTbRefs[i]->GetText ();
 				for (size_t ind = 0; ind < arText.size(); ++ind)
 				{
-					vector<unsigned int> allTextItemOffsets;
-					vector<PapxInFkp> allTextItemProperties	=	arText[ind]->GetAllParagraphsProperties(&allTextItemOffsets);
+					std::vector<unsigned int> allTextItemOffsets;
+					std::vector<PapxInFkp> allTextItemProperties	=	arText[ind]->GetAllParagraphsProperties(&allTextItemOffsets);
 
 					for (unsigned int j = 0; j < allTextItemProperties.size(); ++j)
 					{
@@ -1598,8 +1603,8 @@ namespace AVSDocFileFormat
 						m_arParagraphsOffSets.push_back(nBuffPos + allTextItemOffsets[j]); 
 					}
 
-					vector<unsigned int> allTextItemRunsOffsets;
-					vector<Chpx> allTextItemChpxs			=	arText[ind]->GetAllRunProperties(&allTextItemRunsOffsets);
+					std::vector<unsigned int> allTextItemRunsOffsets;
+					std::vector<Chpx> allTextItemChpxs			=	arText[ind]->GetAllRunProperties(&allTextItemRunsOffsets);
 
 					for (unsigned int j = 0; j < allTextItemChpxs.size(); ++j)
 					{
@@ -1610,7 +1615,7 @@ namespace AVSDocFileFormat
 					nBuffPos += sizeof(WCHAR) * arText[ind]->GetAllText().size();
 				}
 			}
-		}
+		}*/
 
 		return TRUE;
 	}
@@ -1619,7 +1624,7 @@ namespace AVSDocFileFormat
 	{
 		//	Запись символов текста в основной поток (пишем после записи текста документа, футеров и прочего)
 
-		if (m_oartStorage)
+		/*if (m_oartStorage)
 		{
 			unsigned long hr			=	0;
 			unsigned long bufferTbSize	=	0;
@@ -1657,13 +1662,13 @@ namespace AVSDocFileFormat
 			}
 
 			return (mainTbSize + headTbSize);
-		}
+		}*/
 
 		return 0;
 	}
 }
 
-namespace AVSDocFileFormat
+namespace Docx2Doc
 {
 	void CDocFile::CalculateMainSpa ()
 	{
@@ -1671,10 +1676,10 @@ namespace AVSDocFileFormat
 
 		unsigned int cp = 0;
 
-		for (list<TextItem>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
+		for (std::list<TextItem>::const_iterator iter = textItems.begin(); iter != textItems.end(); ++iter)
 		{
-			vector<unsigned int> paragraphsItemsOffsets;
-			vector<IParagraphItemPtr> paragraphsItems	=	(*iter)->GetAllRunsCopy (&paragraphsItemsOffsets);
+			std::vector<unsigned int> paragraphsItemsOffsets;
+			std::vector<IParagraphItemPtr> paragraphsItems	=	(*iter)->GetAllRunsCopy (&paragraphsItemsOffsets);
 
 			if (paragraphsItems.size())
 			{
@@ -1685,13 +1690,13 @@ namespace AVSDocFileFormat
 					Run* run		=	dynamic_cast<Run*>(paragraphsItems[i].operator->());
 					if (run)
 					{
-						for (list<RunItem>::const_iterator runiter = run->begin(); runiter != run->end(); ++runiter)
+						/*for (std::list<RunItem>::const_iterator runiter = run->begin(); runiter != run->end(); ++runiter)
 						{		
-							if (runiter->is<AVSDocFileFormat::CShapeRun>())
+							if (runiter->is<Docx2Doc::CShapeRun>())
 								m_aSpaCP.push_back (CP(rCP + cp));
 
 							rCP		+=	(*runiter)->GetAllText().size();
-						}
+						}*/
 					}
 				}
 			}
@@ -1713,9 +1718,9 @@ namespace AVSDocFileFormat
 
 		//  TODO : требуется небольшой рефакторинг ( в хедере может быть много разной инфы и каждый раз пересчитывать каретку не правильно )
 
-		for (list<SectionProperties>::const_iterator sectionIter = sectionProperties.begin(); sectionIter != sectionProperties.end(); ++sectionIter)
+		for (std::list<SectionProperties>::const_iterator sectionIter = sectionProperties.begin(); sectionIter != sectionProperties.end(); ++sectionIter)
 		{
-			list<TextItem> headerItems;
+			std::list<TextItem> headerItems;
 
 			headerItems.push_back (TextItem(*sectionIter->GetEvenPageHeader()));
 			headerItems.push_back (TextItem(*sectionIter->GetOddPageHeader()));
@@ -1724,10 +1729,10 @@ namespace AVSDocFileFormat
 			headerItems.push_back (TextItem(*sectionIter->GetFirstPageHeader()));
 			headerItems.push_back (TextItem(*sectionIter->GetFirstPageFooter()));
 
-			for (list<TextItem>::const_iterator iter = headerItems.begin(); iter != headerItems.end(); ++iter)
+			for (std::list<TextItem>::const_iterator iter = headerItems.begin(); iter != headerItems.end(); ++iter)
 			{
-				vector<unsigned int> paragraphsItemsOffsets;
-				vector<IParagraphItemPtr> paragraphsItems	=	(*iter)->GetAllRunsCopy (&paragraphsItemsOffsets);
+				std::vector<unsigned int> paragraphsItemsOffsets;
+				std::vector<IParagraphItemPtr> paragraphsItems	=	(*iter)->GetAllRunsCopy (&paragraphsItemsOffsets);
 
 				if (paragraphsItems.size())
 				{
@@ -1738,13 +1743,13 @@ namespace AVSDocFileFormat
 						Run* run		=	dynamic_cast<Run*>(paragraphsItems[i].operator->());
 						if (run)
 						{
-							for (list<RunItem>::const_iterator runiter = run->begin(); runiter != run->end(); ++runiter)
+							/*for (std::list<RunItem>::const_iterator runiter = run->begin(); runiter != run->end(); ++runiter)
 							{		
-								if (runiter->is<AVSDocFileFormat::CShapeRun>())
+								if (runiter->is<Docx2Doc::CShapeRun>())
 									m_aHeadSpaCP.push_back (CP(rCP + cp));
 
 								rCP		+=	(*runiter)->GetAllText().size();
-							}
+							}*/
 						}
 					}
 				}
@@ -1763,7 +1768,7 @@ namespace AVSDocFileFormat
 	{
 		long hr	= S_OK;
 
-		if (m_oartStorage)
+		/*if (m_oartStorage)
 		{
 			if (m_oartStorage->GetSpa(MAIN_DOCUMENT).size() || m_oartStorage->GetSpa(HEADER_DOCUMENT).size())
 			{
@@ -1859,19 +1864,19 @@ namespace AVSDocFileFormat
 					}
 				}
 			}
-		}
+		}*/
 
 		return hr;
 	}
 }
 
-namespace AVSDocFileFormat
+namespace Docx2Doc
 {
-	long CDocFile::SaveToFile (const CString& sFileName)
+	long CDocFile::SaveToFile (const std::wstring& sFileName)
 	{
 		long hr	= S_FALSE;
 
-		if (sFileName.GetLength())
+		/*if (sFileName.GetLength())
 		{
 			RELEASEINTERFACE (m_pIStorage);
 
@@ -1888,17 +1893,15 @@ namespace AVSDocFileFormat
 
 				InitStream(L"1Table", m_pTableStream, false);
 
-				/*
+				//TODO : сделать нормально копирование параметров из исходника (пока будут пустые поля в настройках файла Property Summary)
 
-				TODO : сделать нормально копирование параметров из исходника (пока будут пустые поля в настройках файла Property Summary)			
+				//http://msdn.microsoft.com/ru-ru/library/windows/desktop/aa380376(v=vs.85).aspx
+				//http://msdn.microsoft.com/ru-ru/library/windows/desktop/aa380376(v=vs.85).aspx
+				//http://msdn.microsoft.com/ru-ru/library/windows/desktop/aa379016(v=vs.85).aspx
+				//http://msdn.microsoft.com/ru-ru/library/windows/desktop/aa380387(v=vs.85).aspx
+				//http://msdn.microsoft.com/ru-ru/library/windows/desktop/aa380326(v=vs.85).aspx
 
-				http://msdn.microsoft.com/ru-ru/library/windows/desktop/aa380376(v=vs.85).aspx
-				http://msdn.microsoft.com/ru-ru/library/windows/desktop/aa380376(v=vs.85).aspx
-				http://msdn.microsoft.com/ru-ru/library/windows/desktop/aa379016(v=vs.85).aspx
-				http://msdn.microsoft.com/ru-ru/library/windows/desktop/aa380387(v=vs.85).aspx
-				http://msdn.microsoft.com/ru-ru/library/windows/desktop/aa380326(v=vs.85).aspx
 
-				*/
 
 				// InitStream(L"\05SummaryInformation", m_pSummaryInformationStream, false);
 				InitStream(L"\05DocumentSummaryInformation", m_pDocumentSummaryInformationStream, false);
@@ -1918,8 +1921,6 @@ namespace AVSDocFileFormat
 					Bool32 cbMac	=	oSt.cbSize.LowPart;		WRITE_FIELD(FIB_OFFSET::cbMac,	cbMac,	sizeof(Bool32));
 				}
 
-				/*
-
 				////// TODO : заполнить данные по умолчанию (обязательная структура по спецификации)
 				////ReloadFromFileBuffer (L"C:\\dop.dat", FIB_OFFSET::fcDop, FIB_OFFSET::lcbDop);
 
@@ -1930,8 +1931,6 @@ namespace AVSDocFileFormat
 				////	ReloadStreamFileBuffer (L"C:\\[1]CompObj", pCompObj);
 				////	RELEASEINTERFACE(pCompObj);
 				////}
-
-				*/
 
 				BinaryStorageSingleton* binaryStorage = BinaryStorageSingleton::Instance();
 				if (binaryStorage)
@@ -1979,15 +1978,15 @@ namespace AVSDocFileFormat
 			{
 				pBin->FreeInstance();
 			}
-		}
+		}*/
 
 		return hr;
 	}
 
 
-	bool CDocFile::InitStream (const CString& stName, IStream*& pStream, bool bDefaultSizes)
+	bool CDocFile::InitStream (const std::wstring& stName, CFCPP::IStream*& pStream, bool bDefaultSizes)
 	{
-		RELEASEINTERFACE(pStream);
+		/*RELEASEINTERFACE(pStream);
 
 		long hr = m_pIStorage->OpenStream (stName, NULL, STGM_READWRITE | STGM_DIRECT | STGM_SHARE_EXCLUSIVE, NULL, &pStream);
 		if (FAILED(hr))
@@ -2003,16 +2002,16 @@ namespace AVSDocFileFormat
 			}
 
 			return true;
-		}
+		}*/
 
 		return false;
 	}
 
-	long CDocFile::Write (IStream* stream, unsigned long position, const void* data, ULONG size, ULONG* writtenSize)
+	long CDocFile::Write (CFCPP::IStream* stream, unsigned long position, const void* data, ULONG size, ULONG* writtenSize)
 	{
 		long hr = S_FALSE;
 
-		if ( ( stream != NULL ) && ( data != NULL ) )
+		/*if ( ( stream != NULL ) && ( data != NULL ) )
 		{
 			LARGE_INTEGER pos = { 0, 0 };
 
@@ -2021,16 +2020,16 @@ namespace AVSDocFileFormat
 
 			hr	=	stream->Seek( pos, STREAM_SEEK_SET, NULL );
 			hr	=	stream->Write( data, size, writtenSize );
-		}
+		}*/
 
 		return hr;
 	}
 
-	long CDocFile::Write (IStream* stream, unsigned long position, const void* data, ULONG size)
+	long CDocFile::Write (CFCPP::IStream* stream, unsigned long position, const void* data, ULONG size)
 	{
 		long hr	= S_FALSE;
 
-		if ( ( stream != NULL ) && ( data != NULL ) )
+		/*if ( ( stream != NULL ) && ( data != NULL ) )
 		{
 			LARGE_INTEGER pos = { 0, 0 };
 
@@ -2041,16 +2040,16 @@ namespace AVSDocFileFormat
 
 			hr	=	stream->Seek( pos, STREAM_SEEK_SET, NULL );
 			hr	=	stream->Write( data, size, &writtenSize );
-		}
+		}*/
 
 		return hr;
 	}
 
-	long CDocFile::ReloadFromFileBuffer (CString strFileData, DWORD dwOffTbID, DWORD dwSizefTbID)
+	long CDocFile::ReloadFromFileBuffer (std::wstring strFileData, DWORD dwOffTbID, DWORD dwSizefTbID)
 	{
 		long hr	= S_FALSE;
 
-		CAtlFile oFile;
+		/*CAtlFile oFile;
 		if (SUCCEEDED(oFile.Create (strFileData, GENERIC_READ, FILE_SHARE_READ, OPEN_ALWAYS)))
 		{
 			ULONGLONG size = 0;
@@ -2089,16 +2088,16 @@ namespace AVSDocFileFormat
 					}
 				}
 			}
-		}
+		}*/
 
 		return hr;
 	}
 
-	long CDocFile::ReloadStreamFileBuffer (CString strFileData, IStream* pStream)
+	long CDocFile::ReloadStreamFileBuffer (std::wstring strFileData, CFCPP::IStream* pStream)
 	{
 		long hr	= S_FALSE;
 
-		CAtlFile oFile;
+		/*CAtlFile oFile;
 		if (SUCCEEDED(oFile.Create (strFileData, GENERIC_READ, FILE_SHARE_READ, OPEN_ALWAYS)))
 		{
 			ULONGLONG size = 0;
@@ -2128,7 +2127,7 @@ namespace AVSDocFileFormat
 					}
 				}
 			}
-		}
+		}*/
 
 		return hr;
 	}

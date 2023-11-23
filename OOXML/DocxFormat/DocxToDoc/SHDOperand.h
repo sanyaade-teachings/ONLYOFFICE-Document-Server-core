@@ -52,7 +52,7 @@ public:
 	Shd():
 		cvFore(), cvBack(), ipat(0)
 	{
-		memcpy( this->bytes, this->cvFore, this->cvFore.Size() );
+		memcpy( this->bytes, this->cvFore.operator BYTE*(), this->cvFore.Size() );
 		memcpy( ( this->bytes + this->cvFore.Size() ), (BYTE*)this->cvBack, this->cvBack.Size() );
 		memcpy( ( this->bytes + this->cvFore.Size() + this->cvBack.Size() ), (BYTE*)(&this->ipat), sizeof(this->ipat) );
 	}
@@ -60,7 +60,7 @@ public:
 	explicit Shd( const COLORREF& _cvFore, const COLORREF& _cvBack, unsigned short _ipat ):
 		cvFore(_cvFore), cvBack(_cvBack), ipat(_ipat)
 	{
-		memcpy( this->bytes, this->cvFore, this->cvFore.Size() );
+		memcpy( this->bytes, this->cvFore.operator BYTE*(), this->cvFore.Size() );
 		memcpy( ( this->bytes + this->cvFore.Size() ), (BYTE*)this->cvBack, this->cvBack.Size() );
 		memcpy( ( this->bytes + this->cvFore.Size() + this->cvBack.Size() ), (BYTE*)(&this->ipat), sizeof(this->ipat) );
 	}
@@ -68,7 +68,7 @@ public:
 	Shd( const Shd& _shd ):
 		cvFore(_shd.cvFore), cvBack(_shd.cvBack), ipat(_shd.ipat)
 	{
-		memcpy( this->bytes, this->cvFore, this->cvFore.Size() );
+		memcpy( this->bytes, this->cvFore.operator BYTE*(), this->cvFore.Size() );
 		memcpy( ( this->bytes + this->cvFore.Size() ), (BYTE*)this->cvBack, this->cvBack.Size() );
 		memcpy( ( this->bytes + this->cvFore.Size() + this->cvBack.Size() ), (BYTE*)(&this->ipat), sizeof(this->ipat) );
 	}

@@ -83,7 +83,7 @@ namespace Docx2Doc
 				this->sizeInBytes += ( 1 * _data->size() ); //cchData  
 			}
 
-			for ( std::vector<D>::const_iterator iter = _data->begin(); iter != _data->end(); iter++ )
+			for ( typename std::vector<D>::const_iterator iter = _data->begin(); iter != _data->end(); iter++ )
 			{
 				this->sizeInBytes += iter->Size();
 			}
@@ -101,7 +101,7 @@ namespace Docx2Doc
 
 			if ( _extraData != NULL )
 			{
-				for ( std::vector<E>::const_iterator iter = _extraData->begin(); iter != _extraData->end(); iter++ )
+				for ( typename std::vector<E>::const_iterator iter = _extraData->begin(); iter != _extraData->end(); iter++ )
 				{
 					this->sizeInBytes += iter->Size();
 				}  

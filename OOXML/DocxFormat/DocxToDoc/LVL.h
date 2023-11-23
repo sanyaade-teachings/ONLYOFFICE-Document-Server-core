@@ -37,12 +37,12 @@ namespace Docx2Doc
 			this->sizeInBytes += cbGrpprlPapx;
 
 			//Get one-based character offset to a level placeholder in xst.rgtchar.
-			const std::vector<byte> rgbxchNums = this->GetRgbxchNums( _xst );
+			const std::vector<BYTE> rgbxchNums = this->GetRgbxchNums( _xst );
 			//rgbxchNums starts at 6 byte. Size MUST be 9 bytes.
 			unsigned int rgbxchNumsOffset = 6;
 
 			//Write real rgbxchNums to the lvlf.
-			for ( std::vector<byte>::const_iterator iter = rgbxchNums.begin(); iter != rgbxchNums.end(); iter++ )
+			for ( std::vector<BYTE>::const_iterator iter = rgbxchNums.begin(); iter != rgbxchNums.end(); iter++ )
 			{
 				lvlf.bytes[rgbxchNumsOffset++] = *iter;
 			}

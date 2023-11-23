@@ -65,7 +65,7 @@
 #include "Hyperlink.h"
 #include "BookmarkStart.h"
 #include "BookmarkEnd.h"
-#include "InlineShape.h"
+//#include "InlineShape.h"
 
 #include "DopBase.h"
 #include "PlcfSpa.h"
@@ -73,7 +73,9 @@
 #include "ListFormattingInformation.h"
 
 //#include "ShapeBuilder.h"
-//#include "WordStreamWriter.h"
+#include "WordStreamWriter.h"
+
+#include "../../../Common/cfcpp/Stream/stream.h"
 
 namespace Docx2Doc
 {
@@ -91,9 +93,9 @@ namespace Docx2Doc
 		void AddFootnote( const Footnote& footnote );
 		void AddEndnote( const Endnote& endnote );
 		void AddSectionProperties( const SectionProperties& _sectionProperties );
-		wstring GetMainDocumentText() const;
+		std::wstring GetMainDocumentText() const;
 		unsigned long GetMainDocumentTextItemsCount() const;
-		wstring GetAllText() const;
+		std::wstring GetAllText() const;
 		unsigned long GetAllTextSize() const;
 		unsigned long GetAllTextItemsCount() const;
 
@@ -133,20 +135,20 @@ namespace Docx2Doc
 		long WriteNumbering();
 
 		void WriteSectionProperties();
-		long WriteMainDocument(unsigned int* _textPosition, vector<CP>* _AllFootnotesReferences, vector<CP>* _AllEndnotesReferences);
-		void AddFldCharsData(unsigned int nTextPos, const TextItem& oItem, map<CP, Fld>* cpFldMap);
-		void AddHyperlinksData(unsigned int nTextPos, const TextItem& oItem, map<CP, Fld>* cpFldMap);
-		void AddInlineShapesData(unsigned int nTextPos, const TextItem& oItem, map<CP, Fld>* cpFldMap);
+		long WriteMainDocument(unsigned int* _textPosition, std::vector<CP>* _AllFootnotesReferences, std::vector<CP>* _AllEndnotesReferences);
+		void AddFldCharsData(unsigned int nTextPos, const TextItem& oItem, std::map<CP, Fld>* cpFldMap);
+		void AddHyperlinksData(unsigned int nTextPos, const TextItem& oItem, std::map<CP, Fld>* cpFldMap);
+		void AddInlineShapesData(unsigned int nTextPos, const TextItem& oItem, std::map<CP, Fld>* cpFldMap);
 
-		long WriteMainDocumentFields(const map<CP, Fld>& _cpFldMap);
-		long WriteFootnoteDocumentFields(const map<CP, Fld>& _cpFldMap);
-		long WriteEndnoteDocumentFields(const map<CP, Fld>& _cpFldMap);
-		long WriteHeadersAndFootersDocumentFields(const map<CP, Fld>& _cpFldMap);
-		long WriteBookmarks(const vector<pair<CP, wstring>>& _bookmarksStartsCPsWithIDs, const vector<pair<CP, wstring>>& _bookmarksEndsCPsWithIDs, const vector<wstring>& _bookmarksNames);
-		short GetBookmarkIndexByID(const wstring& _id, const vector<pair<CP, wstring>>& _bookmarksCPsWithIDs);
-		long WriteFootnoteDocument(unsigned int* _textPosition, vector<CP>* _AllFootnotesReferences);
-		long WriteEndnoteDocument(unsigned int* _textPosition, vector<CP>* _AllEndnotesReferences);
-		wstring GetHeadersOrFootersProperties(const ITextItem* _headerOrFooter, unsigned int& _headersOrFootersOffset, unsigned int* _headerOrFooterOffset, map<CP, Fld>* cpFldMap);
+		long WriteMainDocumentFields(const std::map<CP, Fld>& _cpFldMap);
+		long WriteFootnoteDocumentFields(const std::map<CP, Fld>& _cpFldMap);
+		long WriteEndnoteDocumentFields(const std::map<CP, Fld>& _cpFldMap);
+		long WriteHeadersAndFootersDocumentFields(const std::map<CP, Fld>& _cpFldMap);
+		long WriteBookmarks(const std::vector<std::pair<CP, std::wstring>>& _bookmarksStartsCPsWithIDs, const std::vector<std::pair<CP, std::wstring>>& _bookmarksEndsCPsWithIDs, const std::vector<std::wstring>& _bookmarksNames);
+		short GetBookmarkIndexByID(const std::wstring& _id, const std::vector<std::pair<CP, std::wstring>>& _bookmarksCPsWithIDs);
+		long WriteFootnoteDocument(unsigned int* _textPosition, std::vector<CP>* _AllFootnotesReferences);
+		long WriteEndnoteDocument(unsigned int* _textPosition, std::vector<CP>* _AllEndnotesReferences);
+		std::wstring GetHeadersOrFootersProperties(const ITextItem* _headerOrFooter, unsigned int& _headersOrFootersOffset, unsigned int* _headerOrFooterOffset, std::map<CP, Fld>* cpFldMap);
 		long WriteHeadersAndFootersDocument(unsigned int* _textPosition);
 
 		// 		
@@ -171,19 +173,19 @@ namespace Docx2Doc
 
 		// Helpers
 
-		bool InitStream(const std::wstring& stName, IStream*& pStream, bool bDefaultSizes);
-		long Write (IStream* stream, unsigned long position, const void* data, ULONG size, ULONG* writtenSize);
-		long Write (IStream* stream, unsigned long position, const void* data, ULONG size);
+		bool InitStream(const std::wstring& stName, CFCPP::IStream*& pStream, bool bDefaultSizes);
+		long Write (CFCPP::IStream* stream, unsigned long position, const void* data, ULONG size, ULONG* writtenSize);
+		long Write (CFCPP::IStream* stream, unsigned long position, const void* data, ULONG size);
 		long ReloadFromFileBuffer (std::wstring strFileData, DWORD dwOffTbID, DWORD dwSizefTbID);
-		long ReloadStreamFileBuffer (std::wstring strFileData, IStream* pStream);
+		long ReloadStreamFileBuffer (std::wstring strFileData, CFCPP::IStream* pStream);
 
 	private:
 
-		IStorage*				m_pIStorage;
+		//IStorage*				m_pIStorage;
 		
-		IStream*				m_pTableStream;
-		IStream*				m_pSummaryInformationStream;
-		IStream*				m_pDocumentSummaryInformationStream;
+		CFCPP::IStream*				m_pTableStream;
+		CFCPP::IStream*				m_pSummaryInformationStream;
+		CFCPP::IStream*				m_pDocumentSummaryInformationStream;
 
 		unsigned long			m_nBuffOk;
 		unsigned int			m_nTextCurPos;
@@ -198,31 +200,31 @@ namespace Docx2Doc
 		int						ccpTxbx;				//	FibRgLw97
 		int						ccpHdrTxbx;				//	FibRgLw97
 
-		vector <Chpx>			m_arChpx;
-		vector <unsigned int>	m_arRunsOffsets;
-		vector <PapxInFkp>		m_arPapxInFkp;
-		vector <unsigned int>	m_arParagraphsOffSets;
+		std::vector <Chpx>			m_arChpx;
+		std::vector <unsigned int>	m_arRunsOffsets;
+		std::vector <PapxInFkp>		m_arPapxInFkp;
+		std::vector <unsigned int>	m_arParagraphsOffSets;
 
-		COArtStorage*			m_oartStorage;
+		//COArtStorage*			m_oartStorage;
 
 		// позиции якорей в тексте документа (индексы символов)
-		vector <unsigned int>	m_aSpaCP;
-		vector <unsigned int>	m_aHeadSpaCP;
+		std::vector <unsigned int>	m_aSpaCP;
+		std::vector <unsigned int>	m_aHeadSpaCP;
 
-		vector <unsigned int>	m_arTxbxCP;
-		vector <unsigned int>	m_arTxbxHdrCP;
+		std::vector <unsigned int>	m_arTxbxCP;
+		std::vector <unsigned int>	m_arTxbxHdrCP;
 
-		vector <unsigned int>	m_arTxbxBkdCP;
-		vector <unsigned int>	m_arTxbxHdrBkdCP;
+		std::vector <unsigned int>	m_arTxbxBkdCP;
+		std::vector <unsigned int>	m_arTxbxHdrBkdCP;
 		
 		//
 
-		list<TextItem> textItems;
-		list<TextItem> m_Footnotes;
-		list<TextItem> endnotes;
+		std::list<TextItem> textItems;
+		std::list<TextItem> m_Footnotes;
+		std::list<TextItem> endnotes;
 		SttbfFfn m_oFontTable;
 		ListFormattingInformation listFormatInfo;
 		PlfLfo listFormatOverrideInfo;
-		list<SectionProperties> sectionProperties;
+		std::list<SectionProperties> sectionProperties;
 	};
 }

@@ -1,12 +1,44 @@
+/*
+ * (c) Copyright Ascensio System SIA 2010-2023
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-6 Ernesta Birznieka-Upish
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+
 #pragma once
 
 #include "ITextItem.h"
 #include "TextItem.h"
 #include "PLC.h"
 
-#include "..\Common\IOperand.h"
+#include "../../../MsBinaryFile/Common/Base/IOperand.h"
 
-namespace AVSDocFileFormat
+namespace Docx2Doc
 {
 	// BreaK Descriptor (BKD)
 	class Tbkd : public IOperand
@@ -43,14 +75,14 @@ namespace AVSDocFileFormat
 		}
 
 		// IOperand
-		virtual operator byte*() const
+		virtual operator BYTE*() const
 		{
-			return (byte*)(bytes);
+			return (BYTE*)(bytes);
 		}
 
-		virtual operator const byte*() const
+		virtual operator const BYTE*() const
 		{
-			return (const byte*)bytes;
+			return (const BYTE*)bytes;
 		}
 
 		virtual unsigned int Size() const
@@ -65,10 +97,10 @@ namespace AVSDocFileFormat
 
 			unsigned int offset = 0;
 
-			FormatUtils::SetBytes((bytes + offset), itxbxs);				offset += sizeof(short);
-			FormatUtils::SetBytes((bytes + offset), dcpDepend);				offset += sizeof(short);
+			DocFileFormat::FormatUtils::SetBytes((bytes + offset), itxbxs);				offset += sizeof(short);
+			DocFileFormat::FormatUtils::SetBytes((bytes + offset), dcpDepend);				offset += sizeof(short);
 
-			AVSDocFormatUtils::BitSet oBits(2);
+			DocFileFormat::BitSet oBits(2);
 			oBits.SetBit(false,			0);	
 			oBits.SetBit(false,			1);
 			oBits.SetBit(false,			2);
@@ -89,12 +121,11 @@ namespace AVSDocFileFormat
 			oBits.SetBit(false,			15);
 
 
-			FormatUtils::SetBytes((bytes + offset),	FormatUtils::BytesToInt16 (oBits.GetBytes(), 0, sizeof(unsigned short)));
+			DocFileFormat::FormatUtils::SetBytes((bytes + offset),	DocFileFormat::FormatUtils::BytesToInt16 (oBits.GetBytes(), 0, sizeof(unsigned short)));
 		}
 
 	private:
-
-		byte bytes [SIZE_IN_BYTES];
+		BYTE bytes [SIZE_IN_BYTES];
 
 		short	itxbxs;
 		short	dcpDepend;
@@ -153,14 +184,14 @@ namespace AVSDocFileFormat
 		}
 
 		// IOperand
-		virtual operator byte*() const
+		virtual operator BYTE*() const
 		{
-			return (byte*)(bytes);
+			return (BYTE*)(bytes);
 		}
 
-		virtual operator const byte*() const
+		virtual operator const BYTE*() const
 		{
-			return (const byte*)bytes;
+			return (const BYTE*)bytes;
 		}
 
 		virtual unsigned int Size() const
@@ -175,23 +206,23 @@ namespace AVSDocFileFormat
 
 			unsigned int offset = 0;
 
-			FormatUtils::SetBytes((bytes + offset), reusable01);				offset += sizeof(int);
-			FormatUtils::SetBytes((bytes + offset), reusable02);				offset += sizeof(int);
-			FormatUtils::SetBytes((bytes + offset), fReusable);					offset += sizeof(short);
-			FormatUtils::SetBytes((bytes + offset), itxbxsDest);				offset += sizeof(int);
-			FormatUtils::SetBytes((bytes + offset), lid);						offset += sizeof(int);
-			FormatUtils::SetBytes((bytes + offset), txidUndo);					offset += sizeof(int);
+			DocFileFormat::FormatUtils::SetBytes((bytes + offset), reusable01);				offset += sizeof(int);
+			DocFileFormat::FormatUtils::SetBytes((bytes + offset), reusable02);				offset += sizeof(int);
+			DocFileFormat::FormatUtils::SetBytes((bytes + offset), fReusable);				offset += sizeof(short);
+			DocFileFormat::FormatUtils::SetBytes((bytes + offset), itxbxsDest);				offset += sizeof(int);
+			DocFileFormat::FormatUtils::SetBytes((bytes + offset), lid);					offset += sizeof(int);
+			DocFileFormat::FormatUtils::SetBytes((bytes + offset), txidUndo);				offset += sizeof(int);
 		}
 
 	private:
 
-		byte bytes [SIZE_IN_BYTES];
+		BYTE bytes [SIZE_IN_BYTES];
 
 		// FTXBXSReusable	|| 	FTXBXNonReusable
 		int					reusable01;
 		int					reusable02;
 
-		short				fReusable;		//	ставим в 0 потому что один TbRef привязан к одному элементу
+		short				fReusable;		//	СЃС‚Р°РІРёРј РІ 0 РїРѕС‚РѕРјСѓ С‡С‚Рѕ РѕРґРёРЅ TbRef РїСЂРёРІСЏР·Р°РЅ Рє РѕРґРЅРѕРјСѓ СЌР»РµРјРµРЅС‚Сѓ
 		int					itxbxsDest;		//	This field MUST be ignored.
 		int					lid;			/*
 
@@ -213,33 +244,33 @@ namespace AVSDocFileFormat
 
 		PlcftxbxTxt(): bytes(NULL), sizeInBytes(0)
 		{
-			bytes = new byte [sizeInBytes];
+			bytes = new BYTE [sizeInBytes];
 
 			if (bytes)
 				memset(bytes, 0, sizeInBytes);
 		}
 
-		PlcftxbxTxt(const vector<unsigned int>& aCP, const vector<FTXBXS>& oFTXBXS) : bytes(NULL), sizeInBytes(0)
+		PlcftxbxTxt(const std::vector<unsigned int>& aCP, const std::vector<FTXBXS>& oFTXBXS) : bytes(NULL), sizeInBytes(0)
 		{
 			sizeInBytes	=	( (aCP.size() * sizeof(unsigned int) ) + ( oFTXBXS.size() * FTXBXS::SIZE_IN_BYTES ) );
 
-			bytes		=	new byte[sizeInBytes];
+			bytes		=	new BYTE[sizeInBytes];
 			if (bytes)
 			{
 				memset (bytes, 0,sizeInBytes);
 
 				unsigned int offset = 0;
-				for ( vector<unsigned int>::const_iterator iter = aCP.begin(); iter != aCP.end(); ++iter)
+				for ( std::vector<unsigned int>::const_iterator iter = aCP.begin(); iter != aCP.end(); ++iter)
 				{
-					FormatUtils::SetBytes( ( bytes + offset ), (int)(*iter) );
+					DocFileFormat::FormatUtils::SetBytes( ( bytes + offset ), (int)(*iter) );
 					offset += sizeof(unsigned int);
 				}
 
 				if (bytes)
 				{
-					for (vector<FTXBXS>::const_iterator iter = oFTXBXS.begin(); iter != oFTXBXS.end(); ++iter)
+					for (std::vector<FTXBXS>::const_iterator iter = oFTXBXS.begin(); iter != oFTXBXS.end(); ++iter)
 					{
-						memcpy ((bytes + offset), (byte*)(*iter), iter->Size());
+						memcpy ((bytes + offset), (BYTE*)(*iter), iter->Size());
 						offset += iter->Size();
 					}
 				}
@@ -248,7 +279,7 @@ namespace AVSDocFileFormat
 
 		PlcftxbxTxt(const PlcftxbxTxt& oBxTxt) : bytes(NULL), sizeInBytes(oBxTxt.sizeInBytes)
 		{
-			bytes	=	new byte[sizeInBytes];
+			bytes	=	new BYTE[sizeInBytes];
 
 			if (bytes)
 			{
@@ -274,7 +305,7 @@ namespace AVSDocFileFormat
 				RELEASEARRAYOBJECTS(bytes);
 
 				sizeInBytes	=	oBxTxt.sizeInBytes;
-				bytes		=	new byte[sizeInBytes];
+				bytes		=	new BYTE[sizeInBytes];
 
 				if (bytes)
 				{
@@ -293,14 +324,14 @@ namespace AVSDocFileFormat
 			RELEASEARRAYOBJECTS(bytes);
 		}
 
-		virtual operator byte*() const
+		virtual operator BYTE*() const
 		{
 			return bytes;
 		}
 
-		virtual operator const byte*() const
+		virtual operator const BYTE*() const
 		{
-			return (const byte*)bytes;
+			return (const BYTE*)bytes;
 		}
 
 		virtual unsigned int Size() const
@@ -310,7 +341,7 @@ namespace AVSDocFileFormat
 
 	private:
 
-		byte*			bytes;
+		BYTE*			bytes;
 		unsigned int	sizeInBytes;
 	};
 
@@ -320,33 +351,33 @@ namespace AVSDocFileFormat
 
 		PlcfTxbxBkd(): bytes(NULL), sizeInBytes(0)
 		{
-			bytes = new byte [sizeInBytes];
+			bytes = new BYTE [sizeInBytes];
 
 			if (bytes)
 				memset(bytes, 0, sizeInBytes);
 		}
 
-		PlcfTxbxBkd (const vector<unsigned int>& aCP, const vector<Tbkd>& oTbkd) : bytes(NULL), sizeInBytes(0)
+		PlcfTxbxBkd (const std::vector<unsigned int>& aCP, const std::vector<Tbkd>& oTbkd) : bytes(NULL), sizeInBytes(0)
 		{
 			sizeInBytes	=	( (aCP.size() * sizeof(unsigned int) ) + ( oTbkd.size() * Tbkd::SIZE_IN_BYTES ) );
 
-			bytes		=	new byte[sizeInBytes];
+			bytes		=	new BYTE[sizeInBytes];
 			if (bytes)
 			{
 				memset (bytes, 0,sizeInBytes);
 
 				unsigned int offset = 0;
-				for (vector<unsigned int>::const_iterator iter = aCP.begin(); iter != aCP.end(); ++iter)
+				for (std::vector<unsigned int>::const_iterator iter = aCP.begin(); iter != aCP.end(); ++iter)
 				{
-					FormatUtils::SetBytes( ( bytes + offset ), (int)(*iter) );
+					DocFileFormat::FormatUtils::SetBytes( ( bytes + offset ), (int)(*iter) );
 					offset += sizeof(unsigned int);
 				}
 
 				if (bytes)
 				{
-					for (vector<Tbkd>::const_iterator iter = oTbkd.begin(); iter != oTbkd.end(); ++iter)
+					for (std::vector<Tbkd>::const_iterator iter = oTbkd.begin(); iter != oTbkd.end(); ++iter)
 					{
-						memcpy ((bytes + offset), (byte*)(*iter), iter->Size());
+						memcpy ((bytes + offset), (BYTE*)(*iter), iter->Size());
 						offset += iter->Size();
 					}
 				}
@@ -355,7 +386,7 @@ namespace AVSDocFileFormat
 
 		PlcfTxbxBkd(const PlcfTxbxBkd& oTxbxBkd) : bytes(NULL), sizeInBytes(oTxbxBkd.sizeInBytes)
 		{
-			bytes	=	new byte[sizeInBytes];
+			bytes	=	new BYTE[sizeInBytes];
 
 			if (bytes)
 			{
@@ -381,7 +412,7 @@ namespace AVSDocFileFormat
 				RELEASEARRAYOBJECTS(bytes);
 
 				sizeInBytes	=	oTxbxBkd.sizeInBytes;
-				bytes		=	new byte[sizeInBytes];
+				bytes		=	new BYTE[sizeInBytes];
 
 				if (bytes)
 				{
@@ -400,14 +431,14 @@ namespace AVSDocFileFormat
 			RELEASEARRAYOBJECTS(bytes);
 		}
 
-		virtual operator byte*() const
+		virtual operator BYTE*() const
 		{
 			return bytes;
 		}
 
-		virtual operator const byte*() const
+		virtual operator const BYTE*() const
 		{
-			return (const byte*)bytes;
+			return (const BYTE*)bytes;
 		}
 
 		virtual unsigned int Size() const
@@ -417,7 +448,7 @@ namespace AVSDocFileFormat
 
 	private:
 
-		byte*			bytes;
+		BYTE*			bytes;
 		unsigned int	sizeInBytes;
 	};
 
@@ -428,33 +459,33 @@ namespace AVSDocFileFormat
 
 		PlcfHdrtxbxTxt(): bytes(NULL), sizeInBytes(0)
 		{
-			bytes = new byte [sizeInBytes];
+			bytes = new BYTE [sizeInBytes];
 
 			if (bytes)
 				memset(bytes, 0, sizeInBytes);
 		}
 
-		PlcfHdrtxbxTxt(const vector<unsigned int>& aCP, const vector<FTXBXS>& oFTXBXS) : bytes(NULL), sizeInBytes(0)
+		PlcfHdrtxbxTxt(const std::vector<unsigned int>& aCP, const std::vector<FTXBXS>& oFTXBXS) : bytes(NULL), sizeInBytes(0)
 		{
 			sizeInBytes	=	( (aCP.size() * sizeof(unsigned int) ) + ( oFTXBXS.size() * FTXBXS::SIZE_IN_BYTES ) );
 
-			bytes		=	new byte[sizeInBytes];
+			bytes		=	new BYTE[sizeInBytes];
 			if (bytes)
 			{
 				memset (bytes, 0,sizeInBytes);
 
 				unsigned int offset = 0;
-				for ( vector<unsigned int>::const_iterator iter = aCP.begin(); iter != aCP.end(); ++iter)
+				for ( std::vector<unsigned int>::const_iterator iter = aCP.begin(); iter != aCP.end(); ++iter)
 				{
-					FormatUtils::SetBytes( ( bytes + offset ), (int)(*iter) );
+					DocFileFormat::FormatUtils::SetBytes( ( bytes + offset ), (int)(*iter) );
 					offset += sizeof(unsigned int);
 				}
 
 				if (bytes)
 				{
-					for (vector<FTXBXS>::const_iterator iter = oFTXBXS.begin(); iter != oFTXBXS.end(); ++iter)
+					for (std::vector<FTXBXS>::const_iterator iter = oFTXBXS.begin(); iter != oFTXBXS.end(); ++iter)
 					{
-						memcpy ((bytes + offset), (byte*)(*iter), iter->Size());
+						memcpy ((bytes + offset), (BYTE*)(*iter), iter->Size());
 						offset += iter->Size();
 					}
 				}
@@ -463,7 +494,7 @@ namespace AVSDocFileFormat
 
 		PlcfHdrtxbxTxt(const PlcfHdrtxbxTxt& oBxTxt) : bytes(NULL), sizeInBytes(oBxTxt.sizeInBytes)
 		{
-			bytes	=	new byte[sizeInBytes];
+			bytes	=	new BYTE[sizeInBytes];
 
 			if (bytes)
 			{
@@ -489,7 +520,7 @@ namespace AVSDocFileFormat
 				RELEASEARRAYOBJECTS(bytes);
 
 				sizeInBytes	=	oBxTxt.sizeInBytes;
-				bytes		=	new byte[sizeInBytes];
+				bytes		=	new BYTE[sizeInBytes];
 
 				if (bytes)
 				{
@@ -508,14 +539,14 @@ namespace AVSDocFileFormat
 			RELEASEARRAYOBJECTS(bytes);
 		}
 
-		virtual operator byte*() const
+		virtual operator BYTE*() const
 		{
 			return bytes;
 		}
 
-		virtual operator const byte*() const
+		virtual operator const BYTE*() const
 		{
-			return (const byte*)bytes;
+			return (const BYTE*)bytes;
 		}
 
 		virtual unsigned int Size() const
@@ -525,7 +556,7 @@ namespace AVSDocFileFormat
 
 	private:
 
-		byte*			bytes;
+		BYTE*			bytes;
 		unsigned int	sizeInBytes;
 	};
 
@@ -535,33 +566,33 @@ namespace AVSDocFileFormat
 
 		PlcfTxbxHdrBkd(): bytes(NULL), sizeInBytes(0)
 		{
-			bytes = new byte [sizeInBytes];
+			bytes = new BYTE[sizeInBytes];
 
 			if (bytes)
 				memset(bytes, 0, sizeInBytes);
 		}
 
-		PlcfTxbxHdrBkd (const vector<unsigned int>& aCP, const vector<Tbkd>& oTbkd) : bytes(NULL), sizeInBytes(0)
+		PlcfTxbxHdrBkd (const std::vector<unsigned int>& aCP, const std::vector<Tbkd>& oTbkd) : bytes(NULL), sizeInBytes(0)
 		{
 			sizeInBytes	=	( (aCP.size() * sizeof(unsigned int) ) + ( oTbkd.size() * Tbkd::SIZE_IN_BYTES ) );
 
-			bytes		=	new byte[sizeInBytes];
+			bytes		=	new BYTE[sizeInBytes];
 			if (bytes)
 			{
 				memset (bytes, 0,sizeInBytes);
 
 				unsigned int offset = 0;
-				for ( vector<unsigned int>::const_iterator iter = aCP.begin(); iter != aCP.end(); ++iter)
+				for ( std::vector<unsigned int>::const_iterator iter = aCP.begin(); iter != aCP.end(); ++iter)
 				{
-					FormatUtils::SetBytes( ( bytes + offset ), (int)(*iter) );
+					DocFileFormat::FormatUtils::SetBytes( ( bytes + offset ), (int)(*iter) );
 					offset += sizeof(unsigned int);
 				}
 
 				if (bytes)
 				{
-					for (vector<Tbkd>::const_iterator iter = oTbkd.begin(); iter != oTbkd.end(); ++iter)
+					for (std::vector<Tbkd>::const_iterator iter = oTbkd.begin(); iter != oTbkd.end(); ++iter)
 					{
-						memcpy ((bytes + offset), (byte*)(*iter), iter->Size());
+						memcpy ((bytes + offset), (BYTE*)(*iter), iter->Size());
 						offset += iter->Size();
 					}
 				}
@@ -570,7 +601,7 @@ namespace AVSDocFileFormat
 
 		PlcfTxbxHdrBkd(const PlcfTxbxHdrBkd& oHdrBkd) : bytes(NULL), sizeInBytes(oHdrBkd.sizeInBytes)
 		{
-			bytes	=	new byte[sizeInBytes];
+			bytes	=	new BYTE[sizeInBytes];
 
 			if (bytes)
 			{
@@ -596,7 +627,7 @@ namespace AVSDocFileFormat
 				RELEASEARRAYOBJECTS(bytes);
 
 				sizeInBytes	=	oHdrBkd.sizeInBytes;
-				bytes		=	new byte[sizeInBytes];
+				bytes		=	new BYTE[sizeInBytes];
 
 				if (bytes)
 				{
@@ -615,14 +646,14 @@ namespace AVSDocFileFormat
 			RELEASEARRAYOBJECTS(bytes);
 		}
 
-		virtual operator byte*() const
+		virtual operator BYTE*() const
 		{
 			return bytes;
 		}
 
-		virtual operator const byte*() const
+		virtual operator const BYTE*() const
 		{
-			return (const byte*)bytes;
+			return (const BYTE*)bytes;
 		}
 
 		virtual unsigned int Size() const
@@ -632,7 +663,7 @@ namespace AVSDocFileFormat
 
 	private:
 
-		byte*			bytes;
+		BYTE*			bytes;
 		unsigned int	sizeInBytes;
 	};
 
@@ -664,16 +695,16 @@ namespace AVSDocFileFormat
 			return m_nIndex;
 		}
 
-		inline BOOL IsValid()
+		inline int IsValid()
 		{
 			return (m_nIndex >= 0);
 		}
 
-		inline void AppendTbItems (std::vector<AVSDocFileFormat::TextItem>& oTextItems)
+		inline void AppendTbItems (std::vector<Docx2Doc::TextItem>& oTextItems)
 		{
 			m_oTextItems	=	oTextItems;
 			
-			// TODO : временно
+			// TODO : РІСЂРµРјРµРЅРЅРѕ
 			if (1 == oTextItems.size())
 			{
 				std::wstring strSrc = oTextItems[0]->GetAllText();
@@ -721,20 +752,20 @@ namespace AVSDocFileFormat
 		void AddTextItem(const ITextItem& oTextItem);
 		short GetIndex() const;
 		virtual ~TextBox();
-		virtual wstring GetAllText() const;
-		virtual operator wstring() const;
-		virtual vector<TextItemPtr> GetAllParagraphsCopy() const;
-		virtual vector<ITextItem*> GetAllParagraphs();
-		virtual vector<PapxInFkp> GetAllParagraphsProperties(vector<unsigned int>* allParagraphsOffsets) const;
-		virtual vector<Chpx> GetAllRunProperties( vector<unsigned int>* allRunsOffsets) const;
-		virtual vector<IParagraphItemPtr> GetAllRunsCopy(vector<unsigned int>* allRunsOffsets) const;
-		virtual vector<IParagraphItemPtr> GetAllParagraphItemsCopy(vector<unsigned int>* allParagraphItemsOffsets) const;
+		virtual std::wstring GetAllText() const;
+		virtual operator std::wstring() const;
+		virtual std::vector<TextItemPtr> GetAllParagraphsCopy() const;
+		virtual std::vector<ITextItem*> GetAllParagraphs();
+		virtual std::vector<PapxInFkp> GetAllParagraphsProperties(std::vector<unsigned int>* allParagraphsOffsets) const;
+		virtual std::vector<Chpx> GetAllRunProperties( std::vector<unsigned int>* allRunsOffsets) const;
+		virtual std::vector<IParagraphItemPtr> GetAllRunsCopy(std::vector<unsigned int>* allRunsOffsets) const;
+		virtual std::vector<IParagraphItemPtr> GetAllParagraphItemsCopy(std::vector<unsigned int>* allParagraphItemsOffsets) const;
 		virtual IVirtualConstructor* New() const;
 		virtual IVirtualConstructor* Clone() const;
 
 	private:
 
-		list<TextBoxItemWithOffset> textItems;
+		std::list<TextBoxItemWithOffset> textItems;
 		unsigned int textBoxItemsOffset;
 		short aFtnIdx;
 	};
