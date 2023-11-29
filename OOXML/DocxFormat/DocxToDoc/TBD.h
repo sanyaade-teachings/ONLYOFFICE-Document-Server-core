@@ -37,33 +37,31 @@
 
 namespace Docx2Doc
 {
-union TBD
-{
-private:
-	struct
+	union TBD
 	{
-		BYTE jc:3;
-		BYTE tlc:3;
-		BYTE UNUSED:2;
-	} TBDStruct;
-	BYTE TBDByte;
+	private:
+		struct
+		{
+			BYTE jc:3;
+			BYTE tlc:3;
+			BYTE UNUSED:2;
+		} TBDStruct;
+		BYTE TBDByte;
 
-public:
-	explicit TBD( BYTE _tbd = 0 ):
-		TBDByte(_tbd)
-	{
-	}
+	public:
+		explicit TBD( BYTE _tbd = 0 ) : TBDByte(_tbd)
+		{
+		}
 
-	TBD( Constants::TabJC _jc, Constants::TabLC _tlc ):
-		TBDByte(0)
-	{
-		this->TBDStruct.jc = (BYTE)_jc;
-		this->TBDStruct.tlc = (BYTE)_tlc;
-	}
+		TBD( Constants::TabJC _jc, Constants::TabLC _tlc ) : TBDByte(0)
+		{
+			this->TBDStruct.jc = (BYTE)_jc;
+			this->TBDStruct.tlc = (BYTE)_tlc;
+		}
 
-	operator BYTE() const
-	{
-		return this->TBDByte;
-	}
-};
+		operator BYTE() const
+		{
+			return this->TBDByte;
+		}
+	};
 }

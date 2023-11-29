@@ -58,7 +58,6 @@ namespace Docx2Doc
 
 		virtual ~Tbkd()
 		{
-
 		}
 
 		Tbkd (const Tbkd& oTbkd)
@@ -138,7 +137,6 @@ namespace Docx2Doc
 	class FTXBXS
 	{
 	public:
-
 		struct FTXBXSReusable
 		{
 			int	iNextReuse;
@@ -166,7 +164,6 @@ namespace Docx2Doc
 
 		virtual ~FTXBXS()
 		{
-
 		}
 
 		FTXBXS (const FTXBXS& oFTXBXS)
@@ -215,7 +212,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE bytes [SIZE_IN_BYTES];
 
 		// FTXBXSReusable	|| 	FTXBXNonReusable
@@ -241,7 +237,6 @@ namespace Docx2Doc
 	class PlcftxbxTxt : public IOperand
 	{
 	public:
-
 		PlcftxbxTxt(): bytes(NULL), sizeInBytes(0)
 		{
 			bytes = new BYTE [sizeInBytes];
@@ -340,7 +335,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE*			bytes;
 		unsigned int	sizeInBytes;
 	};
@@ -348,7 +342,6 @@ namespace Docx2Doc
 	class PlcfTxbxBkd : public IOperand
 	{
 	public:
-
 		PlcfTxbxBkd(): bytes(NULL), sizeInBytes(0)
 		{
 			bytes = new BYTE [sizeInBytes];
@@ -447,7 +440,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE*			bytes;
 		unsigned int	sizeInBytes;
 	};
@@ -456,7 +448,6 @@ namespace Docx2Doc
 	class PlcfHdrtxbxTxt : public IOperand
 	{
 	public:
-
 		PlcfHdrtxbxTxt(): bytes(NULL), sizeInBytes(0)
 		{
 			bytes = new BYTE [sizeInBytes];
@@ -555,7 +546,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE*			bytes;
 		unsigned int	sizeInBytes;
 	};
@@ -563,7 +553,6 @@ namespace Docx2Doc
 	class PlcfTxbxHdrBkd : public IOperand
 	{
 	public:
-
 		PlcfTxbxHdrBkd(): bytes(NULL), sizeInBytes(0)
 		{
 			bytes = new BYTE[sizeInBytes];
@@ -662,7 +651,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE*			bytes;
 		unsigned int	sizeInBytes;
 	};
@@ -671,7 +659,6 @@ namespace Docx2Doc
 	class CTextBoxRef
 	{
 	public:
-
 		CTextBoxRef(int nIndex) : m_nIndex(nIndex), m_nID (-1)
 		{
 
@@ -679,7 +666,6 @@ namespace Docx2Doc
 
 		~CTextBoxRef()
 		{
-
 		}
 
 		inline void SetID (int nID)
@@ -719,7 +705,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		int m_nIndex;
 		int m_nID;				//
 
@@ -746,7 +731,6 @@ namespace Docx2Doc
 		};
 
 	public:
-
 		TextBox (short aFtnIdx = 0);
 		TextBox (const TextBox& oTextBox);
 		void AddTextItem(const ITextItem& oTextItem);
@@ -764,7 +748,6 @@ namespace Docx2Doc
 		virtual IVirtualConstructor* Clone() const;
 
 	private:
-
 		std::list<TextBoxItemWithOffset> textItems;
 		unsigned int textBoxItemsOffset;
 		short aFtnIdx;

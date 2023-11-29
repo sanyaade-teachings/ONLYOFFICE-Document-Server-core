@@ -47,7 +47,6 @@ namespace Docx2Doc
 	}
 	Hyperlink::~Hyperlink()
 	{
-
 	}
 }
 
@@ -110,11 +109,11 @@ namespace Docx2Doc
 
 	/*========================================================================================================*/
 
-	void Hyperlink::SetURL( const WCHAR* _url )
+	void Hyperlink::SetURL( const std::wstring _url )
 	{
-		if ( _url != NULL )
+		if ( _url.length() )
 		{
-			url = std::wstring( _url );
+			url = _url;
 		}
 	}
 
@@ -125,11 +124,11 @@ namespace Docx2Doc
 
 	/*========================================================================================================*/
 
-	void Hyperlink::SetLocationInTheFile( const WCHAR* _locationInTheFile )
+	void Hyperlink::SetLocationInTheFile( const std::wstring _locationInTheFile )
 	{
-		if ( _locationInTheFile != NULL )
+		if ( _locationInTheFile.length() )
 		{
-			locationInTheFile = std::wstring( _locationInTheFile );
+			locationInTheFile = _locationInTheFile;
 		}  
 	}
 

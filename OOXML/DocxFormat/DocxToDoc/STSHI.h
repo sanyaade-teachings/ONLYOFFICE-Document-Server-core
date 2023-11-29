@@ -44,7 +44,6 @@ namespace Docx2Doc
 	public:
 		STSHI () : bytes(NULL), sizeInBytes(0)
 		{
-
 		}
 
 		STSHI (const Stshif& _stshif, short _ftcBi, const StshiLsd& _stshiLsd, const STSHIB& _stshiB /*!!!MUST be ignored!!!*/ ) : bytes(NULL), sizeInBytes(0)

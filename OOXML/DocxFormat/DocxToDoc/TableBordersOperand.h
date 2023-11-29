@@ -77,8 +77,7 @@ namespace Docx2Doc
 		}
 
 	public:
-		TableBordersOperand():
-		  bytes(NULL), cb(0)
+		TableBordersOperand() :  bytes(NULL), cb(0)
 		  {
 			  this->Initialize();
 		  }
@@ -103,8 +102,7 @@ namespace Docx2Doc
 			  memcpy( this->bytes, _tableBordersOperand.bytes, ( _tableBordersOperand.cb + 1 ) );
 		  }
 
-		  explicit TableBordersOperand( const Prl& _prl ):
-		  bytes(NULL), cb(0)
+		  explicit TableBordersOperand( const Prl& _prl ) : bytes(NULL), cb(0)
 		  {
 			  unsigned long prlSize = 0;
 

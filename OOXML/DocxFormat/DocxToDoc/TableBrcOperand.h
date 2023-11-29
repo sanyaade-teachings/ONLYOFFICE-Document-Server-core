@@ -48,7 +48,6 @@ namespace Docx2Doc
 		TableBrcOperand()
 		{
 			memset( this->bytes, 0, SIZE_IN_BYTES );
-
 			this->bytes[0] = ( SIZE_IN_BYTES - 1 );
 		}
 
@@ -66,7 +65,6 @@ namespace Docx2Doc
 		TableBrcOperand( const TableBrcOperand& _tableBrcOperand )
 		{
 			memset( this->bytes, 0, SIZE_IN_BYTES );
-
 			memcpy( this->bytes, _tableBrcOperand.bytes, SIZE_IN_BYTES );
 		}
 

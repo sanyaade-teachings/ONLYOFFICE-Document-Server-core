@@ -36,20 +36,18 @@
 
 namespace Docx2Doc
 {
-	class Header: public ITextItem
+	class Header : public ITextItem
 	{
 		struct HeaderItemWithOffset
 		{
 			TextItemPtr headerItem;
 			unsigned int headerItemOffset;
 
-			HeaderItemWithOffset():
-			headerItem(), headerItemOffset(0)
+			HeaderItemWithOffset() : headerItem(), headerItemOffset(0)
 			{
 			}
 
-			HeaderItemWithOffset( const TextItemPtr& _headerItem, unsigned int _headerItemOffset ):
-			headerItem(_headerItem), headerItemOffset(_headerItemOffset)
+			HeaderItemWithOffset( const TextItemPtr& _headerItem, unsigned int _headerItemOffset ) : headerItem(_headerItem), headerItemOffset(_headerItemOffset)
 			{
 			}
 		};

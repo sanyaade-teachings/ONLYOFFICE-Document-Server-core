@@ -36,8 +36,6 @@
 
 #include "../../../MsBinaryFile/Common/Base/FormatUtils.h"
 
-//#include <AtlFile.h>
-
 #define WRITE_STREAM_WORD(VAR)	hr=STREAMS::CSWordWriter::Instance()->Write(FIB_OFFSET::VAR,&VAR,sizeof(VAR))
 #define WRITE_STREAM_TABLE(VAR,BUFFER) m_nBuffOk=0;hr=Write(m_pTableStream,fc##VAR,(byte*)BUFFER,lcb##VAR,&m_nBuffOk);
 
@@ -513,7 +511,6 @@ namespace Docx2Doc
 			}  
 		}
 	}  	  
-
 
 	void CDocFile::AddInlineShapesData (unsigned int nTextPos, const TextItem& oItem, std::map<CP, Fld>* cpFldMap)
 	{
@@ -1982,7 +1979,6 @@ namespace Docx2Doc
 
 		return hr;
 	}
-
 
 	bool CDocFile::InitStream (const std::wstring& stName, CFCPP::IStream*& pStream, bool bDefaultSizes)
 	{

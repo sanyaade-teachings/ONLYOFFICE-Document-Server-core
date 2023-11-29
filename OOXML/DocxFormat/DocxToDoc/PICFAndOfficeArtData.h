@@ -152,7 +152,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 	};

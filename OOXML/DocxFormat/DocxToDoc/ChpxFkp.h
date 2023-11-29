@@ -162,9 +162,7 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE						crun;
-
 		std::vector<unsigned int>	rgfc;
 		std::vector<BYTE>			rgb;
 		std::vector<Chpx>			chpxs;

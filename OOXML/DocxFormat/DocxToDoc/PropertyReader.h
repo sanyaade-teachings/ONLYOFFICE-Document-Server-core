@@ -47,12 +47,10 @@ public:
 
 	CXmlPropertyReader ()
 	{
-
 	}
 
 	~CXmlPropertyReader ()
 	{
-
 	}
 
 	/*
@@ -358,7 +356,7 @@ public:
 	*/
 
 	//
-	inline PrlList GetTableStyleProperties		(const PrlList& arSource)
+	inline PrlList GetTableStyleProperties(const PrlList& arSource)
 	{
 		PrlList arFinal;
 
@@ -413,7 +411,7 @@ public:
 		return arFinal;
 	}	
 
-	inline PrlList GetRunStyleProperties		(const PrlList& arSource)
+	inline PrlList GetRunStyleProperties(const PrlList& arSource)
 	{
 		PrlList arFinal;
 
@@ -443,7 +441,7 @@ public:
 		return arFinal;
 	}	
 
-	inline PrlList GetParagraphStyleProperties	(const PrlList& arSource)
+	inline PrlList GetParagraphStyleProperties(const PrlList& arSource)
 	{
 		PrlList arFinal;
 
@@ -475,9 +473,5 @@ public:
 		}
 
 		return arFinal;
-	}	
-
-
-private:
-
+	}
 };

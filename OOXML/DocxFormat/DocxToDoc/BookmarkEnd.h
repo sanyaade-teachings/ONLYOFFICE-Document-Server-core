@@ -103,7 +103,6 @@ namespace Docx2Doc
 		}
 	
 	private:
-	
 		std::wstring id;
 	};
 }

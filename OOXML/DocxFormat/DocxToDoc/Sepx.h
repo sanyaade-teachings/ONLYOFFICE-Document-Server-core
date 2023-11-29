@@ -40,7 +40,6 @@ namespace Docx2Doc
 	class SDxaColSpacingOperand : public IOperand
 	{
 	public:
-
 		SDxaColSpacingOperand()
 		{
 			memset( this->bytes, 0, SIZE_IN_BYTES );
@@ -86,8 +85,8 @@ namespace Docx2Doc
 		{
 			return sizeof(this->bytes);
 		}
-	private:
 
+	private:
 		static const BYTE SIZE_IN_BYTES = 3;
 		BYTE bytes[SIZE_IN_BYTES];
 	};
@@ -148,8 +147,8 @@ namespace Docx2Doc
 		{
 			return sizeof(this->bytes);
 		}
-	private:
 
+	private:
 		static const BYTE SIZE_IN_BYTES = 3;
 		BYTE bytes[SIZE_IN_BYTES];
 	};
@@ -157,7 +156,6 @@ namespace Docx2Doc
 	class Sepx : public IOperand
 	{
 	public:
-
 		Sepx() : cb(0), bytes(NULL), size(0)
 		{
 			this->size = ( sizeof(this->cb) + this->cb );
@@ -317,8 +315,7 @@ namespace Docx2Doc
 		}
 
 	private:
-
-		short cb; //Size in bytes of the grpprl
+		short cb;	// Size in bytes of the grpprl
 		std::vector<Prl> grpprl;
 		BYTE* bytes;
 		unsigned int size;

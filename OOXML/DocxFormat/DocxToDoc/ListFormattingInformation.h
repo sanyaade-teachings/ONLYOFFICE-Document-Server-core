@@ -46,7 +46,6 @@ namespace Docx2Doc
 		unsigned int listLevelsSize;
 
 	public:
-
 		ListFormattingInformation() : bytes(NULL), sizeInBytes(0), listFormattingInformationSize(0), listLevelsSize(0)
 		{
 		}

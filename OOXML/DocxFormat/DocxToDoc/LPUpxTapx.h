@@ -39,7 +39,6 @@ namespace Docx2Doc
 	class UpxTapx : public IOperand
 	{
 	public:
-
 		UpxTapx() : bytes(NULL), sizeInBytes(0), sizeInBytesWithoutPadding(0)
 		{
 		}
@@ -87,8 +86,7 @@ namespace Docx2Doc
 			}
 		}
 
-		UpxTapx( const UpxTapx& _upxTapx ):
-		grpprlTapx(_upxTapx.grpprlTapx), bytes(NULL), sizeInBytes(_upxTapx.sizeInBytes),
+		UpxTapx( const UpxTapx& _upxTapx ) : grpprlTapx(_upxTapx.grpprlTapx), bytes(NULL), sizeInBytes(_upxTapx.sizeInBytes),
 			sizeInBytesWithoutPadding(_upxTapx.sizeInBytesWithoutPadding)
 		{
 			this->bytes = new BYTE[this->sizeInBytes];
@@ -150,10 +148,9 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytesWithoutPadding;
 		}
+
 	private:
-
 		std::vector<Prl> grpprlTapx;
-
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 		unsigned int sizeInBytesWithoutPadding;
@@ -162,7 +159,6 @@ namespace Docx2Doc
 	class LPUpxTapx : public IOperand
 	{	
 	public:
-
 		LPUpxTapx () : upxTapx(), bytes(NULL), sizeInBytes(0), sizeInBytesWithoutPadding(0)
 		{
 			Init();
@@ -245,9 +241,7 @@ namespace Docx2Doc
 			return sizeInBytesWithoutPadding;
 		}
 
-
-	private: 
-
+	private:
 		void Init()
 		{
 			this->sizeInBytes = ( sizeof(unsigned short) + this->upxTapx.Size() );
@@ -264,10 +258,9 @@ namespace Docx2Doc
 				memcpy( ( this->bytes + sizeof(unsigned short) ), (BYTE*)this->upxTapx, this->upxTapx.Size() );
 			}
 		}
+
 	private:
-
 		UpxTapx upxTapx;
-
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 		unsigned int sizeInBytesWithoutPadding;

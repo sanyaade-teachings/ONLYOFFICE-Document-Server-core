@@ -46,7 +46,7 @@ namespace Docx2Doc
 		virtual ~Tplc() {}
 	};
 
-	class TplcBuildIn: public Tplc
+	class TplcBuildIn : public Tplc
 	{
 	private:
 		static const bool fBuildIn = true;
@@ -54,38 +54,35 @@ namespace Docx2Doc
 		LID lid;
 
 	public:
-		TplcBuildIn():
-		  ilgpdM1(Constants::numberingFormatNone), lid()
-		  {
-		  }
+		TplcBuildIn() : ilgpdM1(Constants::numberingFormatNone), lid()
+		{
+		}
 
-		  explicit TplcBuildIn( Constants::NumberingFormat _ilgpdM1, const LID& _lid ):
-		  ilgpdM1(_ilgpdM1), lid(_lid)
-		  {
-		  }
+		explicit TplcBuildIn( Constants::NumberingFormat _ilgpdM1, const LID& _lid ) : ilgpdM1(_ilgpdM1), lid(_lid)
+		{
+		}
 
-		  explicit TplcBuildIn( unsigned int _tplcBuildIn ):
-		  ilgpdM1(Constants::numberingFormatNone), lid()
-		  {
-			  this->ilgpdM1 = (Constants::NumberingFormat)DocFileFormat::FormatUtils::GetIntFromBits( _tplcBuildIn, 1, 15 );
-			  this->lid = LID( (DocFileFormat::LanguageCode)DocFileFormat::FormatUtils::GetIntFromBits( _tplcBuildIn, 16, 16 ) );
-		  }
+		explicit TplcBuildIn( unsigned int _tplcBuildIn ) : ilgpdM1(Constants::numberingFormatNone), lid()
+		{
+			this->ilgpdM1 = (Constants::NumberingFormat)DocFileFormat::FormatUtils::GetIntFromBits( _tplcBuildIn, 1, 15 );
+			this->lid = LID( (DocFileFormat::LanguageCode)DocFileFormat::FormatUtils::GetIntFromBits( _tplcBuildIn, 16, 16 ) );
+		}
 
-		  virtual ~TplcBuildIn()
-		  {
-		  }
+		virtual ~TplcBuildIn()
+		{
+		}
 
-		  virtual operator unsigned int() const
-		  {
-			  unsigned int tplcValue = 1;
+		virtual operator unsigned int() const
+		{
+			unsigned int tplcValue = 1;
 
-			  unsigned int ilgpdM1Value = ( ( (unsigned int)this->ilgpdM1 ) << 1 );
-			  unsigned int lidValue = ( ( (unsigned int)this->lid ) << 16 );
+			unsigned int ilgpdM1Value = ( ( (unsigned int)this->ilgpdM1 ) << 1 );
+			unsigned int lidValue = ( ( (unsigned int)this->lid ) << 16 );
 
-			  tplcValue |= ( ilgpdM1Value | lidValue );
+			tplcValue |= ( ilgpdM1Value | lidValue );
 
-			  return tplcValue;
-		  }
+			return tplcValue;
+		}
 	};
 
 	class TplcUser: public Tplc
@@ -95,25 +92,23 @@ namespace Docx2Doc
 		unsigned int wRandom;
 
 	public:
-		TplcUser():
-		  wRandom(0)
-		  {
-		  }
+		TplcUser() : wRandom(0)
+		{
+		}
 
-		  explicit TplcUser( unsigned int _wRandom ):
-		  wRandom(0)
-		  {
-			  this->wRandom = _wRandom;
-		  }
+		explicit TplcUser( unsigned int _wRandom ) : wRandom(0)
+		{
+			this->wRandom = _wRandom;
+		}
 
-		  virtual ~TplcUser()
-		  {
-		  }
+		virtual ~TplcUser()
+		{
+		}
 
-		  virtual operator unsigned int() const
-		  {
-			  return this->wRandom;
-		  }
+		virtual operator unsigned int() const
+		{
+			return this->wRandom;
+		}
 	};
 
 	struct TplcFactory

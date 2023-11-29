@@ -205,12 +205,10 @@ namespace Docx2Doc
 	public:
 		StyleID() : styleID(0x0FFE)
 		{
-
 		}
 
 		StyleID (unsigned short _styleID) : styleID(_styleID)
 		{
-
 		}
 
 		operator unsigned short() const
@@ -328,7 +326,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		std::vector<LPStd>	rglpstd;
 		BYTE*				bytes;
 		unsigned int		sizeInBytes;

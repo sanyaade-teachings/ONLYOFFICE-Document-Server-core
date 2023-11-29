@@ -44,7 +44,6 @@ namespace Docx2Doc
 	public:
 		StshiLsd () : bytes(NULL), sizeInBytes(0)
 		{
-
 		}
 
 		StshiLsd (const std::vector<LSD>& _mpstiilsd) : bytes(NULL), sizeInBytes(0), mpstiilsd(_mpstiilsd)
@@ -97,10 +96,9 @@ namespace Docx2Doc
 		{
 			return sizeInBytes;
 		}
+
 	private:
-
 		std::vector<LSD>	mpstiilsd;
-
 		BYTE*				bytes;
 		unsigned int		sizeInBytes;
 	};

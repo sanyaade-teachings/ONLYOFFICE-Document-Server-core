@@ -123,5 +123,4 @@ namespace Docx2Doc
 			  return this->sizeInBytes;
 		  }
 	};
-
 }

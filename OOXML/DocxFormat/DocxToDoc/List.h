@@ -37,35 +37,35 @@
 
 namespace Docx2Doc
 {
-  class List: public ITextItem
-  {
-    private:
-	  std::list<TextItemPtr> textItems;
-	  short numID;
-	  BYTE level;
+	class List: public ITextItem
+	{
+	private:
+		std::list<TextItemPtr> textItems;
+		short numID;
+		BYTE level;
 
-    protected:
-	  void SetLevel( BYTE _level );
-	  void SetNumID( short _numID );
+	protected:
+		void SetLevel( BYTE _level );
+		void SetNumID( short _numID );
 
-    public:
-	  List( short _numID = 1 );
-	  List( const std::list<TextItemPtr>& _textItems, short _numID = 1 );
-      List( const List& _list );
-	  /*Paragraphs MUST be already with LIST properties set.*/
-	  void AddParagraph( const Paragraph& _paragraph );
-	  /*List class sets LIST properties.*/
-	  void AddTextItem( const ITextItem& _textItem );
-	  virtual std::wstring GetAllText() const;
-	  virtual operator std::wstring() const;
-	  virtual std::vector<TextItemPtr> GetAllParagraphsCopy() const;
-	  virtual std::vector<ITextItem*> GetAllParagraphs();
-	  virtual std::vector<IParagraphItemPtr> GetAllRunsCopy( std::vector<unsigned int>* allRunsOffsets ) const;
-	  virtual std::vector<IParagraphItemPtr> GetAllParagraphItemsCopy( std::vector<unsigned int>* allParagraphItemsOffsets ) const;
-	  virtual std::vector<PapxInFkp> GetAllParagraphsProperties( std::vector<unsigned int>* allParagraphsOffsets ) const;
-	  virtual std::vector<Chpx> GetAllRunProperties( std::vector<unsigned int>* allRunsOffsets ) const;
-	  virtual IVirtualConstructor* New() const;
-	  virtual IVirtualConstructor* Clone() const;
-	  virtual ~List();
-  };
+	public:
+		List( short _numID = 1 );
+		List( const std::list<TextItemPtr>& _textItems, short _numID = 1 );
+		List( const List& _list );
+		/*Paragraphs MUST be already with LIST properties set.*/
+		void AddParagraph( const Paragraph& _paragraph );
+		/*List class sets LIST properties.*/
+		void AddTextItem( const ITextItem& _textItem );
+		virtual std::wstring GetAllText() const;
+		virtual operator std::wstring() const;
+		virtual std::vector<TextItemPtr> GetAllParagraphsCopy() const;
+		virtual std::vector<ITextItem*> GetAllParagraphs();
+		virtual std::vector<IParagraphItemPtr> GetAllRunsCopy( std::vector<unsigned int>* allRunsOffsets ) const;
+		virtual std::vector<IParagraphItemPtr> GetAllParagraphItemsCopy( std::vector<unsigned int>* allParagraphItemsOffsets ) const;
+		virtual std::vector<PapxInFkp> GetAllParagraphsProperties( std::vector<unsigned int>* allParagraphsOffsets ) const;
+		virtual std::vector<Chpx> GetAllRunProperties( std::vector<unsigned int>* allRunsOffsets ) const;
+		virtual IVirtualConstructor* New() const;
+		virtual IVirtualConstructor* Clone() const;
+		virtual ~List();
+	};
 }

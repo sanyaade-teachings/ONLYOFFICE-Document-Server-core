@@ -42,17 +42,14 @@ namespace Docx2Doc
 	public:
 		PapxInFkp() : grpprlInPapx()
 		{
-
 		}
 
 		PapxInFkp(const GrpPrlAndIstd& _grpprlInPapx) : grpprlInPapx(_grpprlInPapx)
 		{
-
 		}
 
 		PapxInFkp(const PapxInFkp& pifkp) : grpprlInPapx(pifkp.grpprlInPapx)
 		{
-
 		}
 
 		virtual ~PapxInFkp()
@@ -180,7 +177,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		GrpPrlAndIstd	grpprlInPapx;
 	};
 }

@@ -38,7 +38,7 @@
 
 namespace Docx2Doc
 {
-	class STSHIB: public IOperand
+	class STSHIB : public IOperand
 	{
 	private:
 		LPStshiGrpPrl grpprlChpStandard;
@@ -53,7 +53,7 @@ namespace Docx2Doc
 		  {
 		  }
 
-		  explicit STSHIB( const LPStshiGrpPrl& _grpprlChpStandard, const LPStshiGrpPrl& _grpprlPapStandard ):
+		  explicit STSHIB( const LPStshiGrpPrl& _grpprlChpStandard, const LPStshiGrpPrl& _grpprlPapStandard ) :
 		  grpprlChpStandard(_grpprlChpStandard), grpprlPapStandard(_grpprlPapStandard), bytes(NULL), sizeInBytes(0)
 		  {
 			  this->sizeInBytes = ( grpprlChpStandard.Size() + grpprlPapStandard.Size() );
@@ -68,7 +68,7 @@ namespace Docx2Doc
 			  }
 		  }
 
-		  STSHIB( const STSHIB& _stshib ):
+		  STSHIB( const STSHIB& _stshib ) :
 		  grpprlChpStandard(_stshib.grpprlChpStandard), grpprlPapStandard(_stshib.grpprlPapStandard), bytes(NULL), sizeInBytes(_stshib.sizeInBytes)
 		  {
 			  this->bytes = new BYTE[this->sizeInBytes];

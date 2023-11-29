@@ -39,12 +39,10 @@ namespace Docx2Doc
 	class GroupShapeBooleans
 	{
 	public:
-
 		GroupShapeBooleans();
 		unsigned int Get() const;
 
 	public:
-
 		bool	fPrint;
 		bool	fHidden;
 		bool	fOneD;
@@ -89,12 +87,10 @@ namespace Docx2Doc
 	class GeometryBooleans
 	{
 	public:
-
 		GeometryBooleans();
 		unsigned int Get() const;
 
 	public:
-
 		bool fFillOK;
 		bool fFillShadeShapeOK;
 		bool fGtextOK;
@@ -113,12 +109,10 @@ namespace Docx2Doc
 	class FillStyleBooleans
 	{
 	public:
-
 		FillStyleBooleans();
 		unsigned int Get() const;
 
 	public:
-
 		bool fNoFillHitTest;
 		bool fillUseRect;
 		bool fillShape;
@@ -139,11 +133,10 @@ namespace Docx2Doc
 	class LineStyleBooleans
 	{
 	public:
-
 		LineStyleBooleans ();
 		unsigned int Get() const;
-	public:
 
+	public:
 		bool fNoLineDrawDash;
 		bool fLineFillShape;
 		bool fHitTestLine;
@@ -166,11 +159,10 @@ namespace Docx2Doc
 	class ShadowBooleans
 	{
 	public:
-
 		ShadowBooleans ();
 		unsigned int Get() const;
-	public:
 
+	public:
 		bool fUsefShadow;
 		bool fUsefShadowObscured;
 
@@ -181,12 +173,11 @@ namespace Docx2Doc
 	class TextBooleans
 	{
 	public:
-
 		TextBooleans ();
 		unsigned int Get() const;
 		int IsValid ();
-	public:
 
+	public:
 		bool fFitShapeToText;
 		bool fAutoTextMargin;
 		bool fSelectText;
@@ -199,11 +190,10 @@ namespace Docx2Doc
 	class BlipBooleans
 	{
 	public:
-
 		BlipBooleans ();
 		unsigned int Get() const;
-	public:
 
+	public:
 		bool fPictureActive;
 		bool fPictureBiLevel;
 		bool fPictureGray;

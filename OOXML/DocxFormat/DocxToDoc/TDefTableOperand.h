@@ -60,7 +60,6 @@ namespace Docx2Doc
 	public:
 		TCGRF() : TCGRFShort(0)
 		{
-
 		}
 
 		explicit TCGRF( Constants::HorzMerge _horzMerge, Constants::TextFlow _textFlow, Constants::VerticalMergeFlag _verticalMergeFlag, Constants::VerticalAlign _verticalAlign, Constants::Fts _fts, bool _fFitText, bool _fNoWrap, bool _fHideMark )
@@ -84,12 +83,11 @@ namespace Docx2Doc
 		}
 	};
 
-	class TC80: public IOperand
+	class TC80 : public IOperand
 	{
 	public:
 		TC80() : tcgrf(), wWidth(0), brcTop(), brcLeft(), brcBottom(), brcRight(), bytes(NULL), sizeInBytes(0)
 		{
-
 		}
 
 		explicit TC80( const TCGRF& _tcgrf, unsigned short _wWidth, const Brc80MayBeNil& _brcTop, const Brc80MayBeNil& _brcLeft, const Brc80MayBeNil& _brcBottom, const Brc80MayBeNil& _brcRight ) : tcgrf(_tcgrf), wWidth(_wWidth), brcTop(_brcTop), brcLeft(_brcLeft), brcBottom(_brcBottom), brcRight(_brcRight), bytes(NULL)
@@ -140,8 +138,8 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytes;  
 		}
-	private:
 
+	private:
 		TCGRF tcgrf;
 		unsigned short wWidth;
 		Brc80MayBeNil brcTop;
@@ -155,7 +153,6 @@ namespace Docx2Doc
 
 	class TDefTableOperand : public IOperand
 	{
-
 	public:
 		static const BYTE MAX_NUMBER_OF_COLUMNS = 63;
 
@@ -231,6 +228,7 @@ namespace Docx2Doc
 		{
 			return (const BYTE*)this->bytes;
 		}
+
 	private:
 		unsigned short cb;
 		BYTE NumberOfColumns;

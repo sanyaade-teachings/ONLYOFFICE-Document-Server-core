@@ -59,7 +59,6 @@ namespace Docx2Doc
 		virtual std::wstring GetAllText() const
 		{
 			std::wstring allText;
-
 			allText.push_back( sectionBreakText );
 
 			return allText;
@@ -68,7 +67,6 @@ namespace Docx2Doc
 		virtual operator std::wstring() const
 		{
 			std::wstring allText;
-
 			allText.push_back( sectionBreakText );
 
 			return allText;  
@@ -77,7 +75,6 @@ namespace Docx2Doc
 		virtual std::vector<TextItemPtr> GetAllParagraphsCopy() const
 		{
 			std::vector<TextItemPtr> allParagraphsCopy;
-
 			allParagraphsCopy.push_back( TextItemPtr( reinterpret_cast<ITextItem*>( NULL ) ) );
 
 			return allParagraphsCopy;
@@ -86,7 +83,6 @@ namespace Docx2Doc
 		virtual std::vector<ITextItem*> GetAllParagraphs()
 		{
 			std::vector<ITextItem*> allParagraphs;
-
 			allParagraphs.push_back( NULL );
 
 			return allParagraphs;   
@@ -112,7 +108,6 @@ namespace Docx2Doc
 			if ( allRunsOffsets != NULL )
 			{
 				AllChpx.push_back( Chpx() );
-
 				allRunsOffsets->push_back( 0 );
 			}
 
@@ -126,7 +121,6 @@ namespace Docx2Doc
 			if ( allRunsOffsets != NULL )
 			{
 				std::wstring text;
-
 				text.push_back( sectionBreakText );
 
 				allRuns.push_back( IParagraphItemPtr( static_cast<IParagraphItem*>(Run( Text( text.c_str() ) ).Clone()) ) );

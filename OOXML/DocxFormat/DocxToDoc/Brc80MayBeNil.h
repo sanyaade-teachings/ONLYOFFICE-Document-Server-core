@@ -113,8 +113,7 @@ namespace Docx2Doc
 		Brc80 brc80;
 
 	public:
-		Brc80MayBeNil():
-		  brc80()
+		Brc80MayBeNil() : brc80()
 		  {
 		  }
 

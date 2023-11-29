@@ -47,7 +47,6 @@ namespace Docx2Doc
 		unsigned short ItcFirstLimShort;
 
 	public:
-
 		explicit ItcFirstLim( BYTE _itcFirst, BYTE _itcLim ) : ItcFirstLimShort(0)
 		{
 			this->ItcFirstLimStruct.itcFirst = _itcFirst;

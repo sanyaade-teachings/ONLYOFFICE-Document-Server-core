@@ -161,8 +161,8 @@ namespace Docx2Doc
 		{
 			return m_arrXstElements;
 		}
-	private:
 
+	private:
 		BYTE*			m_pBuffer;
 		unsigned int	m_nSize;
 		std::vector<wchar_t>	m_arrXstElements;
@@ -214,7 +214,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE*			m_pBuffer;
 		unsigned int	m_nSize;
 	};

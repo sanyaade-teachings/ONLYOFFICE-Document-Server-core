@@ -55,28 +55,25 @@ namespace Docx2Doc
 		BYTE FFIDByte;
 
 	public:
-		FFID():
-		  FFIDByte(0)
-		  {
-		  }
+		FFID() : FFIDByte(0)
+		{
+		}
 
-		  FFID( BYTE _ffid ):
-		  FFIDByte(_ffid)
-		  {
-		  }
+		FFID( BYTE _ffid ) : FFIDByte(_ffid)
+		{
+		}
 
-		  explicit FFID( Constants::CharacterPitch _characterPitch, bool _isTrueTypeFont, Constants::FontFamilyType _fontFamilyType ):
-		  FFIDByte(0)
-		  {
-			  this->FFIDStruct.prq = (unsigned short)_characterPitch;
-			  ( _isTrueTypeFont ) ? ( this->FFIDStruct.fTrueType = 1 ) : ( this->FFIDStruct.fTrueType = 0 );
-			  this->FFIDStruct.ff = (unsigned short)_fontFamilyType;
-		  }
+		explicit FFID( Constants::CharacterPitch _characterPitch, bool _isTrueTypeFont, Constants::FontFamilyType _fontFamilyType ) : FFIDByte(0)
+		{
+			this->FFIDStruct.prq = (unsigned short)_characterPitch;
+			( _isTrueTypeFont ) ? ( this->FFIDStruct.fTrueType = 1 ) : ( this->FFIDStruct.fTrueType = 0 );
+			this->FFIDStruct.ff = (unsigned short)_fontFamilyType;
+		}
 
-		  operator BYTE() const
-		  {
-			  return this->FFIDByte;
-		  }
+		operator BYTE() const
+		{
+			return this->FFIDByte;
+		}
 	};
 
 	struct PANOSE
@@ -92,16 +89,16 @@ namespace Docx2Doc
 		BYTE bMidline;
 		BYTE bHeight;
 
-		PANOSE():
-		bFamilyType(PAN_ANY), bSerifStyle(PAN_ANY), bWeight(PAN_ANY), bProportion(PAN_ANY),
+		PANOSE() :
+			bFamilyType(PAN_ANY), bSerifStyle(PAN_ANY), bWeight(PAN_ANY), bProportion(PAN_ANY),
 			bContrast(PAN_ANY), bStrokeVariation(PAN_ANY), bArmStyle(PAN_ANY), bLetterform(PAN_ANY),
 			bMidline(PAN_ANY), bHeight(PAN_ANY)
 		{
 		}
 
 		explicit PANOSE( BYTE _bFamilyType, BYTE _bSerifStyle, BYTE _bWeight, BYTE _bProportion, BYTE _bContrast,
-			BYTE _bStrokeVariation, BYTE _bArmStyle, BYTE _bLetterform, BYTE _bMidline, BYTE _bHeight ):
-		bFamilyType(_bFamilyType), bSerifStyle(_bSerifStyle), bWeight(_bWeight), bProportion(_bProportion),
+						 BYTE _bStrokeVariation, BYTE _bArmStyle, BYTE _bLetterform, BYTE _bMidline, BYTE _bHeight ):
+			bFamilyType(_bFamilyType), bSerifStyle(_bSerifStyle), bWeight(_bWeight), bProportion(_bProportion),
 			bContrast(_bContrast), bStrokeVariation(_bStrokeVariation), bArmStyle(_bArmStyle), bLetterform(_bLetterform),
 			bMidline(_bMidline), bHeight(_bHeight)
 		{
@@ -135,9 +132,9 @@ namespace Docx2Doc
 
 		void SetBytes()
 		{
-			this->sizeInBytes = ( sizeof(this->ffid) + sizeof(this->wWeight) + sizeof(this->chs) + 
-				sizeof(this->ixchSzAlt) + sizeof(this->panose) + sizeof(this->fs) + 
-				( sizeof(WCHAR) * ( this->xszFfn.size() + 1 ) ) );
+			this->sizeInBytes = ( sizeof(this->ffid) + sizeof(this->wWeight) + sizeof(this->chs) +
+								  sizeof(this->ixchSzAlt) + sizeof(this->panose) + sizeof(this->fs) +
+								  ( sizeof(WCHAR) * ( this->xszFfn.size() + 1 ) ) );
 
 			if ( this->ixchSzAlt != 0 )
 			{
@@ -166,25 +163,24 @@ namespace Docx2Doc
 				this->bytes[14] = this->panose.bHeight;
 
 				memcpy( ( this->bytes + sizeof(this->ffid) + sizeof(this->wWeight) + sizeof(this->chs) +
-					sizeof(this->ixchSzAlt) + sizeof(this->panose) ), &(this->fs), sizeof(this->fs) );
+						  sizeof(this->ixchSzAlt) + sizeof(this->panose) ), &(this->fs), sizeof(this->fs) );
 
 				memcpy( ( this->bytes + sizeof(this->ffid) + sizeof(this->wWeight) + sizeof(this->chs) +
-					sizeof(this->ixchSzAlt) + sizeof(this->panose) + sizeof(this->fs) ), this->xszFfn.c_str(), ( sizeof(WCHAR) * ( this->xszFfn.size() + 1 ) ) );
+						  sizeof(this->ixchSzAlt) + sizeof(this->panose) + sizeof(this->fs) ), this->xszFfn.c_str(), ( sizeof(WCHAR) * ( this->xszFfn.size() + 1 ) ) );
 
 				if ( this->ixchSzAlt != 0 )
 				{
 					memcpy( ( this->bytes + sizeof(this->ffid) + sizeof(this->wWeight) + sizeof(this->chs) +
-						sizeof(this->ixchSzAlt) + sizeof(this->panose) + sizeof(this->fs) + ( sizeof(WCHAR) * ( this->xszFfn.size() + 1 ) ) ), this->xszAlt.c_str(), ( sizeof(WCHAR) * ( this->xszAlt.size() + 1 ) ) );
+							  sizeof(this->ixchSzAlt) + sizeof(this->panose) + sizeof(this->fs) + ( sizeof(WCHAR) * ( this->xszFfn.size() + 1 ) ) ), this->xszAlt.c_str(), ( sizeof(WCHAR) * ( this->xszAlt.size() + 1 ) ) );
 				}
 			}
 		}
 
 	public:
 
-		FFN() :  ffid(), wWeight(0), chs(ANSI_CHARSET), ixchSzAlt(0), panose(), bytes(NULL), sizeInBytes(0)
+		FFN() : ffid(), wWeight(0), chs(ANSI_CHARSET), ixchSzAlt(0), panose(), bytes(NULL), sizeInBytes(0)
 		{
 			memset( &(this->fs), 0, sizeof(this->fs) );
-
 			this->SetBytes();
 		}
 

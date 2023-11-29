@@ -34,7 +34,6 @@
 
 #include "../../../DesktopEditor/common/Types.h"
 #include "../../../MsBinaryFile/Common/Base/Singleton.h"
-
 #include "../../../Common/cfcpp/Stream/stream.h"
 
 namespace Docx2Doc

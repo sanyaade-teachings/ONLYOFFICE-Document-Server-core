@@ -110,10 +110,9 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytes;
 		}
+
 	private:
-
 		std::vector<Prl> grpprl;
-
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 	};

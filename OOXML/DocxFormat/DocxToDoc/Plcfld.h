@@ -54,7 +54,7 @@ namespace Docx2Doc
 		BYTE grffldEndByte;
 
 	public:
-		explicit grffldEnd( BYTE _grffldEnd = 0 ):grffldEndByte(_grffldEnd)
+		explicit grffldEnd( BYTE _grffldEnd = 0 ) : grffldEndByte(_grffldEnd)
 		{
 		}
 
@@ -79,7 +79,6 @@ namespace Docx2Doc
 	class Fld
 	{
 	public:
-
 		Fld ()
 		{
 			memset(bytes, 0, SIZE_IN_BYTES);
@@ -126,7 +125,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		static const BYTE SIZE_IN_BYTES = 2;
 		BYTE bytes[SIZE_IN_BYTES];
 	};

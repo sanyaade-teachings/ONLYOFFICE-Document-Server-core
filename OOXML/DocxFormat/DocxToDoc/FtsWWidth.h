@@ -180,8 +180,7 @@ namespace Docx2Doc
 			memcpy( ( this->bytes + sizeof(BYTE) ), &(this->wWidth), sizeof(this->wWidth) );
 		}
 
-		FtsWWidth_TablePart( const FtsWWidth_TablePart& ftsWWidth_TablePart ):
-		ftsWidth(ftsWWidth_TablePart.ftsWidth), wWidth(ftsWWidth_TablePart.wWidth)
+		FtsWWidth_TablePart( const FtsWWidth_TablePart& ftsWWidth_TablePart ) : ftsWidth(ftsWWidth_TablePart.ftsWidth), wWidth(ftsWWidth_TablePart.wWidth)
 		{
 			memset( this->bytes, 0, SIZE_IN_BYTES );
 
@@ -256,8 +255,7 @@ namespace Docx2Doc
 			memcpy( ( this->bytes + sizeof(BYTE) ), &(this->wWidth), sizeof(this->wWidth) );
 		}
 
-		FtsWWidth_Indent( const FtsWWidth_Indent& ftsWWidth_Indent ):
-		ftsWidth(ftsWWidth_Indent.ftsWidth), wWidth(ftsWWidth_Indent.wWidth)
+		FtsWWidth_Indent( const FtsWWidth_Indent& ftsWWidth_Indent ) : ftsWidth(ftsWWidth_Indent.ftsWidth), wWidth(ftsWWidth_Indent.wWidth)
 		{
 			memset( this->bytes, 0, SIZE_IN_BYTES );
 

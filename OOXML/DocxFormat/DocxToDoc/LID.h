@@ -38,43 +38,42 @@
 
 namespace Docx2Doc
 {
-class LID: public IOperand
-{
-private:
-	DocFileFormat::LanguageCode lid;
-
-public:
-	LID() : lid(DocFileFormat::Nothing)
+	class LID: public IOperand
 	{
-	}
+	private:
+		DocFileFormat::LanguageCode lid;
 
-	explicit LID( DocFileFormat::LanguageCode _lid ):
-		lid(_lid)
-	{
-	}
+	public:
+		LID() : lid(DocFileFormat::Nothing)
+		{
+		}
 
-	virtual ~LID()
-	{
-	}
+		explicit LID( DocFileFormat::LanguageCode _lid ) : lid(_lid)
+		{
+		}
 
-	virtual operator BYTE*() const
-	{
-		return (BYTE*)(&(this->lid));
-	}
+		virtual ~LID()
+		{
+		}
 
-	virtual operator const BYTE*() const
-	{
-		return (const BYTE*)(&(this->lid));
-	}
+		virtual operator BYTE*() const
+		{
+			return (BYTE*)(&(this->lid));
+		}
 
-	virtual unsigned int Size() const
-	{
-		return sizeof(unsigned short);
-	}
+		virtual operator const BYTE*() const
+		{
+			return (const BYTE*)(&(this->lid));
+		}
 
-	operator unsigned int() const
-	{
-		return (unsigned int)this->lid;
-	}
-};
+		virtual unsigned int Size() const
+		{
+			return sizeof(unsigned short);
+		}
+
+		operator unsigned int() const
+		{
+			return (unsigned int)this->lid;
+		}
+	};
 }

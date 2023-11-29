@@ -33,7 +33,6 @@
 #pragma once
 
 #include "Prl.h"
-
 #include "../../../MsBinaryFile/Common/Base/IOperand.h"
 
 namespace Docx2Doc
@@ -138,12 +137,10 @@ namespace Docx2Doc
 	public:
 		Prc( const PrcData& _prcData ) : data(_prcData)
 		{
-
 		}
 
 		Prc( const Prc& _prc ) :  data(_prc.data)
 		{
-
 		}
 
 		virtual ~Prc()
@@ -175,6 +172,7 @@ namespace Docx2Doc
 		{
 			return (unsigned int)( sizeof(clxt) + this->data.Size() ); 
 		}
+
 	private:
 		static const BYTE clxt = 0x01;
 		PrcData data;
@@ -296,8 +294,8 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytes;
 		}
-	private:
 
+	private:
 		std::vector<unsigned int> aCP;
 		std::vector<Pcd> aPcd;
 		unsigned int sizeInBytes;
@@ -354,8 +352,8 @@ namespace Docx2Doc
 		{
 			return ( sizeof(clxt) + sizeof(this->lcb) + this->plcPcd.Size() );
 		}
-	private:
 
+	private:
 		static const BYTE clxt = 0x02;
 		unsigned int lcb;
 		PlcPcd plcPcd;
@@ -364,7 +362,6 @@ namespace Docx2Doc
 	class Clx : public IStreamWriter
 	{
 	public:
-
 		Clx (const std::vector<Prc>* _rgPrc, const Pcdt& _pcdt ) : pcdt(_pcdt), sizeInBytes(0)
 		{
 			if ( _rgPrc != NULL )

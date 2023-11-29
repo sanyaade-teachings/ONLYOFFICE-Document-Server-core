@@ -69,6 +69,6 @@ namespace Docx2Doc
 		}
 
 		//
-		virtual BYTE* GetBytes(unsigned long* size) const	=	0;
+		virtual BYTE* GetBytes(unsigned long* size) const = 0;
 	};
 }

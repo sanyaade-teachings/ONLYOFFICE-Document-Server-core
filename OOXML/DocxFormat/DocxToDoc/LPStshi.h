@@ -44,7 +44,7 @@ namespace Docx2Doc
 		{
 		}
 
-		LPStshi( const STSHI& oSTSHI ): bytes(NULL), sizeInBytes(0)
+		LPStshi( const STSHI& oSTSHI ) : bytes(NULL), sizeInBytes(0)
 		{
 			sizeInBytes	=	( sizeof(unsigned short) + oSTSHI.Size() );
 
@@ -91,7 +91,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE*			bytes;
 		unsigned int	sizeInBytes;
 	};

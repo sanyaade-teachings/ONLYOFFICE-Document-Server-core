@@ -37,7 +37,7 @@
 
 namespace Docx2Doc
 {
-	class GrpPrlAndIstd: public IStreamWriter
+	class GrpPrlAndIstd : public IStreamWriter
 	{
 	public:
 		GrpPrlAndIstd() :  istd(0), grpprlSize(0)
@@ -176,8 +176,7 @@ namespace Docx2Doc
 		}
 
 	private:
-
-		short					istd; //The style applied to this paragraph, cell marker or table row marker.
+		short					istd;	// The style applied to this paragraph, cell marker or table row marker.
 		std::vector<Prl>		grpprl;
 		unsigned short			grpprlSize;
 	};

@@ -43,7 +43,6 @@ namespace Docx2Doc
 		unsigned int sizeInBytes;
 
 	public:
-
 		LFOLVL() : bytes(NULL), sizeInBytes(0)
 		{
 			this->sizeInBytes = ( sizeof(int) + sizeof(unsigned int) );

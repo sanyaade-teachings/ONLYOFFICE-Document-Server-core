@@ -36,7 +36,6 @@ namespace Docx2Doc
 {
 	TextBox::TextBox (short _aFtnIdx) : textBoxItemsOffset(0), aFtnIdx(_aFtnIdx)
 	{
-
 	}
 
 	TextBox::TextBox (const TextBox& oTextBox) : textBoxItemsOffset(oTextBox.textBoxItemsOffset), aFtnIdx(oTextBox.aFtnIdx)

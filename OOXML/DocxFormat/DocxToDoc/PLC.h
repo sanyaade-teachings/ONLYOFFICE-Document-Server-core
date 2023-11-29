@@ -147,8 +147,8 @@ namespace Docx2Doc
 		{
 			return m_nSizeInBytes;
 		}
-	private:
 
+	private:
 		BYTE*			m_pBuffer;
 		unsigned int	m_nSizeInBytes;
 	};

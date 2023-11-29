@@ -33,7 +33,6 @@
 #pragma once
 
 #include "Prl.h"
-
 #include "../../../DesktopEditor/common/Types.h"
 
 namespace Docx2Doc
@@ -163,7 +162,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE cb; //Size in bytes of the grpprl
 		std::vector<Prl> grpprl;
 	};

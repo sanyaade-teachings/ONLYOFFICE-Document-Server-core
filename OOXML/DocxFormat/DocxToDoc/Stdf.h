@@ -38,7 +38,7 @@
 
 namespace Docx2Doc
 {
-	class Stdf: public IOperand
+	class Stdf : public IOperand
 	{
 	public:
 

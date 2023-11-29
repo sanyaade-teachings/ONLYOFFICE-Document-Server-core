@@ -56,8 +56,7 @@ namespace Docx2Doc
 			memcpy( this->bytes, _tableBordersOperand80.bytes, ( _tableBordersOperand80.cb + 1 ) );
 		}
 
-		explicit TableBordersOperand80( const Prl& _prl ):
-		bytes(NULL), cb(0)
+		explicit TableBordersOperand80( const Prl& _prl ) : bytes(NULL), cb(0)
 		{
 			unsigned long prlSize = 0;
 
@@ -188,7 +187,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE cb;
 		Brc80MayBeNil brcTop;
 		Brc80MayBeNil brcLeft;

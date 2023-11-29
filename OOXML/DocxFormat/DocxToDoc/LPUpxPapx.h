@@ -39,7 +39,6 @@ namespace Docx2Doc
 	class UpxPapx: public IOperand
 	{
 	public:
-
 		UpxPapx() : istd(0), bytes(NULL), sizeInBytes(0), sizeInBytesWithoutPadding(0)
 		{
 		}
@@ -154,10 +153,8 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		unsigned short istd;
 		std::vector<Prl> grpprlPapx;
-
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 		unsigned int sizeInBytesWithoutPadding;
@@ -167,7 +164,6 @@ namespace Docx2Doc
 	{
 	private:
 		UpxPapx upxPapx;
-
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 		unsigned int sizeInBytesWithoutPadding;

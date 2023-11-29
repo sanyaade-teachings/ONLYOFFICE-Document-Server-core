@@ -119,14 +119,11 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE red;
 		BYTE green;
 		BYTE blue;
 		BYTE fAuto;
-
 		static const BYTE SIZE_IN_BYTES = 4;
-
 		BYTE bytes[SIZE_IN_BYTES];
 	};
 }

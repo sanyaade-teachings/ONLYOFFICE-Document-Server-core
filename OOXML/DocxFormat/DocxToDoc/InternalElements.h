@@ -1,21 +1,16 @@
 #pragma once	
 
-#include <vector>
-#include <string>
+#include "Prl.h"
 
-#include "..\docxdocconverter\prl.h"
-
-typedef std::vector<AVSDocFileFormat::Prl>	PrlList;
+typedef std::vector<Docx2Doc::Prl>	PrlList;
 
 namespace DOCXTODOC
 {
 	class CInternalStyle
 	{
 	public:
-
 		CInternalStyle () : m_bIsRenewed(FALSE)
 		{
-
 		}
 
 		CInternalStyle (std::string strName, const PrlList& arRun, const PrlList& arParagraph) : m_bIsRenewed(FALSE), m_strName(strName)
@@ -25,7 +20,6 @@ namespace DOCXTODOC
 
 		CInternalStyle (std::string strBaseStyle) : m_bIsRenewed(FALSE)
 		{
-
 		}
 
 		inline void SetPrlsLists (const PrlList& arRun, const PrlList& arParagraph)
@@ -39,18 +33,18 @@ namespace DOCXTODOC
 			m_strName	=	strName;
 		}
 
-		inline BOOL UpdateRunPrls (const PrlList& arRun)
+		inline int UpdateRunPrls (const PrlList& arRun)
 		{
-			if (0 == arRun.size())		//	не дополняем стиль
+			if (0 == arRun.size())		//	РЅРµ РґРѕРїРѕР»РЅСЏРµРј СЃС‚РёР»СЊ
 				return FALSE;
 
-			if (0 == m_arRun.size())	//	стиль не имеет параметров для символов
+			if (0 == m_arRun.size())	//	СЃС‚РёР»СЊ РЅРµ РёРјРµРµС‚ РїР°СЂР°РјРµС‚СЂРѕРІ РґР»СЏ СЃРёРјРІРѕР»РѕРІ
 			{
 				m_arRun	= arRun;
 				return TRUE;
 			}
 
-			BOOL bModifity	=	FALSE;
+			int bModifity	=	FALSE;
 
 			for (size_t i = 0; i < arRun.size(); ++i)
 			{
@@ -75,7 +69,7 @@ namespace DOCXTODOC
 			return bModifity;
 		}
 
-		inline BOOL IsRenewed ()
+		inline int IsRenewed ()
 		{
 			return m_bIsRenewed;
 		}
@@ -106,7 +100,6 @@ namespace DOCXTODOC
 		}
 
 	private:
-		
 		inline int FindSprm (unsigned short sprm)
 		{
 			for (size_t i = 0; i < m_arRun.size(); ++i)
@@ -119,13 +112,9 @@ namespace DOCXTODOC
 		}
 
 	private:
-
-		BOOL m_bIsRenewed;
-
+		int m_bIsRenewed;
 		std::string m_strName;
-
 		PrlList	m_arRun;
 		PrlList	m_arParagraph;
 	};
-
 }

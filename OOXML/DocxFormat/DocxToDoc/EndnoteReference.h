@@ -50,8 +50,7 @@ namespace Docx2Doc
 		std::list<Prl> properties;
 
 	public:
-		explicit EndnoteReference( short _aEndIdx = 0, unsigned short _ftc = 0, WCHAR _xchar = 0x0000 ):
-		aEndIdx(_aEndIdx)
+		explicit EndnoteReference( short _aEndIdx = 0, unsigned short _ftc = 0, WCHAR _xchar = 0x0000 ) : aEndIdx(_aEndIdx)
 		{
 			if ( this->aEndIdx == 0 )
 			{
@@ -65,8 +64,7 @@ namespace Docx2Doc
 			}
 		}
 
-		EndnoteReference( const EndnoteReference& _endnoteReference ):
-		aEndIdx(_endnoteReference.aEndIdx), text(_endnoteReference.text), properties(_endnoteReference.properties)
+		EndnoteReference( const EndnoteReference& _endnoteReference ) : aEndIdx(_endnoteReference.aEndIdx), text(_endnoteReference.text), properties(_endnoteReference.properties)
 		{
 		}
 

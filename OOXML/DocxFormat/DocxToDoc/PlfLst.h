@@ -93,8 +93,8 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytes;
 		}
-	private:
 
+	private:
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 	};

@@ -40,7 +40,7 @@
 
 namespace Docx2Doc
 {
-	class FootnoteReference: public IRunItem
+	class FootnoteReference : public IRunItem
 	{
 	private:
 		static const BYTE CFSpec = 1;

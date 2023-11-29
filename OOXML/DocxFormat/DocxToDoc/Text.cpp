@@ -36,7 +36,6 @@ namespace Docx2Doc
 {
 	Text::Text()
 	{
-
 	}
 
 	Text::Text (const wchar_t& wChar)
@@ -52,12 +51,10 @@ namespace Docx2Doc
 
 	Text::Text (const Text& _text) : text(_text.text), properties(_text.properties)
 	{
-
 	}
 
 	Text::~Text()
 	{
-
 	}
 
 	bool Text::operator == ( const Text& _text )

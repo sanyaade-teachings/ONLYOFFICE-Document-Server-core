@@ -41,7 +41,7 @@
 
 namespace Docx2Doc
 {
-	class PapxFkp: public IStreamWriter
+	class PapxFkp : public IStreamWriter
 	{
 	public:
 		static const unsigned short PAPX_FKP_SIZE = 512;
@@ -187,7 +187,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		std::vector<unsigned int> rgfc;
 		std::vector<BxPap> rgbx;
 		std::vector<PapxInFkp> papxInFkps;

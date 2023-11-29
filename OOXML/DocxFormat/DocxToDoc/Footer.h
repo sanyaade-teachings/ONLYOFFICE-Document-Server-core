@@ -45,12 +45,10 @@ namespace Docx2Doc
 
 			FooterItemWithOffset() : footerItem(), footerItemOffset(0)
 			{
-
 			}
 
 			FooterItemWithOffset(const TextItemPtr& _footerItem, unsigned int _footerItemOffset) : footerItem(_footerItem), footerItemOffset(_footerItemOffset)
 			{
-
 			}
 		};
 

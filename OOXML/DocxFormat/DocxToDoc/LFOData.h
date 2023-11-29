@@ -36,39 +36,61 @@
 
 namespace Docx2Doc
 {
-class LFOData: public IOperand
-{
-private:
-	BYTE* bytes;
-	unsigned int sizeInBytes;
-
-public:
-
-	LFOData() : bytes(NULL), sizeInBytes(0)
+	class LFOData: public IOperand
 	{
-		this->sizeInBytes = sizeof(unsigned int);
+	private:
+		BYTE* bytes;
+		unsigned int sizeInBytes;
 
-		if ( this->sizeInBytes != 0 )
+	public:
+
+		LFOData() : bytes(NULL), sizeInBytes(0)
 		{
-			this->bytes = new BYTE[this->sizeInBytes];
+			this->sizeInBytes = sizeof(unsigned int);
 
-			if ( this->bytes != NULL )
+			if ( this->sizeInBytes != 0 )
 			{
-				memset( this->bytes, 0xFF, this->sizeInBytes );
+				this->bytes = new BYTE[this->sizeInBytes];
+
+				if ( this->bytes != NULL )
+				{
+					memset( this->bytes, 0xFF, this->sizeInBytes );
+				}
 			}
 		}
-	}
 
-	explicit LFOData( unsigned int _cp, const std::vector<LFOLVL>& _rgLfoLvl ) : bytes(NULL), sizeInBytes(0)
-	{
-		this->sizeInBytes = sizeof(_cp);
-
-		for ( std::vector<LFOLVL>::const_iterator iter = _rgLfoLvl.begin(); iter != _rgLfoLvl.end(); iter++ )
+		explicit LFOData( unsigned int _cp, const std::vector<LFOLVL>& _rgLfoLvl ) : bytes(NULL), sizeInBytes(0)
 		{
-			this->sizeInBytes += iter->Size();
+			this->sizeInBytes = sizeof(_cp);
+
+			for ( std::vector<LFOLVL>::const_iterator iter = _rgLfoLvl.begin(); iter != _rgLfoLvl.end(); iter++ )
+			{
+				this->sizeInBytes += iter->Size();
+			}
+
+			if ( this->sizeInBytes != 0 )
+			{
+				this->bytes = new BYTE[this->sizeInBytes];
+
+				if ( this->bytes != NULL )
+				{
+					memset( this->bytes, 0, this->sizeInBytes );
+
+					DocFileFormat::FormatUtils::SetBytes( this->bytes, _cp );
+
+					unsigned int offset = 0;
+
+					for ( std::vector<LFOLVL>::const_iterator iter = _rgLfoLvl.begin(); iter != _rgLfoLvl.end(); iter++ )
+					{
+						memcpy( ( this->bytes + sizeof(_cp) + offset ), (BYTE*)(*iter), iter->Size() );
+
+						offset += iter->Size();
+					}
+				}
+			}
 		}
 
-		if ( this->sizeInBytes != 0 )
+		LFOData( const LFOData& _lFOData ) : bytes(NULL), sizeInBytes(_lFOData.sizeInBytes)
 		{
 			this->bytes = new BYTE[this->sizeInBytes];
 
@@ -76,50 +98,28 @@ public:
 			{
 				memset( this->bytes, 0, this->sizeInBytes );
 
-				DocFileFormat::FormatUtils::SetBytes( this->bytes, _cp );
-
-				unsigned int offset = 0;
-
-				for ( std::vector<LFOLVL>::const_iterator iter = _rgLfoLvl.begin(); iter != _rgLfoLvl.end(); iter++ )
-				{
-					memcpy( ( this->bytes + sizeof(_cp) + offset ), (BYTE*)(*iter), iter->Size() );
-
-					offset += iter->Size();
-				}
+				memcpy( this->bytes, _lFOData.bytes, this->sizeInBytes );
 			}
 		}
-	}
 
-	LFOData( const LFOData& _lFOData ) : bytes(NULL), sizeInBytes(_lFOData.sizeInBytes)
-	{
-		this->bytes = new BYTE[this->sizeInBytes];
-
-		if ( this->bytes != NULL )
+		virtual ~LFOData()
 		{
-			memset( this->bytes, 0, this->sizeInBytes );
-
-			memcpy( this->bytes, _lFOData.bytes, this->sizeInBytes );
+			RELEASEARRAYOBJECTS (bytes);
 		}
-	}
 
-	virtual ~LFOData()
-	{
-		RELEASEARRAYOBJECTS (bytes);
-	}
+		virtual operator BYTE*() const
+		{
+			return this->bytes;
+		}
 
-	virtual operator BYTE*() const
-	{
-		return this->bytes;
-	}
+		virtual operator const BYTE*() const
+		{
+			return (const BYTE*)this->bytes;
+		}
 
-	virtual operator const BYTE*() const
-	{
-		return (const BYTE*)this->bytes;
-	}
-
-	virtual unsigned int Size() const
-	{
-		return this->sizeInBytes;
-	}
-};
+		virtual unsigned int Size() const
+		{
+			return this->sizeInBytes;
+		}
+	};
 }

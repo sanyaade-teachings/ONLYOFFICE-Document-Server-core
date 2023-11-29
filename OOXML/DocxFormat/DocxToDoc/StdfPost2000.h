@@ -56,7 +56,6 @@ namespace Docx2Doc
 		BYTE StdfPost2000Bytes [ SIZE_IN_BYTES ];
 
 	public:
-
 		StdfPost2000()
 		{
 			memset( this->StdfPost2000Bytes, 0, SIZE_IN_BYTES );

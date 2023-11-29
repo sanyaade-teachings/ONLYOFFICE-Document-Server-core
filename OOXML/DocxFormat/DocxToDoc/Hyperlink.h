@@ -71,9 +71,9 @@ namespace Docx2Doc
 
 	public:
 		void AddRun( const Run& _run );
-		void SetURL( const WCHAR* _url );
+		void SetURL( const std::wstring _url );
 		std::wstring GetURL() const;
-		void SetLocationInTheFile( const WCHAR* _locationInTheFile );
+		void SetLocationInTheFile( const std::wstring _locationInTheFile );
 		std::wstring GetLocationInTheFile() const;
 		std::wstring GetHyperlinkText() const;
 		virtual ~Hyperlink();

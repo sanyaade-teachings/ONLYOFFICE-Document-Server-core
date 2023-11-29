@@ -52,7 +52,6 @@ namespace Docx2Doc
 	class Picture : public IRunItem, public IOperand
 	{
 	public:
-
 		Picture () : m_oBinPictureInfo(), m_sTextType (std::wstring (&TextMark::Picture)), m_bOK(FALSE)
 		{
 		}
@@ -109,7 +108,6 @@ namespace Docx2Doc
 
 		Picture (const Picture& oPicture) : m_oBinPictureInfo(oPicture.m_oBinPictureInfo), m_sTextType(oPicture.m_sTextType), m_arProperties(oPicture.m_arProperties), m_bOK(oPicture.m_bOK)
 		{
-
 		}
 
 		virtual ~Picture()
@@ -156,7 +154,9 @@ namespace Docx2Doc
 			std::vector<Prl> prls;
 
 			for (std::list<Prl>::const_iterator iter = m_arProperties.begin(); iter != m_arProperties.end(); ++iter)
+			{
 				prls.push_back(*iter);
+			}
 
 			return prls;
 		}
@@ -172,13 +172,9 @@ namespace Docx2Doc
 		}
 
 	private:
-		
-		static const BYTE CFSpec = 1;
-
+		static const BYTE		CFSpec = 1;
 		int						m_bOK;
-	
 		PICFAndOfficeArtData	m_oBinPictureInfo;
-
 		std::wstring			m_sTextType;
 		std::list<Prl>			m_arProperties;
 	};

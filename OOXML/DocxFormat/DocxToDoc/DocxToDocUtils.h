@@ -164,7 +164,6 @@ namespace DOCX
 		}
 
 	private:
-
 		inline unsigned int ToFixed(double dNumber) const
 		{
 			if (dNumber < 0.0)
@@ -213,7 +212,6 @@ namespace DOCX
 
 		CFPoint () : m_dX(0.0), m_dY(0.0)
 		{
-
 		}
 
 		CFPoint (const std::string& value, double dX, double dY) : m_dX(dX), m_dY(dY)
@@ -253,7 +251,6 @@ namespace DOCX
 		}
 
 	private:
-
 		double m_dX;
 		double m_dY;
 	};
@@ -261,10 +258,8 @@ namespace DOCX
 	class CMatrixF
 	{
 	public:
-
 		CMatrixF () : m_XToX (0), m_XToY(0), m_YToX(0), m_YToY(0), m_PX(0), m_PY(0)
-		{		  
-
+		{
 		}	
 
 		CMatrixF (const std::string& str) : m_XToX (0), m_XToY(0), m_YToX(0), m_YToY(0), m_PX(0), m_PY(0)
@@ -415,7 +410,6 @@ namespace DOCX
 		}
 
 	private:
-
 		unsigned int ToFixed(double dNumber)
 		{
 			if (dNumber < 0.0)
@@ -449,8 +443,7 @@ namespace DOCX
 			return 0;
 		}
 
-	private:		 
-
+	private:
 		unsigned m_XToX;
 		unsigned m_XToY;
 		unsigned m_YToX;
@@ -464,7 +457,6 @@ namespace DOCX
 	public:
 		CEmu() : m_nVal(0)
 		{
-
 		}
 
 		CEmu(const std::string& str) : m_nVal(0)
@@ -503,7 +495,6 @@ namespace DOCX
 		}
 
 	private:
-
 		int	m_nVal;
 	};
 }
@@ -841,7 +832,6 @@ namespace DOCXDOCUTILS
 
 		return 0;
 	}
-
 }
 
 namespace DOCXDOCUTILS
@@ -933,10 +923,8 @@ namespace DOCX
 	class CSColor
 	{
 	public:
-
 		CSColor () :  m_nColor (0)
 		{
-
 		}
 
 		inline int Init (const std::wstring& Color)
@@ -1192,14 +1180,12 @@ namespace DOCX
 		}
 
 	private:
-
 		inline unsigned int RGB2 (unsigned char r, unsigned char g, unsigned char b, unsigned char a = 0xF)	// TODO
 		{
 			return ( (b<<16) | (g<<8) | (r) );
 		}
 
 	private:
-
 		unsigned int m_nColor;
 	};
 }

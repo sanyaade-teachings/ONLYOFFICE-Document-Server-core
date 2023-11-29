@@ -60,8 +60,7 @@ namespace Docx2Doc
 		static const int SIZE_IN_BYTES = 26;
 
 	public:
-
-		Spa () : m_lid(-1), wr(0), wrk(0), cTxbx (0)
+		Spa() : m_lid(-1), wr(0), wrk(0), cTxbx (0)
 		{
 			fBelowText		=	false;
 			fAnchorLock		=	false;
@@ -69,7 +68,7 @@ namespace Docx2Doc
 			m_bFlip			=	FALSE;
 		}
 
-		Spa (int id, int nX, int nY, int nWidth, int nHeight)
+		Spa(int id, int nX, int nY, int nWidth, int nHeight)
 		{
 			m_lid			=	id; 
 			m_rca.left		=	nX; 
@@ -91,7 +90,7 @@ namespace Docx2Doc
 			Update ();
 		}
 
-		Spa (const Spa& spa)
+		Spa(const Spa& spa)
 		{
 			m_lid		=	spa.m_lid;
 			m_rca		=	spa.m_rca;
@@ -125,7 +124,7 @@ namespace Docx2Doc
 			return sizeof(bytes);
 		}
 
-		inline void Update ()
+		inline void Update()
 		{
 			memset(bytes, 0, SIZE_IN_BYTES);
 
@@ -215,7 +214,6 @@ namespace Docx2Doc
 		}
 
 	public:
-
 		BYTE bytes[SIZE_IN_BYTES];
 
 		/// Shape Identifier. Used in conjunction with the office art data 

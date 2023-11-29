@@ -39,7 +39,6 @@ namespace Docx2Doc
 	class Text: public IRunItem
 	{
 	public:
-
 		Text ();
 		Text (const wchar_t& wChar);
 		Text (const std::wstring& _text);
@@ -65,7 +64,6 @@ namespace Docx2Doc
 		void RemoveAllProperties();
 	
 	protected:
-		
 		std::wstring text;
 		std::list<Prl> properties;
 	};

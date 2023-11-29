@@ -41,13 +41,12 @@ namespace Docx2Doc
 	class Stshif : public IOperand
 	{
 	public:
-
 		Stshif ()
 		{
 			memset ( bytes, 0, SIZE_IN_BYTES );
 		}
 
-		Stshif (unsigned short cstd, bool StdfPost2000Exists, unsigned short stiMaxWhenSaved, short ftcAsci = 0, short ftcFE = 0, short ftcOther = 0 )
+		Stshif(unsigned short cstd, bool StdfPost2000Exists, unsigned short stiMaxWhenSaved, short ftcAsci = 0, short ftcFE = 0, short ftcOther = 0)
 		{
 			memset ( bytes, 0, SIZE_IN_BYTES);
 
@@ -82,7 +81,7 @@ namespace Docx2Doc
 			DocFileFormat::FormatUtils::SetBytes( ( bytes + 16 ), ftcOther );
 		}
 
-		Stshif (const Stshif& stshif)
+		Stshif(const Stshif& stshif)
 		{
 			memset ( bytes, 0, SIZE_IN_BYTES );
 			memcpy ( bytes, stshif.bytes, SIZE_IN_BYTES );

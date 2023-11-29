@@ -40,7 +40,7 @@
 
 namespace Docx2Doc
 {
-	class Prl: public IStreamWriter
+	class Prl : public IStreamWriter
 	{
 	private:
 		union
@@ -78,7 +78,6 @@ namespace Docx2Doc
 		}
 
 	public:
-
 		Prl ()		  
 		{
 			operand			=	NULL;

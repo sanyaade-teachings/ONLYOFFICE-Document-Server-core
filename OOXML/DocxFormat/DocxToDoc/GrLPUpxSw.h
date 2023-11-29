@@ -51,7 +51,6 @@ namespace Docx2Doc
 		unsigned int sizeInBytesWithoutPadding;
 
 	public:
-
 		StkParaGRLPUPX () : lPUpxPapx(), lPUpxChpx(), bytes(NULL), sizeInBytes(0), sizeInBytesWithoutPadding(0)
 		{
 		}
@@ -228,12 +227,11 @@ namespace Docx2Doc
 		unsigned int sizeInBytesWithoutPadding;
 
 	public:
-		StkTableGRLPUPX():
-		  lPUpxTapx(), lPUpxPapx(), lPUpxChpx(), bytes(NULL), sizeInBytes(0), sizeInBytesWithoutPadding(0)
+		StkTableGRLPUPX() : lPUpxTapx(), lPUpxPapx(), lPUpxChpx(), bytes(NULL), sizeInBytes(0), sizeInBytesWithoutPadding(0)
 		  {
 		  }
 
-		  explicit StkTableGRLPUPX( const LPUpxTapx& _lPUpxTapx, const LPUpxPapx& _lPUpxPapx, const LPUpxChpx& _lPUpxChpx ):
+		  explicit StkTableGRLPUPX( const LPUpxTapx& _lPUpxTapx, const LPUpxPapx& _lPUpxPapx, const LPUpxChpx& _lPUpxChpx ) :
 		  lPUpxTapx(_lPUpxTapx), lPUpxPapx(_lPUpxPapx), lPUpxChpx(_lPUpxChpx), bytes(NULL), sizeInBytes(0), sizeInBytesWithoutPadding(0)
 		  {
 			  this->sizeInBytes = ( _lPUpxTapx.Size() + _lPUpxPapx.Size() + _lPUpxChpx.Size() );
@@ -254,7 +252,7 @@ namespace Docx2Doc
 			  }
 		  }
 
-		  StkTableGRLPUPX( const StkTableGRLPUPX& _stkTableGRLPUPX ):
+		  StkTableGRLPUPX( const StkTableGRLPUPX& _stkTableGRLPUPX ) :
 		  lPUpxTapx(_stkTableGRLPUPX.lPUpxTapx), lPUpxPapx(_stkTableGRLPUPX.lPUpxPapx), lPUpxChpx(_stkTableGRLPUPX.lPUpxChpx), bytes(NULL), sizeInBytes(_stkTableGRLPUPX.sizeInBytes), sizeInBytesWithoutPadding(_stkTableGRLPUPX.sizeInBytesWithoutPadding)
 		  {
 			  if ( this->sizeInBytes > 0 )
@@ -322,7 +320,7 @@ namespace Docx2Doc
 		  }
 	};
 
-	class StkListGRLPUPX: public IOperand
+	class StkListGRLPUPX : public IOperand
 	{
 	private:
 		LPUpxPapx lPUpxPapx;
@@ -337,7 +335,7 @@ namespace Docx2Doc
 		  {
 		  }
 
-		  explicit StkListGRLPUPX( const LPUpxPapx& _lPUpxPapx ):
+		  explicit StkListGRLPUPX( const LPUpxPapx& _lPUpxPapx ) :
 		  lPUpxPapx(_lPUpxPapx), bytes(NULL), sizeInBytes(0), sizeInBytesWithoutPadding(0)
 		  {
 			  this->sizeInBytes = _lPUpxPapx.Size();
@@ -356,7 +354,7 @@ namespace Docx2Doc
 			  }
 		  }
 
-		  StkListGRLPUPX( const StkListGRLPUPX& _stkListGRLPUPX ):
+		  StkListGRLPUPX( const StkListGRLPUPX& _stkListGRLPUPX ) :
 		  lPUpxPapx(_stkListGRLPUPX.lPUpxPapx), bytes(NULL), sizeInBytes(_stkListGRLPUPX.sizeInBytes), sizeInBytesWithoutPadding(_stkListGRLPUPX.sizeInBytesWithoutPadding)
 		  {
 			  if ( this->sizeInBytes > 0 )
@@ -598,8 +596,8 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytesWithoutPadding;
 		}
-	private:
 
+	private:
 		std::vector<Prl> properties;
 
 		BYTE* bytes;

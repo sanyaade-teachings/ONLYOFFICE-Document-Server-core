@@ -39,7 +39,6 @@ namespace Docx2Doc
 	class PlcfSpa : public IOperand
 	{
 	public:
-
 		PlcfSpa(): bytes(NULL), sizeInBytes(0)
 		{
 			bytes = new BYTE[sizeInBytes];
@@ -138,7 +137,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 	};

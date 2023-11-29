@@ -150,7 +150,6 @@ namespace Docx2Doc
 
 	private:
 		std::vector<Prl> grpprlChpx;
-
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 		unsigned int sizeInBytesWithoutPadding;
@@ -158,8 +157,7 @@ namespace Docx2Doc
 
 	class LPUpxChpx : public IOperand
 	{
-	private: 
-
+	private:
 		void Init()
 		{
 			this->sizeInBytes = ( sizeof(unsigned short) + this->upxChpx.Size() );
@@ -176,8 +174,8 @@ namespace Docx2Doc
 				memcpy( ( this->bytes + sizeof(unsigned short) ), (BYTE*)this->upxChpx, this->upxChpx.Size() );
 			}
 		}
-	public:
 
+	public:
 		LPUpxChpx():  upxChpx(), bytes(NULL), sizeInBytes(0), sizeInBytesWithoutPadding(0)
 		{
 			Init();
@@ -262,10 +260,9 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytesWithoutPadding;
 		}
+
 	private:
-
 		UpxChpx			upxChpx;
-
 		BYTE*			bytes;
 		unsigned int	sizeInBytes;
 		unsigned int	sizeInBytesWithoutPadding;

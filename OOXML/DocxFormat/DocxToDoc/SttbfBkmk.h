@@ -36,7 +36,7 @@
 
 namespace Docx2Doc
 {
-	class BookmarkName: public IOperand
+	class BookmarkName : public IOperand
 	{
 	public:
 
@@ -101,8 +101,8 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytes;
 		}
-	private:
 
+	private:
 		std::wstring bookmarkName;
 		BYTE* bytes;
 		unsigned int sizeInBytes;

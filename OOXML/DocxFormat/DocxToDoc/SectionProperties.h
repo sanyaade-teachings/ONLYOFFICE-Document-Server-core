@@ -127,7 +127,6 @@ namespace Docx2Doc
 		}
 
 	private:
-		
 		Sepx		sepx;
 		TextItem	evenPageHeader;
 		TextItem	oddPageHeader;

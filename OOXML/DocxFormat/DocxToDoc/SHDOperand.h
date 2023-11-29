@@ -36,110 +36,106 @@
 
 namespace Docx2Doc
 {
-class Shd: public IOperand
-{
-private:
-	COLORREF cvFore;
-	COLORREF cvBack;
-	//!!!TODO!!!
-	unsigned short ipat;
-
-	static const BYTE SIZE_IN_BYTES = 10;
-
-	BYTE bytes[SIZE_IN_BYTES];
-
-public:
-	Shd():
-		cvFore(), cvBack(), ipat(0)
+	class Shd : public IOperand
 	{
-		memcpy( this->bytes, this->cvFore.operator BYTE*(), this->cvFore.Size() );
-		memcpy( ( this->bytes + this->cvFore.Size() ), (BYTE*)this->cvBack, this->cvBack.Size() );
-		memcpy( ( this->bytes + this->cvFore.Size() + this->cvBack.Size() ), (BYTE*)(&this->ipat), sizeof(this->ipat) );
-	}
+	private:
+		COLORREF cvFore;
+		COLORREF cvBack;
+		//!!!TODO!!!
+		unsigned short ipat;
 
-	explicit Shd( const COLORREF& _cvFore, const COLORREF& _cvBack, unsigned short _ipat ):
-		cvFore(_cvFore), cvBack(_cvBack), ipat(_ipat)
+		static const BYTE SIZE_IN_BYTES = 10;
+
+		BYTE bytes[SIZE_IN_BYTES];
+
+	public:
+		Shd() : cvFore(), cvBack(), ipat(0)
+		{
+			memcpy( this->bytes, this->cvFore.operator BYTE*(), this->cvFore.Size() );
+			memcpy( ( this->bytes + this->cvFore.Size() ), (BYTE*)this->cvBack, this->cvBack.Size() );
+			memcpy( ( this->bytes + this->cvFore.Size() + this->cvBack.Size() ), (BYTE*)(&this->ipat), sizeof(this->ipat) );
+		}
+
+		explicit Shd( const COLORREF& _cvFore, const COLORREF& _cvBack, unsigned short _ipat ) : cvFore(_cvFore), cvBack(_cvBack), ipat(_ipat)
+		{
+			memcpy( this->bytes, this->cvFore.operator BYTE*(), this->cvFore.Size() );
+			memcpy( ( this->bytes + this->cvFore.Size() ), (BYTE*)this->cvBack, this->cvBack.Size() );
+			memcpy( ( this->bytes + this->cvFore.Size() + this->cvBack.Size() ), (BYTE*)(&this->ipat), sizeof(this->ipat) );
+		}
+
+		Shd( const Shd& _shd ) : cvFore(_shd.cvFore), cvBack(_shd.cvBack), ipat(_shd.ipat)
+		{
+			memcpy( this->bytes, this->cvFore.operator BYTE*(), this->cvFore.Size() );
+			memcpy( ( this->bytes + this->cvFore.Size() ), (BYTE*)this->cvBack, this->cvBack.Size() );
+			memcpy( ( this->bytes + this->cvFore.Size() + this->cvBack.Size() ), (BYTE*)(&this->ipat), sizeof(this->ipat) );
+		}
+
+		virtual ~Shd()
+		{
+		}
+
+		virtual operator BYTE*() const
+		{
+			return (BYTE*)this->bytes;
+		}
+
+		virtual operator const BYTE*() const
+		{
+			return (const BYTE*)this->bytes;
+		}
+
+		virtual unsigned int Size() const
+		{
+			return sizeof(this->bytes);
+		}
+	};
+
+	class SHDOperand : public IOperand
 	{
-		memcpy( this->bytes, this->cvFore.operator BYTE*(), this->cvFore.Size() );
-		memcpy( ( this->bytes + this->cvFore.Size() ), (BYTE*)this->cvBack, this->cvBack.Size() );
-		memcpy( ( this->bytes + this->cvFore.Size() + this->cvBack.Size() ), (BYTE*)(&this->ipat), sizeof(this->ipat) );
-	}
+	private:
+		static const BYTE cb = 10;
+		Shd shd;
 
-	Shd( const Shd& _shd ):
-		cvFore(_shd.cvFore), cvBack(_shd.cvBack), ipat(_shd.ipat)
-	{
-		memcpy( this->bytes, this->cvFore.operator BYTE*(), this->cvFore.Size() );
-		memcpy( ( this->bytes + this->cvFore.Size() ), (BYTE*)this->cvBack, this->cvBack.Size() );
-		memcpy( ( this->bytes + this->cvFore.Size() + this->cvBack.Size() ), (BYTE*)(&this->ipat), sizeof(this->ipat) );
-	}
+		BYTE bytes[SHDOperand::cb + 1];
 
-	virtual ~Shd()
-	{
-	}
+	public:
+		SHDOperand() : shd()
+		{
+			this->bytes[0] = SHDOperand::cb;
+			memcpy( ( this->bytes + sizeof(SHDOperand::cb) ), (BYTE*)this->shd, this->shd.Size() );
+		}
 
-	virtual operator BYTE*() const
-	{
-		return (BYTE*)this->bytes;
-	}
+		explicit SHDOperand( const Shd& _shd ):
+			shd(_shd)
+		{
+			this->bytes[0] = SHDOperand::cb;
+			memcpy( ( this->bytes + sizeof(SHDOperand::cb) ), (BYTE*)this->shd, this->shd.Size() );
+		}
 
-	virtual operator const BYTE*() const
-	{
-		return (const BYTE*)this->bytes;
-	}
+		SHDOperand( const SHDOperand& _shdOperand ):
+			shd(_shdOperand.shd)
+		{
+			this->bytes[0] = SHDOperand::cb;
+			memcpy( ( this->bytes + sizeof(SHDOperand::cb) ), (BYTE*)this->shd, this->shd.Size() );
+		}
 
-	virtual unsigned int Size() const
-	{
-		return sizeof(this->bytes);
-	}
-};
+		virtual ~SHDOperand()
+		{
+		}
 
-class SHDOperand: public IOperand
-{
-private:
-	static const BYTE cb = 10;
-	Shd shd;
+		virtual operator BYTE*() const
+		{
+			return (BYTE*)this->bytes;
+		}
 
-	BYTE bytes[SHDOperand::cb + 1];
+		virtual operator const BYTE*() const
+		{
+			return (const BYTE*)this->bytes;
+		}
 
-public:
-	SHDOperand():
-		shd()
-	{
-		this->bytes[0] = SHDOperand::cb;
-		memcpy( ( this->bytes + sizeof(SHDOperand::cb) ), (BYTE*)this->shd, this->shd.Size() );
-	}
-
-	explicit SHDOperand( const Shd& _shd ):
-		shd(_shd)
-	{
-		this->bytes[0] = SHDOperand::cb;
-		memcpy( ( this->bytes + sizeof(SHDOperand::cb) ), (BYTE*)this->shd, this->shd.Size() );
-	}
-
-	SHDOperand( const SHDOperand& _shdOperand ):
-		shd(_shdOperand.shd)
-	{
-		this->bytes[0] = SHDOperand::cb;
-		memcpy( ( this->bytes + sizeof(SHDOperand::cb) ), (BYTE*)this->shd, this->shd.Size() );
-	}
-
-	virtual ~SHDOperand()
-	{
-	}
-
-	virtual operator BYTE*() const
-	{
-		return (BYTE*)this->bytes;
-	}
-
-	virtual operator const BYTE*() const
-	{
-		return (const BYTE*)this->bytes;
-	}
-
-	virtual unsigned int Size() const
-	{
-		return sizeof(this->bytes);
-	}
-};
+		virtual unsigned int Size() const
+		{
+			return sizeof(this->bytes);
+		}
+	};
 }

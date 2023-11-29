@@ -127,8 +127,8 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytes;
 		}
-	private:
 
+	private:
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 
@@ -138,7 +138,6 @@ namespace Docx2Doc
 	class PChgTabsDel : public IOperand
 	{
 	public:
-
 		PChgTabsDel() : bytes(NULL), sizeInBytes(0)
 		{
 			this->sizeInBytes = sizeof(BYTE);
@@ -220,14 +219,12 @@ namespace Docx2Doc
 	private:
 		BYTE* bytes;
 		unsigned int sizeInBytes;
-
 		static const BYTE MAX_RECORDS_NUMBER = 64;
 	};
 
 	class PChgTabsDelClose : public IOperand
 	{
 	public:
-
 		PChgTabsDelClose() : bytes(NULL), sizeInBytes(0)
 		{
 			this->sizeInBytes = sizeof(BYTE);
@@ -316,14 +313,12 @@ namespace Docx2Doc
 	private:
 		BYTE* bytes;
 		unsigned int sizeInBytes;
-
 		static const BYTE MAX_RECORDS_NUMBER = 64;
 	};
 
 	class PChgTabsOperand : public IOperand
 	{
 	public:
-
 		PChgTabsOperand() : bytes(NULL), sizeInBytes(0)
 		{
 			this->DefaultInit();
@@ -391,6 +386,7 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytes;
 		}
+
 	private:
 		void DefaultInit()
 		{
@@ -406,10 +402,8 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		BYTE* bytes;
 		unsigned int sizeInBytes;
-
 		static const BYTE MIN_SIZE_IN_BYTES = 2;
 		static const BYTE MAX_SIZE_IN_BYTES = 255;
 	};
@@ -417,7 +411,6 @@ namespace Docx2Doc
 	class PChgTabsPapxOperand : public IOperand
 	{
 	public:
-
 		PChgTabsPapxOperand() :  bytes(NULL), sizeInBytes(0)
 		{
 			this->DefaultInit();
@@ -485,8 +478,8 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytes;
 		}
-	private:
 
+	private:
 		void DefaultInit()
 		{
 			this->sizeInBytes = ( MIN_SIZE_IN_BYTES + sizeof(BYTE) );
@@ -503,9 +496,7 @@ namespace Docx2Doc
 	private:
 		BYTE* bytes;
 		unsigned int sizeInBytes;
-
 		static const BYTE MIN_SIZE_IN_BYTES = 2;
 		static const BYTE MAX_SIZE_IN_BYTES = 255;
-
 	};
 }

@@ -60,7 +60,6 @@ namespace Docx2Doc
 			if (bytes)
 			{
 				memset( this->bytes, 0, this->sizeInBytes );
-
 				memcpy( this->bytes, (BYTE*)_stdf, _stdf.Size() );
 				memcpy( ( this->bytes + _stdf.Size() ), (BYTE*)_xstzName, _xstzName.Size() );
 				memcpy( ( this->bytes + _stdf.Size() + _xstzName.Size() ), (BYTE*)_grLPUpxSw, _grLPUpxSw.Size() );
@@ -108,10 +107,9 @@ namespace Docx2Doc
 		{
 			return this->sizeInBytesWithoutPadding;
 		}
+
 	private:
-
 		std::vector<Prl> properties;
-
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 		unsigned int sizeInBytesWithoutPadding;
@@ -121,7 +119,6 @@ namespace Docx2Doc
 	{
 	private:
 		std::vector<Prl> properties;
-
 		BYTE* bytes;
 		unsigned int sizeInBytes;
 		unsigned int sizeInBytesWithoutPadding;

@@ -78,7 +78,6 @@ namespace Docx2Doc
 		}
 
 	private:
-
 		unsigned int m_nItemOffset;
 	};
 }

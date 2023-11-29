@@ -50,7 +50,6 @@ namespace Docx2Doc
 		static const BYTE FldCharBegin			=	0x13;
 		static const BYTE FldCharSeparate		=	0x14;
 		static const BYTE FldCharEnd			=	0x15;
-	public:
 
 		FldChar () : fld()
 		{

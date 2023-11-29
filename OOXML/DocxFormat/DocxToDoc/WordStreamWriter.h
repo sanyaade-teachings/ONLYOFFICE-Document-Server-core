@@ -43,7 +43,6 @@ namespace STREAMS
 	public:
 		CWordStreamWriter () : m_pBin (NULL), m_nBufPos (0), m_pMemBuffer (NULL)
 		{
-
 		}
 
 		virtual ~CWordStreamWriter ()
@@ -175,7 +174,6 @@ namespace STREAMS
 		}
 
 	private:
-
 		CFCPP::IStream*		m_pBin;
 		ULONG				m_nBufPos;
 

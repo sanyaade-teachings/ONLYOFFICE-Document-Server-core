@@ -46,7 +46,6 @@ namespace Docx2Doc
 
 		explicit RunItem(const IRunItem& oRunItem) : Aggregat(static_cast<IRunItem*>(oRunItem.Clone()))
 		{
-
 		}
 
 		RunItem(const RunItem& oRunItem)
