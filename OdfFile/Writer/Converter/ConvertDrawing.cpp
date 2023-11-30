@@ -224,6 +224,18 @@ void OoxConverter::convert(PPTX::Logic::Xfrm *oox_xfrm)
 {
 	if (oox_xfrm == NULL) return;	//CTransform2D
 
+	double angle = 0;
+
+	if (oox_xfrm->rot.get_value_or(0) > 0)
+	{
+		angle = 360.0 - oox_xfrm->rot.get_value_or(0) / 60000.0;
+
+		if (oox_xfrm->flipV.get_value_or(false))
+			angle = -angle;
+
+		odf_context()->drawing_context()->set_rotate(angle);
+	}
+
 	_CP_OPT(double) x, y, width, height;
 
 	if (oox_xfrm->offX.IsInit())	x = Emu2Pt(*oox_xfrm->offX);
@@ -231,23 +243,15 @@ void OoxConverter::convert(PPTX::Logic::Xfrm *oox_xfrm)
 	
 	if (oox_xfrm->extX.IsInit())	width	= Emu2Pt(*oox_xfrm->extX);
 	if (oox_xfrm->extY.IsInit())	height	= Emu2Pt(*oox_xfrm->extY);
-	
-	odf_context()->drawing_context()->set_size(	width, height);					
-	odf_context()->drawing_context()->set_position( x, y);
-	
+		
+	// odf_context()->drawing_context()->set_size(width, height);
+	// odf_context()->drawing_context()->set_position(x, y);
+	// odf_context()->drawing_context()->set_rotate(angle);
+
+	odf_context()->drawing_context()->set_orientation(x, y, width, height, angle);
+
 	if (oox_xfrm->flipH.get_value_or(false))	odf_context()->drawing_context()->set_flip_H(true);
 	if (oox_xfrm->flipV.get_value_or(false))	odf_context()->drawing_context()->set_flip_V(true);
-	
-	if (oox_xfrm->rot.get_value_or(0) > 0)
-	{
-		double angle = 360.0 - oox_xfrm->rot.get_value_or(0) / 60000.0;
-		
-		if (oox_xfrm->flipV.get_value_or(false))
-			angle = -angle;
-
-		odf_context()->drawing_context()->set_rotate(angle);
-	}
-		
 }
 void OoxConverter::convert(PPTX::Logic::Xfrm *oox_txbx, PPTX::Logic::Xfrm *oox_xfrm)
 {

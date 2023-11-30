@@ -213,7 +213,9 @@ public:
 	
 	void get_size			( _CP_OPT(double) & width_pt, _CP_OPT(double) & height_pt);
 	void set_size			( _CP_OPT(double) & width_pt, _CP_OPT(double) & height_pt, bool reset_always = false);
-	
+
+	void set_orientation(_CP_OPT(double)& x_pt, _CP_OPT(double)& y_pt, _CP_OPT(double)& width_pt, _CP_OPT(double)& height_pt, double angle = 0);
+
 	void set_name			(const std::wstring & name);
 	void set_description	(const std::wstring & descr);
 	void set_hidden			(bool bVal);

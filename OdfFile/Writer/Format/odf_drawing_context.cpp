@@ -665,22 +665,22 @@ void odf_drawing_context::end_drawing()
 				length cx = *impl_->current_drawing_state_.svg_width_;
 				length cy = *impl_->current_drawing_state_.svg_height_;
 
-				length x1 = *impl_->current_drawing_state_.svg_x_;
-				length y1 = *impl_->current_drawing_state_.svg_y_;
-				length x2 = *impl_->current_drawing_state_.svg_x_ + *impl_->current_drawing_state_.svg_width_;
-				length y2 = *impl_->current_drawing_state_.svg_y_ + *impl_->current_drawing_state_.svg_height_;
+				//length x1 = *impl_->current_drawing_state_.svg_x_;
+				//length y1 = *impl_->current_drawing_state_.svg_y_;
+				//length x2 = *impl_->current_drawing_state_.svg_x_ + *impl_->current_drawing_state_.svg_width_;
+				//length y2 = *impl_->current_drawing_state_.svg_y_ + *impl_->current_drawing_state_.svg_height_;
 
-				length origin_x = (x1 + x2) / 2.0;
-				length origin_y = (y1 + y2) / 2.0;
+				//length origin_x = (x1 + x2) / 2.0;
+				//length origin_y = (y1 + y2) / 2.0;
 
-				length x, y;
-				x = *impl_->current_drawing_state_.svg_x_ - origin_x;
-				y = *impl_->current_drawing_state_.svg_y_ - origin_y;
+				//length x, y;
+				//x = *impl_->current_drawing_state_.svg_x_ - origin_x;
+				//y = *impl_->current_drawing_state_.svg_y_ - origin_y;
 
-				new_x = x * cos(angle) + y * sin(angle) + origin_x;
-				new_y = y * cos(angle) - x * sin(angle) + origin_y;
-                //new_x = (cx / 2.) - ((cx / 2.) * cos(-angle) - (cy / 2.) * sin(-angle) );
-                //new_y = (cy / 2.) - ((cx / 2.) * sin(-angle) + (cy / 2.) * cos(-angle) );
+				//new_x = x * cos(angle) + y * sin(angle) + origin_x;
+				//new_y = y * cos(angle) - x * sin(angle) + origin_y;
+                new_x = (cx / 2.) - ((cx / 2.) * cos(-angle) - (cy / 2.) * sin(-angle) );
+                new_y = (cy / 2.) - ((cx / 2.) * sin(-angle) + (cy / 2.) * cos(-angle) );
 			}
 
 			strTransform += std::wstring(L"rotate(") + boost::lexical_cast<std::wstring>(*rotate) + std::wstring(L")");
@@ -2241,6 +2241,19 @@ void odf_drawing_context::set_position(_CP_OPT(double) & x_pt, _CP_OPT(double) &
 
 	//double cx = *impl_->current_drawing_state_.cx_;
 	//double cy = *impl_->current_drawing_state_.cy_;
+
+	//if (impl_->current_drawing_state_.rotateAngle_)
+	//{
+	//	double angle = *impl_->current_drawing_state_.rotateAngle_;
+	//	double x_ = x;
+	//	double y_ = y;
+
+	//	// NOTE(Kamil Kerimov): Apply rotation matrix transformation
+	//	x = x_ * std::cos(angle) + y_ * std::sin(angle);
+	//	y = y_ * std::cos(angle) - x_ * std::sin(angle);
+
+	//	impl_->current_drawing_state_.rotateAngle_ = boost::none;
+	//}
 	
 	if (impl_->current_drawing_state_.in_group_)
 	{
@@ -2334,6 +2347,61 @@ void odf_drawing_context::set_size( _CP_OPT(double) & width_pt, _CP_OPT(double) 
 		}
 	}
 }
+
+void odf_drawing_context::set_orientation(_CP_OPT(double)& x_pt, _CP_OPT(double)& y_pt, _CP_OPT(double)& width_pt, _CP_OPT(double)& height_pt, double angle)
+{
+	if (angle == 0)
+	{
+		set_size(width_pt, height_pt);
+		set_position(x_pt, y_pt);
+		
+		return;
+	}
+
+	double x1 = x_pt ? *x_pt : 0;
+	double y1 = y_pt ? *y_pt : 0;
+
+	double x2 = x_pt && width_pt	? *x_pt + *width_pt		: x1;
+	double y2 = y_pt && height_pt	? *y_pt + *height_pt	: y1;
+
+	double origin_x = (x1 + x2) / 2;
+	double origin_y = (y1 + y2) / 2;
+	
+	// NOTE(Kamil Kerimov): Apply rotation matrix transformation
+	double x, y;
+
+	x = x1 - origin_x;
+	y = y1 - origin_y;
+
+	x1 = x * std::cos(angle) + y * std::sin(angle) + origin_x;
+	y1 = y * std::cos(angle) - x * std::sin(angle) + origin_y;
+
+	x = x2 - origin_x;
+	y = y2 - origin_y;
+
+	x2 = x * std::cos(angle) + y * std::sin(angle) + origin_x;
+	y2 = y * std::cos(angle) - x * std::sin(angle) + origin_y;
+
+
+
+	if (impl_->current_drawing_state_.in_group_)
+	{
+		for (int i = (int)impl_->group_list_.size() - 1; i >= 0; i--)
+		{
+			//if (impl_->group_list_[i]->rotate)
+			//{
+			//	x = (x * cos(-impl_->group_list_[i]->rotate.get()) - y * sin(-impl_->group_list_[i]->rotate.get()) );
+			//	y = (x * sin(-impl_->group_list_[i]->rotate.get()) + y * cos(-impl_->group_list_[i]->rotate.get()) );
+			//}
+			x = (x + impl_->group_list_[i]->shift_x) * impl_->group_list_[i]->scale_cx;
+			y = (y + impl_->group_list_[i]->shift_y) * impl_->group_list_[i]->scale_cy;
+
+			//cx *= impl_->group_list_[i]->scale_cx;
+			//cy *= impl_->group_list_[i]->scale_cy;
+		}
+	}
+}
+
 void odf_drawing_context::set_line_width(double pt)
 {
 	if (!impl_->current_graphic_properties) return;
