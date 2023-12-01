@@ -1900,7 +1900,7 @@ namespace Docx2Doc
 
 
 
-				// InitStream(L"\05SummaryInformation", m_pSummaryInformationStream, false);
+				InitStream(L"\05SummaryInformation", m_pSummaryInformationStream, false);
 				InitStream(L"\05DocumentSummaryInformation", m_pDocumentSummaryInformationStream, false);
 
 				WriteInformationBlock ();

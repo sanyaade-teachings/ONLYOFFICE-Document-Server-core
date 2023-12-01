@@ -102,7 +102,6 @@ SOURCES += \
 	../../../XlsxFormat/Controls/Controls.cpp \
 	../../../DocxFormat/Settings/Settings.cpp \
 	../../../DocxFormat/Settings/WebSettings.cpp \
-	../../../DocxFormat/DocxToDoc/Converter.cpp \
 	../../../DocxFormat/DocxToDoc/DocFile.cpp \
 	#../../../DocxFormat/DocxToDoc/FileConverter.cpp \
 	../../../DocxFormat/DocxToDoc/Paragraph.cpp \
@@ -276,7 +275,6 @@ HEADERS += \
 	../../../DocxFormat/Media/VbaProject.h \
 	../../../DocxFormat/Settings/Settings.h \
 	../../../DocxFormat/Settings/WebSettings.h \
-	../../../DocxFormat/DocxToDoc/Converter.h \
 	../../../DocxFormat/DocxToDoc/DocFile.h \
 	#../../../DocxFormat/DocxToDoc/FileConverter.h \
 	../../../DocxFormat/DocxToDoc/Defines.h \

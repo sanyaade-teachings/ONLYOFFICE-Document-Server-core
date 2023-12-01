@@ -10,271 +10,269 @@
 
 #define AVS_ERROR_UNEXPECTED -1
 
-using namespace Docx2Doc;
-
-namespace DOCXTODOC
+namespace Docx2Doc
 {
 	CFileTransformer::CFileTransformer ()
 	{
-		m_pDOCFile				=	NULL;
+		m_pDocFile				=	NULL;
 
 		m_bHaveSeparateFldChar	=	false;
 		m_bIsInlineShape		=	FALSE;
 
 		m_bIsHaveRunPr			=	FALSE;
 
-		m_pDOCFile				=	new Docx2Doc::CDocFile();
+		m_pDocFile				=	new Docx2Doc::CDocFile();
 
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "af-ZA" ), Docx2Doc::LID( DocFileFormat::Afrikaans ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "sq-AL" ), Docx2Doc::LID( DocFileFormat::Albanian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "am-ET" ), Docx2Doc::LID( DocFileFormat::Amharic ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-DZ" ), Docx2Doc::LID( DocFileFormat::ArabicAlgeria ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-BH" ), Docx2Doc::LID( DocFileFormat::ArabicBahrain ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-EG" ), Docx2Doc::LID( DocFileFormat::ArabicEgypt ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-IQ" ), Docx2Doc::LID( DocFileFormat::ArabicIraq ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-JO" ), Docx2Doc::LID( DocFileFormat::ArabicJordan ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-KW" ), Docx2Doc::LID( DocFileFormat::ArabicKuwait ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-LB" ), Docx2Doc::LID( DocFileFormat::ArabicLebanon ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-LY" ), Docx2Doc::LID( DocFileFormat::ArabicLibya ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-MA" ), Docx2Doc::LID( DocFileFormat::ArabicMorocco ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-OM" ), Docx2Doc::LID( DocFileFormat::ArabicOman ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-QA" ), Docx2Doc::LID( DocFileFormat::ArabicQatar ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-SA" ), Docx2Doc::LID( DocFileFormat::ArabicSaudiArabia ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-SY" ), Docx2Doc::LID( DocFileFormat::ArabicSyria ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-TN" ), Docx2Doc::LID( DocFileFormat::ArabicTunisia ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-AE" ), Docx2Doc::LID( DocFileFormat::ArabicUAE ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ar-YE" ), Docx2Doc::LID( DocFileFormat::ArabicYemen ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "hy-AM" ), Docx2Doc::LID( DocFileFormat::Armenian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "as-IN" ), Docx2Doc::LID( DocFileFormat::Assamese ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "az-AZ-cyrl" ), Docx2Doc::LID( DocFileFormat::AzeriCyrillic ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "az-AZ-latn" ), Docx2Doc::LID( DocFileFormat::AzeriLatin ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "eu-ES" ), Docx2Doc::LID( DocFileFormat::Basque ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "be-BY" ), Docx2Doc::LID( DocFileFormat::Belarusian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "bn-IN" ), Docx2Doc::LID( DocFileFormat::Bengali ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "bn-BD" ), Docx2Doc::LID( DocFileFormat::BengaliBangladesh ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "bg-BG" ), Docx2Doc::LID( DocFileFormat::Bulgarian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "my-MM" ), Docx2Doc::LID( DocFileFormat::Burmese ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ca-ES" ), Docx2Doc::LID( DocFileFormat::Catalan ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "zh-HK" ), Docx2Doc::LID( DocFileFormat::ChineseHongKong ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "zh-MO" ), Docx2Doc::LID( DocFileFormat::ChineseMacao ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "zh-CN" ), Docx2Doc::LID( DocFileFormat::ChinesePRC ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "zh-SG" ), Docx2Doc::LID( DocFileFormat::ChineseSingapore ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "zh-TW" ), Docx2Doc::LID( DocFileFormat::ChineseTaiwan ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "hr-HR" ), Docx2Doc::LID( DocFileFormat::Croatian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "cs-CZ" ), Docx2Doc::LID( DocFileFormat::Czech ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "da-DK" ), Docx2Doc::LID( DocFileFormat::Danish ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "dv-MV" ), Docx2Doc::LID( DocFileFormat::Divehi ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "nl-BE" ), Docx2Doc::LID( DocFileFormat::DutchBelgium ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "nl-NL" ), Docx2Doc::LID( DocFileFormat::DutchNetherlands ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-AU" ), Docx2Doc::LID( DocFileFormat::EnglishAustralia ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-BZ" ), Docx2Doc::LID( DocFileFormat::EnglishBelize ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-CA" ), Docx2Doc::LID( DocFileFormat::EnglishCanada ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-DO" ), Docx2Doc::LID( DocFileFormat::EnglishCaribbean ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-HK" ), Docx2Doc::LID( DocFileFormat::EnglishHongKong ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-IN" ), Docx2Doc::LID( DocFileFormat::EnglishIndia ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-ID" ), Docx2Doc::LID( DocFileFormat::EnglishIndonesia ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-IE" ), Docx2Doc::LID( DocFileFormat::EnglishIreland ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-JM" ), Docx2Doc::LID( DocFileFormat::EnglishJamaica ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-MY" ), Docx2Doc::LID( DocFileFormat::EnglishMalaysia ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-NZ" ), Docx2Doc::LID( DocFileFormat::EnglishNewZealand ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-PH" ), Docx2Doc::LID( DocFileFormat::EnglishPhilippines ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-SG" ), Docx2Doc::LID( DocFileFormat::EnglishSingapore ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-ZA" ), Docx2Doc::LID( DocFileFormat::EnglishSouthAfrica ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-TT" ), Docx2Doc::LID( DocFileFormat::EnglishTrinidadAndTobago ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-UK" ), Docx2Doc::LID( DocFileFormat::EnglishUK ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-US" ), Docx2Doc::LID( DocFileFormat::EnglishUS ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "en-ZW" ), Docx2Doc::LID( DocFileFormat::EnglishZimbabwe ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "et-EE" ), Docx2Doc::LID( DocFileFormat::Estonian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fo-FO" ), Docx2Doc::LID( DocFileFormat::Faeroese ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fi-FI" ), Docx2Doc::LID( DocFileFormat::Finnish ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-BE" ), Docx2Doc::LID( DocFileFormat::FrenchBelgium ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-CM" ), Docx2Doc::LID( DocFileFormat::FrenchCameroon ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-CA" ), Docx2Doc::LID( DocFileFormat::FrenchCanada ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-CD" ), Docx2Doc::LID( DocFileFormat::FrenchCongoDRC ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-CI" ), Docx2Doc::LID( DocFileFormat::FrenchCotedIvoire ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-FR" ), Docx2Doc::LID( DocFileFormat::FrenchFrance ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-HT" ), Docx2Doc::LID( DocFileFormat::FrenchHaiti ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-LU" ), Docx2Doc::LID( DocFileFormat::FrenchLuxembourg ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-ML" ), Docx2Doc::LID( DocFileFormat::FrenchMali ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-MC" ), Docx2Doc::LID( DocFileFormat::FrenchMonaco ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-MA" ), Docx2Doc::LID( DocFileFormat::FrenchMorocco ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-RE" ), Docx2Doc::LID( DocFileFormat::FrenchReunion ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-SN" ), Docx2Doc::LID( DocFileFormat::FrenchSenegal ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-CH" ), Docx2Doc::LID( DocFileFormat::FrenchSwitzerland ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fr-DO" ), Docx2Doc::LID( DocFileFormat::FrenchWestIndies ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "fy-NL" ), Docx2Doc::LID( DocFileFormat::FrisianNetherlands ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "mk-MK" ), Docx2Doc::LID( DocFileFormat::FYROMacedonian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ga-IE" ), Docx2Doc::LID( DocFileFormat::GaelicIreland ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "gd-UK" ), Docx2Doc::LID( DocFileFormat::GaelicScotland ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "gl-ES" ), Docx2Doc::LID( DocFileFormat::Galician ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ka-GE" ), Docx2Doc::LID( DocFileFormat::Georgian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "de-AT" ), Docx2Doc::LID( DocFileFormat::GermanAustria ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "de-DE" ), Docx2Doc::LID( DocFileFormat::GermanGermany ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "de-LI" ), Docx2Doc::LID( DocFileFormat::GermanLiechtenstein ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "de-LU" ), Docx2Doc::LID( DocFileFormat::GermanLuxembourg ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "de-CH" ), Docx2Doc::LID( DocFileFormat::GermanSwitzerland ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "el-GR" ), Docx2Doc::LID( DocFileFormat::Greek ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "gn-BR" ), Docx2Doc::LID( DocFileFormat::Guarani ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "gu-IN" ), Docx2Doc::LID( DocFileFormat::Gujarati ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ha-NG" ), Docx2Doc::LID( DocFileFormat::Hausa ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "he-IL" ), Docx2Doc::LID( DocFileFormat::Hebrew ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "hi-IN" ), Docx2Doc::LID( DocFileFormat::Hindi ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "hu-HU" ), Docx2Doc::LID( DocFileFormat::Hungarian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "is-IS" ), Docx2Doc::LID( DocFileFormat::Icelandic ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "id-ID" ), Docx2Doc::LID( DocFileFormat::Indonesian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "iu-CA" ), Docx2Doc::LID( DocFileFormat::Inuktitut ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "it-IT" ), Docx2Doc::LID( DocFileFormat::ItalianItaly ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "it-CH" ), Docx2Doc::LID( DocFileFormat::ItalianSwitzerland ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ja-JP" ), Docx2Doc::LID( DocFileFormat::Japanese ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "kn-ID" ), Docx2Doc::LID( DocFileFormat::Kannada ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ks-ID" ), Docx2Doc::LID( DocFileFormat::Kashmiri ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ks-PK" ), Docx2Doc::LID( DocFileFormat::KashmiriArabic ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "kk-KZ" ), Docx2Doc::LID( DocFileFormat::Kazakh ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ko-KR" ), Docx2Doc::LID( DocFileFormat::Korean ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ky-KG" ), Docx2Doc::LID( DocFileFormat::Kyrgyz ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "lo-LA" ), Docx2Doc::LID( DocFileFormat::Lao ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "la" ), Docx2Doc::LID( DocFileFormat::Latin ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "lv-LV" ), Docx2Doc::LID( DocFileFormat::Latvian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "lt-LT" ), Docx2Doc::LID( DocFileFormat::Lithuanian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ms-MY" ), Docx2Doc::LID( DocFileFormat::Malay ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ms-BN" ), Docx2Doc::LID( DocFileFormat::MalayBruneiDarussalam ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ml-ID" ), Docx2Doc::LID( DocFileFormat::Malayalam ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "mt-MT" ), Docx2Doc::LID( DocFileFormat::Maltese ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "mi-NZ" ), Docx2Doc::LID( DocFileFormat::Maori ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "mr-ID" ), Docx2Doc::LID( DocFileFormat::Marathi ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "mn-MN" ), Docx2Doc::LID( DocFileFormat::Mongolian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ne-NP" ), Docx2Doc::LID( DocFileFormat::Nepali ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ne-ID" ), Docx2Doc::LID( DocFileFormat::NepaliIndia ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "nb-NO" ), Docx2Doc::LID( DocFileFormat::NorwegianBokmal ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "nn-NO" ), Docx2Doc::LID( DocFileFormat::NorwegianNynorsk ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "or-ID" ), Docx2Doc::LID( DocFileFormat::Oriya ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ps-PK" ), Docx2Doc::LID( DocFileFormat::Pashto ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "pl-PL" ), Docx2Doc::LID( DocFileFormat::Polish ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "pt-BR" ), Docx2Doc::LID( DocFileFormat::PortugueseBrazil ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "pt-PT" ), Docx2Doc::LID( DocFileFormat::PortuguesePortugal ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "pa-ID" ), Docx2Doc::LID( DocFileFormat::Punjabi ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "pa-PK" ), Docx2Doc::LID( DocFileFormat::PunjabiPakistan ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "qu-BO" ), Docx2Doc::LID( DocFileFormat::QuechuaBolivia ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "qu-EC" ), Docx2Doc::LID( DocFileFormat::QuechuaEcuador ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "qu-PE" ), Docx2Doc::LID( DocFileFormat::QuechuaPeru ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "rm-CH" ), Docx2Doc::LID( DocFileFormat::RhaetoRomanic ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ro-MD" ), Docx2Doc::LID( DocFileFormat::RomanianMoldova ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ro-RO" ), Docx2Doc::LID( DocFileFormat::RomanianRomania ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ru-MD" ), Docx2Doc::LID( DocFileFormat::RussianMoldova ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ru-RU" ), Docx2Doc::LID( DocFileFormat::RussianRussia ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "se-FI" ), Docx2Doc::LID( DocFileFormat::SamiLappish ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "sa-ID" ), Docx2Doc::LID( DocFileFormat::Sanskrit ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "sr-YU-cyrl" ), Docx2Doc::LID( DocFileFormat::SerbianCyrillic ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "sr-YU-latn" ), Docx2Doc::LID( DocFileFormat::SerbianLatin ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "sd-PK" ), Docx2Doc::LID( DocFileFormat::SindhiArabic ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "sd-ID" ), Docx2Doc::LID( DocFileFormat::SindhiDevanagari ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "si-ID" ), Docx2Doc::LID( DocFileFormat::Sinhalese ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "sk-SK" ), Docx2Doc::LID( DocFileFormat::Slovak ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "sl-SI" ), Docx2Doc::LID( DocFileFormat::Slovenian ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "so-SO" ), Docx2Doc::LID( DocFileFormat::Somali ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-AR" ), Docx2Doc::LID( DocFileFormat::SpanishArgentina ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-BO" ), Docx2Doc::LID( DocFileFormat::SpanishBolivia ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-CL" ), Docx2Doc::LID( DocFileFormat::SpanishChile ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-CO" ), Docx2Doc::LID( DocFileFormat::SpanishColombia ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-CR" ), Docx2Doc::LID( DocFileFormat::SpanishCostaRica ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-DO" ), Docx2Doc::LID( DocFileFormat::SpanishDominicanRepublic ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-EC" ), Docx2Doc::LID( DocFileFormat::SpanishEcuador ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-SV" ), Docx2Doc::LID( DocFileFormat::SpanishElSalvador ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-GT" ), Docx2Doc::LID( DocFileFormat::SpanishGuatemala ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-HN" ), Docx2Doc::LID( DocFileFormat::SpanishHonduras ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-MX" ), Docx2Doc::LID( DocFileFormat::SpanishMexico ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-NI" ), Docx2Doc::LID( DocFileFormat::SpanishNicaragua ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-PA" ), Docx2Doc::LID( DocFileFormat::SpanishPanama ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-PY" ), Docx2Doc::LID( DocFileFormat::SpanishParaguay ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-PE" ), Docx2Doc::LID( DocFileFormat::SpanishPeru ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-PR" ), Docx2Doc::LID( DocFileFormat::SpanishPuertoRico ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-ES" ), Docx2Doc::LID( DocFileFormat::SpanishSpainTraditionalSort ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-UY" ), Docx2Doc::LID( DocFileFormat::SpanishUruguay ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "es-VE" ), Docx2Doc::LID( DocFileFormat::SpanishVenezuela ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "sw-TZ" ), Docx2Doc::LID( DocFileFormat::Swahili ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "sv-FI" ), Docx2Doc::LID( DocFileFormat::SwedishFinland ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "sv-SE" ), Docx2Doc::LID( DocFileFormat::SwedishSweden ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "tg-TJ" ), Docx2Doc::LID( DocFileFormat::Tajik ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "ta-ID" ), Docx2Doc::LID( DocFileFormat::Tamil ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "tt-RU" ), Docx2Doc::LID( DocFileFormat::Tatar ) ) );
-		lidMap.insert( std::pair<std::string, Docx2Doc::LID>( std::string( "te-ID" ), Docx2Doc::LID( DocFileFormat::Telugu ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"af-ZA" ), Docx2Doc::LID( DocFileFormat::Afrikaans ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"sq-AL" ), Docx2Doc::LID( DocFileFormat::Albanian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"am-ET" ), Docx2Doc::LID( DocFileFormat::Amharic ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-DZ" ), Docx2Doc::LID( DocFileFormat::ArabicAlgeria ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-BH" ), Docx2Doc::LID( DocFileFormat::ArabicBahrain ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-EG" ), Docx2Doc::LID( DocFileFormat::ArabicEgypt ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-IQ" ), Docx2Doc::LID( DocFileFormat::ArabicIraq ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-JO" ), Docx2Doc::LID( DocFileFormat::ArabicJordan ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-KW" ), Docx2Doc::LID( DocFileFormat::ArabicKuwait ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-LB" ), Docx2Doc::LID( DocFileFormat::ArabicLebanon ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-LY" ), Docx2Doc::LID( DocFileFormat::ArabicLibya ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-MA" ), Docx2Doc::LID( DocFileFormat::ArabicMorocco ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-OM" ), Docx2Doc::LID( DocFileFormat::ArabicOman ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-QA" ), Docx2Doc::LID( DocFileFormat::ArabicQatar ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-SA" ), Docx2Doc::LID( DocFileFormat::ArabicSaudiArabia ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-SY" ), Docx2Doc::LID( DocFileFormat::ArabicSyria ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-TN" ), Docx2Doc::LID( DocFileFormat::ArabicTunisia ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-AE" ), Docx2Doc::LID( DocFileFormat::ArabicUAE ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ar-YE" ), Docx2Doc::LID( DocFileFormat::ArabicYemen ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"hy-AM" ), Docx2Doc::LID( DocFileFormat::Armenian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"as-IN" ), Docx2Doc::LID( DocFileFormat::Assamese ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"az-AZ-cyrl" ), Docx2Doc::LID( DocFileFormat::AzeriCyrillic ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"az-AZ-latn" ), Docx2Doc::LID( DocFileFormat::AzeriLatin ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"eu-ES" ), Docx2Doc::LID( DocFileFormat::Basque ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"be-BY" ), Docx2Doc::LID( DocFileFormat::Belarusian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"bn-IN" ), Docx2Doc::LID( DocFileFormat::Bengali ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"bn-BD" ), Docx2Doc::LID( DocFileFormat::BengaliBangladesh ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"bg-BG" ), Docx2Doc::LID( DocFileFormat::Bulgarian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"my-MM" ), Docx2Doc::LID( DocFileFormat::Burmese ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ca-ES" ), Docx2Doc::LID( DocFileFormat::Catalan ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"zh-HK" ), Docx2Doc::LID( DocFileFormat::ChineseHongKong ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"zh-MO" ), Docx2Doc::LID( DocFileFormat::ChineseMacao ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"zh-CN" ), Docx2Doc::LID( DocFileFormat::ChinesePRC ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"zh-SG" ), Docx2Doc::LID( DocFileFormat::ChineseSingapore ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"zh-TW" ), Docx2Doc::LID( DocFileFormat::ChineseTaiwan ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"hr-HR" ), Docx2Doc::LID( DocFileFormat::Croatian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"cs-CZ" ), Docx2Doc::LID( DocFileFormat::Czech ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"da-DK" ), Docx2Doc::LID( DocFileFormat::Danish ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"dv-MV" ), Docx2Doc::LID( DocFileFormat::Divehi ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"nl-BE" ), Docx2Doc::LID( DocFileFormat::DutchBelgium ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"nl-NL" ), Docx2Doc::LID( DocFileFormat::DutchNetherlands ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-AU" ), Docx2Doc::LID( DocFileFormat::EnglishAustralia ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-BZ" ), Docx2Doc::LID( DocFileFormat::EnglishBelize ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-CA" ), Docx2Doc::LID( DocFileFormat::EnglishCanada ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-DO" ), Docx2Doc::LID( DocFileFormat::EnglishCaribbean ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-HK" ), Docx2Doc::LID( DocFileFormat::EnglishHongKong ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-IN" ), Docx2Doc::LID( DocFileFormat::EnglishIndia ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-ID" ), Docx2Doc::LID( DocFileFormat::EnglishIndonesia ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-IE" ), Docx2Doc::LID( DocFileFormat::EnglishIreland ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-JM" ), Docx2Doc::LID( DocFileFormat::EnglishJamaica ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-MY" ), Docx2Doc::LID( DocFileFormat::EnglishMalaysia ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-NZ" ), Docx2Doc::LID( DocFileFormat::EnglishNewZealand ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-PH" ), Docx2Doc::LID( DocFileFormat::EnglishPhilippines ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-SG" ), Docx2Doc::LID( DocFileFormat::EnglishSingapore ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-ZA" ), Docx2Doc::LID( DocFileFormat::EnglishSouthAfrica ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-TT" ), Docx2Doc::LID( DocFileFormat::EnglishTrinidadAndTobago ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-UK" ), Docx2Doc::LID( DocFileFormat::EnglishUK ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-US" ), Docx2Doc::LID( DocFileFormat::EnglishUS ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"en-ZW" ), Docx2Doc::LID( DocFileFormat::EnglishZimbabwe ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"et-EE" ), Docx2Doc::LID( DocFileFormat::Estonian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fo-FO" ), Docx2Doc::LID( DocFileFormat::Faeroese ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fi-FI" ), Docx2Doc::LID( DocFileFormat::Finnish ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-BE" ), Docx2Doc::LID( DocFileFormat::FrenchBelgium ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-CM" ), Docx2Doc::LID( DocFileFormat::FrenchCameroon ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-CA" ), Docx2Doc::LID( DocFileFormat::FrenchCanada ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-CD" ), Docx2Doc::LID( DocFileFormat::FrenchCongoDRC ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-CI" ), Docx2Doc::LID( DocFileFormat::FrenchCotedIvoire ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-FR" ), Docx2Doc::LID( DocFileFormat::FrenchFrance ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-HT" ), Docx2Doc::LID( DocFileFormat::FrenchHaiti ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-LU" ), Docx2Doc::LID( DocFileFormat::FrenchLuxembourg ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-ML" ), Docx2Doc::LID( DocFileFormat::FrenchMali ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-MC" ), Docx2Doc::LID( DocFileFormat::FrenchMonaco ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-MA" ), Docx2Doc::LID( DocFileFormat::FrenchMorocco ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-RE" ), Docx2Doc::LID( DocFileFormat::FrenchReunion ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-SN" ), Docx2Doc::LID( DocFileFormat::FrenchSenegal ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-CH" ), Docx2Doc::LID( DocFileFormat::FrenchSwitzerland ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fr-DO" ), Docx2Doc::LID( DocFileFormat::FrenchWestIndies ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"fy-NL" ), Docx2Doc::LID( DocFileFormat::FrisianNetherlands ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"mk-MK" ), Docx2Doc::LID( DocFileFormat::FYROMacedonian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ga-IE" ), Docx2Doc::LID( DocFileFormat::GaelicIreland ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"gd-UK" ), Docx2Doc::LID( DocFileFormat::GaelicScotland ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"gl-ES" ), Docx2Doc::LID( DocFileFormat::Galician ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ka-GE" ), Docx2Doc::LID( DocFileFormat::Georgian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"de-AT" ), Docx2Doc::LID( DocFileFormat::GermanAustria ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"de-DE" ), Docx2Doc::LID( DocFileFormat::GermanGermany ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"de-LI" ), Docx2Doc::LID( DocFileFormat::GermanLiechtenstein ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"de-LU" ), Docx2Doc::LID( DocFileFormat::GermanLuxembourg ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"de-CH" ), Docx2Doc::LID( DocFileFormat::GermanSwitzerland ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"el-GR" ), Docx2Doc::LID( DocFileFormat::Greek ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"gn-BR" ), Docx2Doc::LID( DocFileFormat::Guarani ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"gu-IN" ), Docx2Doc::LID( DocFileFormat::Gujarati ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ha-NG" ), Docx2Doc::LID( DocFileFormat::Hausa ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"he-IL" ), Docx2Doc::LID( DocFileFormat::Hebrew ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"hi-IN" ), Docx2Doc::LID( DocFileFormat::Hindi ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"hu-HU" ), Docx2Doc::LID( DocFileFormat::Hungarian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"is-IS" ), Docx2Doc::LID( DocFileFormat::Icelandic ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"id-ID" ), Docx2Doc::LID( DocFileFormat::Indonesian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"iu-CA" ), Docx2Doc::LID( DocFileFormat::Inuktitut ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"it-IT" ), Docx2Doc::LID( DocFileFormat::ItalianItaly ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"it-CH" ), Docx2Doc::LID( DocFileFormat::ItalianSwitzerland ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ja-JP" ), Docx2Doc::LID( DocFileFormat::Japanese ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"kn-ID" ), Docx2Doc::LID( DocFileFormat::Kannada ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ks-ID" ), Docx2Doc::LID( DocFileFormat::Kashmiri ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ks-PK" ), Docx2Doc::LID( DocFileFormat::KashmiriArabic ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"kk-KZ" ), Docx2Doc::LID( DocFileFormat::Kazakh ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ko-KR" ), Docx2Doc::LID( DocFileFormat::Korean ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ky-KG" ), Docx2Doc::LID( DocFileFormat::Kyrgyz ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"lo-LA" ), Docx2Doc::LID( DocFileFormat::Lao ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"la" ), Docx2Doc::LID( DocFileFormat::Latin ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"lv-LV" ), Docx2Doc::LID( DocFileFormat::Latvian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"lt-LT" ), Docx2Doc::LID( DocFileFormat::Lithuanian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ms-MY" ), Docx2Doc::LID( DocFileFormat::Malay ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ms-BN" ), Docx2Doc::LID( DocFileFormat::MalayBruneiDarussalam ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ml-ID" ), Docx2Doc::LID( DocFileFormat::Malayalam ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"mt-MT" ), Docx2Doc::LID( DocFileFormat::Maltese ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"mi-NZ" ), Docx2Doc::LID( DocFileFormat::Maori ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"mr-ID" ), Docx2Doc::LID( DocFileFormat::Marathi ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"mn-MN" ), Docx2Doc::LID( DocFileFormat::Mongolian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ne-NP" ), Docx2Doc::LID( DocFileFormat::Nepali ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ne-ID" ), Docx2Doc::LID( DocFileFormat::NepaliIndia ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"nb-NO" ), Docx2Doc::LID( DocFileFormat::NorwegianBokmal ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"nn-NO" ), Docx2Doc::LID( DocFileFormat::NorwegianNynorsk ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"or-ID" ), Docx2Doc::LID( DocFileFormat::Oriya ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ps-PK" ), Docx2Doc::LID( DocFileFormat::Pashto ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"pl-PL" ), Docx2Doc::LID( DocFileFormat::Polish ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"pt-BR" ), Docx2Doc::LID( DocFileFormat::PortugueseBrazil ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"pt-PT" ), Docx2Doc::LID( DocFileFormat::PortuguesePortugal ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"pa-ID" ), Docx2Doc::LID( DocFileFormat::Punjabi ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"pa-PK" ), Docx2Doc::LID( DocFileFormat::PunjabiPakistan ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"qu-BO" ), Docx2Doc::LID( DocFileFormat::QuechuaBolivia ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"qu-EC" ), Docx2Doc::LID( DocFileFormat::QuechuaEcuador ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"qu-PE" ), Docx2Doc::LID( DocFileFormat::QuechuaPeru ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"rm-CH" ), Docx2Doc::LID( DocFileFormat::RhaetoRomanic ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ro-MD" ), Docx2Doc::LID( DocFileFormat::RomanianMoldova ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ro-RO" ), Docx2Doc::LID( DocFileFormat::RomanianRomania ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ru-MD" ), Docx2Doc::LID( DocFileFormat::RussianMoldova ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ru-RU" ), Docx2Doc::LID( DocFileFormat::RussianRussia ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"se-FI" ), Docx2Doc::LID( DocFileFormat::SamiLappish ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"sa-ID" ), Docx2Doc::LID( DocFileFormat::Sanskrit ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"sr-YU-cyrl" ), Docx2Doc::LID( DocFileFormat::SerbianCyrillic ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"sr-YU-latn" ), Docx2Doc::LID( DocFileFormat::SerbianLatin ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"sd-PK" ), Docx2Doc::LID( DocFileFormat::SindhiArabic ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"sd-ID" ), Docx2Doc::LID( DocFileFormat::SindhiDevanagari ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"si-ID" ), Docx2Doc::LID( DocFileFormat::Sinhalese ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"sk-SK" ), Docx2Doc::LID( DocFileFormat::Slovak ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"sl-SI" ), Docx2Doc::LID( DocFileFormat::Slovenian ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"so-SO" ), Docx2Doc::LID( DocFileFormat::Somali ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-AR" ), Docx2Doc::LID( DocFileFormat::SpanishArgentina ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-BO" ), Docx2Doc::LID( DocFileFormat::SpanishBolivia ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-CL" ), Docx2Doc::LID( DocFileFormat::SpanishChile ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-CO" ), Docx2Doc::LID( DocFileFormat::SpanishColombia ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-CR" ), Docx2Doc::LID( DocFileFormat::SpanishCostaRica ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-DO" ), Docx2Doc::LID( DocFileFormat::SpanishDominicanRepublic ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-EC" ), Docx2Doc::LID( DocFileFormat::SpanishEcuador ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-SV" ), Docx2Doc::LID( DocFileFormat::SpanishElSalvador ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-GT" ), Docx2Doc::LID( DocFileFormat::SpanishGuatemala ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-HN" ), Docx2Doc::LID( DocFileFormat::SpanishHonduras ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-MX" ), Docx2Doc::LID( DocFileFormat::SpanishMexico ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-NI" ), Docx2Doc::LID( DocFileFormat::SpanishNicaragua ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-PA" ), Docx2Doc::LID( DocFileFormat::SpanishPanama ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-PY" ), Docx2Doc::LID( DocFileFormat::SpanishParaguay ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-PE" ), Docx2Doc::LID( DocFileFormat::SpanishPeru ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-PR" ), Docx2Doc::LID( DocFileFormat::SpanishPuertoRico ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-ES" ), Docx2Doc::LID( DocFileFormat::SpanishSpainTraditionalSort ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-UY" ), Docx2Doc::LID( DocFileFormat::SpanishUruguay ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"es-VE" ), Docx2Doc::LID( DocFileFormat::SpanishVenezuela ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"sw-TZ" ), Docx2Doc::LID( DocFileFormat::Swahili ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"sv-FI" ), Docx2Doc::LID( DocFileFormat::SwedishFinland ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"sv-SE" ), Docx2Doc::LID( DocFileFormat::SwedishSweden ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"tg-TJ" ), Docx2Doc::LID( DocFileFormat::Tajik ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"ta-ID" ), Docx2Doc::LID( DocFileFormat::Tamil ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"tt-RU" ), Docx2Doc::LID( DocFileFormat::Tatar ) ) );
+		m_lidMap.insert( std::pair<std::wstring, Docx2Doc::LID>( std::wstring( L"te-ID" ), Docx2Doc::LID( DocFileFormat::Telugu ) ) );
 
 		for (unsigned short i = 0; i < ( sizeof(Docx2Doc::StyleIDs) / sizeof(Docx2Doc::StyleIDs[0]) ); i++ )
 		{
-			predefinedStyleIDMap.insert( std::pair<std::string, unsigned short>( Docx2Doc::StyleIDs[i], i ) );
+			m_predefinedStyleIDMap.insert( std::pair<std::string, unsigned short>( Docx2Doc::StyleIDs[i], i ) );
 		}
 
-		styleTypeMap.insert( std::pair<std::string, Docx2Doc::Constants::StyleType>( std::string( "paragraph" ), Docx2Doc::Constants::styleTypeParagraph ) );
-		styleTypeMap.insert( std::pair<std::string, Docx2Doc::Constants::StyleType>( std::string( "character" ), Docx2Doc::Constants::styleTypeCharacter ) );
-		styleTypeMap.insert( std::pair<std::string, Docx2Doc::Constants::StyleType>( std::string( "table" ), Docx2Doc::Constants::styleTypeTable ) );
-		styleTypeMap.insert( std::pair<std::string, Docx2Doc::Constants::StyleType>( std::string( "numbering" ), Docx2Doc::Constants::styleTypeNumbering ) );
+		m_styleTypeMap.insert( std::pair<std::wstring, Docx2Doc::Constants::StyleType>( std::wstring( L"paragraph" ), Docx2Doc::Constants::styleTypeParagraph ) );
+		m_styleTypeMap.insert( std::pair<std::wstring, Docx2Doc::Constants::StyleType>( std::wstring( L"character" ), Docx2Doc::Constants::styleTypeCharacter ) );
+		m_styleTypeMap.insert( std::pair<std::wstring, Docx2Doc::Constants::StyleType>( std::wstring( L"table" ), Docx2Doc::Constants::styleTypeTable ) );
+		m_styleTypeMap.insert( std::pair<std::wstring, Docx2Doc::Constants::StyleType>( std::wstring( L"numbering" ), Docx2Doc::Constants::styleTypeNumbering ) );
 
 		for ( unsigned short i = 0; i < ( sizeof(Docx2Doc::NumberFormatCodes) / sizeof(Docx2Doc::NumberFormatCodes[0]) ); i++ )
 		{
-			numFmtMap.insert( std::pair<std::string, Docx2Doc::Constants::MSONFC>( Docx2Doc::NumberFormatCodes[i], (Docx2Doc::Constants::MSONFC)i ) );
+			m_numFmtMap.insert( std::pair<std::string, Docx2Doc::Constants::MSONFC>( Docx2Doc::NumberFormatCodes[i], (Docx2Doc::Constants::MSONFC)i ) );
 		}
 
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "none" ), 0x00 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "single" ), 0x01 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "words" ), 0x02 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "double" ), 0x03 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "dotted" ), 0x04 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "thick" ), 0x06 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "dash" ), 0x07 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "dotDash" ), 0x09 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "dotDotDash" ), 0x0A ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "wave" ), 0x0B ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "dottedHeavy" ), 0x14 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "dashedHeavy" ), 0x17 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "dashDotHeavy" ), 0x19 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "dashDotDotHeavy" ), 0x1A ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "wavyHeavy" ), 0x1B ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "dashLong" ), 0x27 ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "wavyDouble" ), 0x2B ) );
-		kulMap.insert( std::pair<std::string, BYTE>( std::string( "dashLongHeavy" ), 0x37 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"none" ), 0x00 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"single" ), 0x01 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"words" ), 0x02 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"double" ), 0x03 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"dotted" ), 0x04 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"thick" ), 0x06 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"dash" ), 0x07 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"dotDash" ), 0x09 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"dotDotDash" ), 0x0A ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"wave" ), 0x0B ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"dottedHeavy" ), 0x14 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"dashedHeavy" ), 0x17 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"dashDotHeavy" ), 0x19 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"dashDotDotHeavy" ), 0x1A ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"wavyHeavy" ), 0x1B ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"dashLong" ), 0x27 ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"wavyDouble" ), 0x2B ) );
+		m_kulMap.insert( std::pair<std::wstring, BYTE>( std::wstring( L"dashLongHeavy" ), 0x37 ) );
 
-		sectionBreakTypeMap.insert( std::pair<std::string, Docx2Doc::Constants::SBkcOperand>( std::string( "continuous" ), Docx2Doc::Constants::bkcContinuous ) );
-		sectionBreakTypeMap.insert( std::pair<std::string, Docx2Doc::Constants::SBkcOperand>( std::string( "nextColumn" ), Docx2Doc::Constants::bkcNewColumn ) );
-		sectionBreakTypeMap.insert( std::pair<std::string, Docx2Doc::Constants::SBkcOperand>( std::string( "nextPage" ), Docx2Doc::Constants::bkcNewPage ) );
-		sectionBreakTypeMap.insert( std::pair<std::string, Docx2Doc::Constants::SBkcOperand>( std::string( "evenPage" ), Docx2Doc::Constants::bkcEvenPage ) );
-		sectionBreakTypeMap.insert( std::pair<std::string, Docx2Doc::Constants::SBkcOperand>( std::string( "oddPage" ), Docx2Doc::Constants::bkcOddPage ) );
+		m_sectionBreakTypeMap.insert( std::pair<std::wstring, Docx2Doc::Constants::SBkcOperand>( std::wstring( L"continuous" ), Docx2Doc::Constants::bkcContinuous ) );
+		m_sectionBreakTypeMap.insert( std::pair<std::wstring, Docx2Doc::Constants::SBkcOperand>( std::wstring( L"nextColumn" ), Docx2Doc::Constants::bkcNewColumn ) );
+		m_sectionBreakTypeMap.insert( std::pair<std::wstring, Docx2Doc::Constants::SBkcOperand>( std::wstring( L"nextPage" ), Docx2Doc::Constants::bkcNewPage ) );
+		m_sectionBreakTypeMap.insert( std::pair<std::wstring, Docx2Doc::Constants::SBkcOperand>( std::wstring( L"evenPage" ), Docx2Doc::Constants::bkcEvenPage ) );
+		m_sectionBreakTypeMap.insert( std::pair<std::wstring, Docx2Doc::Constants::SBkcOperand>( std::wstring( L"oddPage" ), Docx2Doc::Constants::bkcOddPage ) );
 
-		verticalPositionCodeMap.insert( std::make_pair( "margin", 0x00 ) );
-		verticalPositionCodeMap.insert( std::make_pair( "page", 0x01 ) );
-		verticalPositionCodeMap.insert( std::make_pair( "text", 0x02 ) );
-		verticalPositionCodeMap.insert( std::make_pair( "none", 0x03 ) );
+		m_verticalPositionCodeMap.insert( std::make_pair( L"margin", 0x00 ) );
+		m_verticalPositionCodeMap.insert( std::make_pair( L"page", 0x01 ) );
+		m_verticalPositionCodeMap.insert( std::make_pair( L"text", 0x02 ) );
+		m_verticalPositionCodeMap.insert( std::make_pair( L"none", 0x03 ) );
 
-		horizontalPositionCodeMap.insert( std::make_pair( "text", 0x00 ) );
-		horizontalPositionCodeMap.insert( std::make_pair( "margin", 0x01 ) );
-		horizontalPositionCodeMap.insert( std::make_pair( "page", 0x02 ) );
-		horizontalPositionCodeMap.insert( std::make_pair( "none", 0x03 ) );
+		m_horizontalPositionCodeMap.insert( std::make_pair( L"text", 0x00 ) );
+		m_horizontalPositionCodeMap.insert( std::make_pair( L"margin", 0x01 ) );
+		m_horizontalPositionCodeMap.insert( std::make_pair( L"page", 0x02 ) );
+		m_horizontalPositionCodeMap.insert( std::make_pair( L"none", 0x03 ) );
 
-		textFrameWrappingMap.insert( std::make_pair( "auto", 0x00 ) );
-		textFrameWrappingMap.insert( std::make_pair( "notBeside", 0x01 ) );
-		textFrameWrappingMap.insert( std::make_pair( "around", 0x02 ) );
-		textFrameWrappingMap.insert( std::make_pair( "none", 0x03 ) );
-		textFrameWrappingMap.insert( std::make_pair( "tight", 0x04 ) );
-		textFrameWrappingMap.insert( std::make_pair( "through", 0x05 ) );
+		m_textFrameWrappingMap.insert( std::make_pair( L"auto", 0x00 ) );
+		m_textFrameWrappingMap.insert( std::make_pair( L"notBeside", 0x01 ) );
+		m_textFrameWrappingMap.insert( std::make_pair( L"around", 0x02 ) );
+		m_textFrameWrappingMap.insert( std::make_pair( L"none", 0x03 ) );
+		m_textFrameWrappingMap.insert( std::make_pair( L"tight", 0x04 ) );
+		m_textFrameWrappingMap.insert( std::make_pair( L"through", 0x05 ) );
 
-		tableCellWidthMap.insert( std::make_pair( "nil", Docx2Doc::Constants::ftsNil ) );
-		tableCellWidthMap.insert( std::make_pair( "auto", Docx2Doc::Constants::ftsAuto ) );
-		tableCellWidthMap.insert( std::make_pair( "pct", Docx2Doc::Constants::ftsPercent ) );
-		tableCellWidthMap.insert( std::make_pair( "dxa", Docx2Doc::Constants::ftsDxa ) );
+		m_tableCellWidthMap.insert( std::make_pair( L"nil", Docx2Doc::Constants::ftsNil ) );
+		m_tableCellWidthMap.insert( std::make_pair( L"auto", Docx2Doc::Constants::ftsAuto ) );
+		m_tableCellWidthMap.insert( std::make_pair( L"pct", Docx2Doc::Constants::ftsPercent ) );
+		m_tableCellWidthMap.insert( std::make_pair( L"dxa", Docx2Doc::Constants::ftsDxa ) );
 
-		customTabStopAlignment.insert( std::make_pair( "left", Docx2Doc::Constants::jcLeft ) );
-		customTabStopAlignment.insert( std::make_pair( "center", Docx2Doc::Constants::jcCenter ) );
-		customTabStopAlignment.insert( std::make_pair( "right", Docx2Doc::Constants::jcRight ) );
-		customTabStopAlignment.insert( std::make_pair( "decimal", Docx2Doc::Constants::jcDecimal ) );
-		customTabStopAlignment.insert( std::make_pair( "bar", Docx2Doc::Constants::jcBar ) );
-		customTabStopAlignment.insert( std::make_pair( "clear", (Docx2Doc::Constants::TabJC)0x05 ) );
-		customTabStopAlignment.insert( std::make_pair( "num", Docx2Doc::Constants::jcList ) );
+		m_customTabStopAlignment.insert( std::make_pair( L"left", Docx2Doc::Constants::jcLeft ) );
+		m_customTabStopAlignment.insert( std::make_pair( L"center", Docx2Doc::Constants::jcCenter ) );
+		m_customTabStopAlignment.insert( std::make_pair( L"right", Docx2Doc::Constants::jcRight ) );
+		m_customTabStopAlignment.insert( std::make_pair( L"decimal", Docx2Doc::Constants::jcDecimal ) );
+		m_customTabStopAlignment.insert( std::make_pair( L"bar", Docx2Doc::Constants::jcBar ) );
+		m_customTabStopAlignment.insert( std::make_pair( L"clear", (Docx2Doc::Constants::TabJC)0x05 ) );
+		m_customTabStopAlignment.insert( std::make_pair( L"num", Docx2Doc::Constants::jcList ) );
 
-		customTabStopLeader.insert( std::make_pair( "none", Docx2Doc::Constants::tlcNone ) );
-		customTabStopLeader.insert( std::make_pair( "dot", Docx2Doc::Constants::tlcDot ) );
-		customTabStopLeader.insert( std::make_pair( "hyphen", Docx2Doc::Constants::tlcHyphen ) );
-		customTabStopLeader.insert( std::make_pair( "underscore", Docx2Doc::Constants::tlcUnderscore ) );
-		customTabStopLeader.insert( std::make_pair( "heavy", Docx2Doc::Constants::tlcHeavy ) );
-		customTabStopLeader.insert( std::make_pair( "middleDot", Docx2Doc::Constants::tlcMiddleDot ) );
+		m_customTabStopLeader.insert( std::make_pair( L"none", Docx2Doc::Constants::tlcNone ) );
+		m_customTabStopLeader.insert( std::make_pair( L"dot", Docx2Doc::Constants::tlcDot ) );
+		m_customTabStopLeader.insert( std::make_pair( L"hyphen", Docx2Doc::Constants::tlcHyphen ) );
+		m_customTabStopLeader.insert( std::make_pair( L"underscore", Docx2Doc::Constants::tlcUnderscore ) );
+		m_customTabStopLeader.insert( std::make_pair( L"heavy", Docx2Doc::Constants::tlcHeavy ) );
+		m_customTabStopLeader.insert( std::make_pair( L"middleDot", Docx2Doc::Constants::tlcMiddleDot ) );
 	}
 
 	CFileTransformer::~CFileTransformer ()
@@ -287,41 +285,41 @@ namespace DOCXTODOC
 		if (pStorage)
 			pStorage->FreeInstance();*/
 
-		RELEASEOBJECT (m_pDOCFile);
+		RELEASEOBJECT (m_pDocFile);
 	}
 }
 
-namespace DOCXTODOC
+namespace Docx2Doc
 {
 	long CFileTransformer::Convert (const WCHAR* ooxFolder, const WCHAR* docFile)
 	{
 		LONG hrStatus = AVS_ERROR_UNEXPECTED;
 
-		if ( (NULL != ooxFolder) && (NULL != docFile) && m_pDOCFile )
+		if ( (NULL != ooxFolder) && (NULL != docFile) && m_pDocFile )
 		{
 			try
 			{
-				inputFolder.Read(ooxFolder);
+				m_oDocx.Read(ooxFolder);
 
 				SHORT index = 0;
 
-				size_t count = (*inputFolder.find<OOX::Document>().find<OOX::CFontTable>().Fonts).size();
-				std::vector<OOX::CFont>& items = (*inputFolder.find<OOX::Document>().find<OOX::CFontTable>().Fonts);
+				size_t count = m_oDocx.m_oMain.fontTable->m_arrFonts.size();
+				std::vector<OOX::CFont*>& items = m_oDocx.m_oMain.fontTable->m_arrFonts;
 
 				for (size_t j = 0; j < count; ++j)	
 				{
-					m_mapFontTableMap.insert(std::pair<std::string, short>(items[j].Name, index++));
+					m_mapFontTableMap.insert(std::pair<std::wstring, short>(items[j]->m_sName, index++));
 				}
 
-				if (inputFolder.find<OOX::Document>().exist<OOX::CNumbering>())
-					ConvertNumbering( inputFolder.find<OOX::Document>().find<OOX::CNumbering>() );
+				if (m_oDocx.m_oMain.numbering)
+					ConvertNumbering( *m_oDocx.m_oMain.numbering );
 
-				ConvertStyleSheet (inputFolder.find<OOX::Document>().find<OOX::CStyles>());
+				ConvertStyleSheet( *m_oDocx.m_oMain.styles );
 
-				ConvertDocument (inputFolder.find<OOX::Document>());
-				ConvertFontTable(inputFolder.find<OOX::Document>().find<OOX::CFontTable>());
+				ConvertDocument( *m_oDocx.m_oMain.document );
+				ConvertFontTable( *m_oDocx.m_oMain.fontTable );
 
-				hrStatus = m_pDOCFile->SaveToFile (docFile);
+				hrStatus = m_pDocFile->SaveToFile (docFile);
 			}
 			catch (...)
 			{
@@ -333,53 +331,53 @@ namespace DOCXTODOC
 	}
 }
 
-namespace DOCXTODOC
+namespace Docx2Doc
 {
-	void CFileTransformer::ConvertDocument (const OOX::Document& oXmlDoc)
+	void CFileTransformer::ConvertDocument (const OOX::CDocument& oXmlDoc)
 	{
-		ConvertContent (*oXmlDoc.Items);
+		ConvertContent (oXmlDoc.m_arrItems);
 
 		// TODO : если список в конце документа, то добавляется брэйк (бага)
 
 		Docx2Doc::Paragraph paragraph;
 		paragraph.AddParagraphItem (Docx2Doc::Run());
-		m_pDOCFile->AddTextItem (paragraph);
+		m_pDocFile->AddTextItem (paragraph);
 
-		m_pDOCFile->AddSectionProperties (ConvertSectionProperties(oXmlDoc.SectorProperty));
+		m_pDocFile->AddSectionProperties (ConvertSectionProperties(oXmlDoc.m_o));
 	}
 
-	void CFileTransformer::ConvertContent (const std::vector<OOX::Logic::TextItem>& oXmlItems)
+	void CFileTransformer::ConvertContent (const std::vector<OOX::WritingElement*>& oXmlItems)
 	{
 		//m_oOArtBuilder.SetLocation (MAIN_DOCUMENT);
 
 		for (size_t i = 0; i < oXmlItems.size(); ++i)
 		{
-			const OOX::Logic::TextItem& oXmlItem = oXmlItems[i];
+			const OOX::WritingElement* oXmlItem = oXmlItems[i];
 
-			if (oXmlItem.is<OOX::Logic::CParagraph>())
+			if (oXmlItem->getType() == OOX::EElementType::et_w_p)
 			{
 				const OOX::Logic::CParagraph& docxParagraph	=	oXmlItem.as<OOX::Logic::CParagraph>();
 				if (ValidParagraph(docxParagraph))
 				{
-					Docx2Doc::Paragraph docParagraph	=	ConvertParagraph<OOX::Document>(docxParagraph);
+					Docx2Doc::Paragraph docParagraph	=	ConvertParagraph<OOX::CDocument>(docxParagraph);
 
-					m_pDOCFile->AddTextItem (docParagraph);
+					m_pDocFile->AddTextItem (docParagraph);
 
-					if (docxParagraph.Property.is_init() && docxParagraph.Property->SectorProperty.is_init())
+					if (docxParagraph.m_oParagraphProperty && docxParagraph.m_oParagraphProperty->m_oSectPr.is_init())
 					{
-						m_pDOCFile->AddTextItem (Docx2Doc::SectionBreak());
-						m_pDOCFile->AddSectionProperties(ConvertSectionProperties( docxParagraph.Property->SectorProperty));
+						m_pDocFile->AddTextItem (Docx2Doc::SectionBreak());
+						m_pDocFile->AddSectionProperties(ConvertSectionProperties( docxParagraph.m_oParagraphProperty->m_oSectPr.get() ));
 					}
 				}
 			}
 
-			if (oXmlItem.is<OOX::Logic::CTbl>())
+			if (oXmlItem->getType() == OOX::EElementType::et_w_tbl)
 			{
-				Docx2Doc::Table oDocTable = CreateTable<OOX::Document>(oXmlItem.as<OOX::Logic::CTbl>());
-				m_pDOCFile->AddTextItem (oDocTable);
+				Docx2Doc::Table oDocTable = CreateTable<OOX::CDocument>(oXmlItem.as<OOX::Logic::CTbl>());
+				m_pDocFile->AddTextItem (oDocTable);
 			}
 
-			if (oXmlItem.is<OOX::Logic::CSdt>())
+			if (oXmlItem->getType() == OOX::EElementType::et_w_sdt)
 			{
 				ConvertContent(*oXmlItem.as<OOX::Logic::CSdt>().Content->Items);
 			}
@@ -391,7 +389,7 @@ namespace DOCXTODOC
 		PrlList styleRunPr;
 		PrlList styleParPr;
 
-		std::string style	=	GetStyleID (oXmlParagraph);
+		std::wstring style	=	GetStyleID (oXmlParagraph);
 
 		Docx2Doc::Paragraph oParagraph;
 		oParagraph.SetStyle (m_mapStyleSheetMap [style]);
@@ -507,7 +505,7 @@ namespace DOCXTODOC
 			UpdateItemByCondition<Docx2Doc::Paragraph> (&oParagraph, strRunType);
 		}
 
-		if (oXmlParagraph.Items->empty())
+		if (oXmlParagraph.m_arrItems.empty())
 		{
 			// Have some other properties
 
@@ -522,7 +520,7 @@ namespace DOCXTODOC
 			oParagraph.AddParagraphItem(run);
 		}
 
-		oParagraph.AddProperties (ConvertParagraphProperties (inputFolder.find<OOX::Document>().find<OOX::CStyles>().Default->ParagraphProperty));
+		oParagraph.AddProperties (ConvertParagraphProperties (m_oDocx.find<OOX::Document>().find<OOX::CStyles>().Default->ParagraphProperty));
 		oParagraph.AddOrReplaceProperties (styleParPr);
 
 		if (oXmlParagraph.m_oParagraphProperty)
@@ -534,7 +532,7 @@ namespace DOCXTODOC
 	}
 }
 
-namespace DOCXTODOC
+namespace Docx2Doc
 {
 	int CFileTransformer::ValidParagraph (const OOX::Logic::CParagraph& oXmlParagraph)
 	{
@@ -543,15 +541,17 @@ namespace DOCXTODOC
 		return TRUE;
 	}
 
-	PrlList CFileTransformer::GetParagraphPropertiesFromStyleHierarchy(const std::string& styleID, PrlList* styleDocRunLinkProperties )
+	PrlList CFileTransformer::GetParagraphPropertiesFromStyleHierarchy(const std::wstring& styleID, PrlList* styleDocRunLinkProperties )
 	{
 		PrlList allParagraphProperties;
 
-		const OOX::CStyle styleById = this->inputFolder.find<OOX::Document>().find<OOX::CStyles>().GetStyleById(styleID);
+		//m_oDocx.m_oMain.styles->
+
+		const OOX::CStyle styleById = this->m_oDocx.find<OOX::Document>().find<OOX::CStyles>().GetStyleById(styleID);
 
 		if (styleById.m_oBasedOn.is_init())
 		{
-			allParagraphProperties = this->GetParagraphPropertiesFromStyleHierarchy(*styleById.m_oBasedOn, styleDocRunLinkProperties);
+			allParagraphProperties = this->GetParagraphPropertiesFromStyleHierarchy(styleById.m_oBasedOn->ToString2(), styleDocRunLinkProperties);
 		}
 
 		if ( styleById.m_oParPr.is_init() )
@@ -564,7 +564,7 @@ namespace DOCXTODOC
 
 		if ((styleById.m_oLink.is_init()) && (styleDocRunLinkProperties != NULL))
 		{
-			PrlList styleDocRunLinkPropertiesHierarchy = GetRunPropertiesFromStyleHierarchy( *styleById.m_oLink );
+			PrlList styleDocRunLinkPropertiesHierarchy = GetRunPropertiesFromStyleHierarchy( styleById.m_oLink->ToString2() );
 
 			for (size_t i = 0; i < styleDocRunLinkPropertiesHierarchy.size(); ++i)
 				styleDocRunLinkProperties->push_back(styleDocRunLinkPropertiesHierarchy[i]);
@@ -577,7 +577,7 @@ namespace DOCXTODOC
 	{
 		PrlList allRunProperties;
 
-		const OOX::CStyle styleById = inputFolder.find<OOX::Document>().find<OOX::CStyles>().GetStyleById( styleID );
+		const OOX::CStyle styleById = m_oDocx.find<OOX::Document>().find<OOX::CStyles>().GetStyleById( styleID );
 
 		if ( styleById.m_oBasedOn.is_init() )
 		{
@@ -599,7 +599,7 @@ namespace DOCXTODOC
 	{
 		PrlList allTableProperties;
 
-		const OOX::CStyle styleById = inputFolder.find<OOX::Document>().find<OOX::CStyles>().GetStyleById( styleID );
+		const OOX::CStyle styleById = m_oDocx.find<OOX::Document>().find<OOX::CStyles>().GetStyleById( styleID );
 
 		if ( styleById.m_oBasedOn.is_init() )
 		{
@@ -617,9 +617,9 @@ namespace DOCXTODOC
 		return allTableProperties;
 	}
 
-	std::string CFileTransformer::GetFontNameByThemeName (const std::wstring& themeName)
+	std::wstring CFileTransformer::GetFontNameByThemeName (const std::wstring& themeName)
 	{
-		std::string fontName;
+		std::wstring fontName;
 
 		/*const OOX::Theme::File& themeFile = this->inputFolder.find<OOX::Document>().find<OOX::Theme::File>();
 
@@ -683,7 +683,7 @@ namespace DOCXTODOC
 		{
 			docParagraph.AddParagraphItem( Docx2Doc::Run( Docx2Doc::FldChar( Docx2Doc::FldCharTypeBegin, Docx2Doc::Constants::fltPAGE ) ) );
 			docParagraph.AddParagraphItem( Docx2Doc::Run( Docx2Doc::FldChar( Docx2Doc::FldCharTypeSeparate ) ) );
-			docParagraph.AddParagraphItem( ConvertRun<T>( *fldSimpleDocx.Run, styleDocRunProperties, strRunType ) );
+			//docParagraph.AddParagraphItem( ConvertRun<T>( *fldSimpleDocx.Run, styleDocRunProperties, strRunType ) );
 			docParagraph.AddParagraphItem( Docx2Doc::Run( Docx2Doc::FldChar( Docx2Doc::FldCharTypeEnd ) ) );
 		}
 
@@ -716,16 +716,16 @@ namespace DOCXTODOC
 
 			if (typeid(T) != typeid(OOX::Document))
 			{
-				if (inputFolder.find<OOX::Document>().find<T>().exist(rid))
+				if (m_oDocx.find<OOX::Document>().find<T>().exist(rid))
 				{
-					hyperlink = dynamic_cast<OOX::CHyperLink*>(inputFolder.find<OOX::Document>().find<T>()[rid].get());
+					hyperlink = dynamic_cast<OOX::CHyperLink*>(m_oDocx.find<OOX::Document>().find<T>()[rid].get());
 				}
 			}
 			else
 			{
-				if (inputFolder.find<OOX::Document>().exist(rid))
+				if (m_oDocx.find<OOX::Document>().exist(rid))
 				{
-					hyperlink = dynamic_cast<OOX::HyperLink*>(inputFolder.find<OOX::Document>()[rid].get());
+					hyperlink = dynamic_cast<OOX::HyperLink*>(m_oDocx.find<OOX::Document>()[rid].get());
 				}
 			}
 
@@ -767,7 +767,7 @@ namespace DOCXTODOC
 
 			for (T::reverse_iterator riter = docItem->rbegin(); riter != docItem->rend(); ++riter)
 			{
-				if (riter->is<Docx2Doc::CRun>())
+				if (riter->is<Docx2Doc::Run>())
 				{
 					Docx2Doc::Run& run = riter->as<Docx2Doc::CRun>();
 
@@ -877,11 +877,11 @@ namespace DOCXTODOC
 		{
 			if ( vMerge->Value.is_init() )
 			{
-				if ( *vMerge->Value == std::string( "restart" ) )
+				if ( *vMerge->Value == std::wstring( L"restart" ) )
 				{
 					vmf = Docx2Doc::Constants::fvmRestart;
 				}
-				else if ( *vMerge->Value == std::string( "continue" ) )
+				else if ( *vMerge->Value == std::wstring( L"continue" ) )
 				{
 					vmf = Docx2Doc::Constants::fvmMerge;
 				}
@@ -903,84 +903,84 @@ namespace DOCXTODOC
 
 		if ( docxRunProperties.m_oBold.is_init() )
 		{
-			BYTE bold = ( ( docxRunProperties.m_oBold ) ? ( 1 ) : ( 0 ) );
+			BYTE bold = ( ( docxRunProperties.m_oBold->m_oVal.ToBool() ) ? ( 1 ) : ( 0 ) );
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCFBold, &bold ) );
 		}
 
 		if ( docxRunProperties.m_oItalic.is_init() )
 		{
-			BYTE italic = ( ( *docxRunProperties.m_oItalic ) ? ( 1 ) : ( 0 ) );
+			BYTE italic = ( ( docxRunProperties.m_oItalic->m_oVal.ToBool() ) ? ( 1 ) : ( 0 ) );
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCFItalic, &italic ) );
 		}
 
-		if ( docxRunProperties.m_oU.is_init() && *docxRunProperties.Under && docxRunProperties.UnderType.is_init() )
+		/*if ( docxRunProperties.m_oU.is_init() && *docxRunProperties.Under && docxRunProperties.UnderType.is_init() )
 		{
-			BYTE under = this->kulMap[*docxRunProperties.UnderType];
+			BYTE under = this->m_kulMap[docxRunProperties.UnderType];
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCKul, &under ) );
-		}
+		}*/
 
 		if ( docxRunProperties.m_oStrike.is_init() )
 		{
-			BYTE strike = ( ( *docxRunProperties.m_oStrike ) ? ( 1 ) : ( 0 ) );
+			BYTE strike = ( ( docxRunProperties.m_oStrike->m_oVal.ToBool() ) ? ( 1 ) : ( 0 ) );
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCFStrike, &strike ) );
 		}
 
 		if ( docxRunProperties.m_oDStrike.is_init() )
 		{
-			BYTE dStrike = ( ( *docxRunProperties.m_oDStrike ) ? ( 1 ) : ( 0 ) );
+			BYTE dStrike = ( ( docxRunProperties.m_oDStrike->m_oVal.ToBool() ) ? ( 1 ) : ( 0 ) );
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCFDStrike, &dStrike ) );
 		}
 
 		if ( docxRunProperties.m_oSmallCaps.is_init() )
 		{
-			BYTE smallCaps = ( ( *docxRunProperties.m_oSmallCaps ) ? ( 1 ) : ( 0 ) );
+			BYTE smallCaps = ( ( docxRunProperties.m_oSmallCaps->m_oVal.ToBool() ) ? ( 1 ) : ( 0 ) );
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCFSmallCaps, &smallCaps ) );
 		}
 
 		if ( docxRunProperties.m_oCaps.is_init() )
 		{
-			BYTE caps = ( ( *docxRunProperties.m_oCaps ) ? ( 1 ) : ( 0 ) );
+			BYTE caps = ( ( docxRunProperties.m_oCaps->m_oVal.ToBool() ) ? ( 1 ) : ( 0 ) );
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCFCaps, &caps ) );
 		}
 
 		if ( docxRunProperties.m_oEmboss.is_init() )
 		{
-			BYTE emboss = ( ( *docxRunProperties.m_oEmboss ) ? ( 1 ) : ( 0 ) );
+			BYTE emboss = ( ( docxRunProperties.m_oEmboss->m_oVal.ToBool() ) ? ( 1 ) : ( 0 ) );
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCFEmboss, &emboss ) );
 		}
 
 		if ( docxRunProperties.m_oImprint.is_init() )
 		{
-			BYTE imprint = ( ( *docxRunProperties.m_oImprint ) ? ( 1 ) : ( 0 ) );
+			BYTE imprint = ( ( docxRunProperties.m_oImprint->m_oVal.ToBool() ) ? ( 1 ) : ( 0 ) );
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCFImprint, &imprint ) );
 		}
 
 		if ( docxRunProperties.m_oOutline.is_init() )
 		{
-			BYTE outline = ( ( *docxRunProperties.m_oOutline ) ? ( 1 ) : ( 0 ) );
+			BYTE outline = ( ( docxRunProperties.m_oOutline->m_oVal.ToBool() ) ? ( 1 ) : ( 0 ) );
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCFOutline, &outline ) );
 		}
 
 		if ( docxRunProperties.m_oShadow.is_init() )
 		{
-			BYTE shadow = ( ( *docxRunProperties.m_oShadow ) ? ( 1 ) : ( 0 ) );
+			BYTE shadow = ( ( docxRunProperties.m_oShadow->m_oVal.ToBool() ) ? ( 1 ) : ( 0 ) );
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCFShadow, &shadow ) );
 		}
 
 		if ( docxRunProperties.m_oVanish.is_init() )
 		{
-			BYTE vanish = ( ( *docxRunProperties.m_oVanish ) ? ( 1 ) : ( 0 ) );
+			BYTE vanish = ( ( docxRunProperties.m_oVanish->m_oVal.ToBool() ) ? ( 1 ) : ( 0 ) );
 
 			docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCFVanish, &vanish ) );
 		}
@@ -1047,9 +1047,9 @@ namespace DOCXTODOC
 					docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCRgFtc0, (BYTE*)&fontIndex ) );
 				}
 			}
-			else if ( docxRunProperties.rFonts->AsciiTheme.is_init() )
+			else if ( docxRunProperties.m_oRFonts->m_oAsciiTheme.is_init() )
 			{
-				std::string fontNameByThemeName = GetFontNameByThemeName(docxRunProperties.rFonts->AsciiTheme);
+				std::wstring fontNameByThemeName = GetFontNameByThemeName(docxRunProperties.m_oRFonts->m_oAsciiTheme->ToString());
 
 				if ( !fontNameByThemeName.empty() )
 				{
@@ -1127,21 +1127,21 @@ namespace DOCXTODOC
 		{
 			if ( docxRunProperties.Lang->Value.is_init() )
 			{
-				Docx2Doc::LID lid = lidMap[docxRunProperties.Lang->Value];
+				Docx2Doc::LID lid = m_lidMap[docxRunProperties.Lang->Value];
 				docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCRgLid0_80, (BYTE*)lid ) );
 				docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCRgLid0, (BYTE*)lid ) );
 			}
 
 			if ( docxRunProperties.Lang->EastAsia.is_init() )
 			{
-				Docx2Doc::LID lid = lidMap[docxRunProperties.Lang->EastAsia];
+				Docx2Doc::LID lid = m_lidMap[docxRunProperties.Lang->EastAsia];
 				docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCRgLid1_80, (BYTE*)lid ) );
 				docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCRgLid1, (BYTE*)lid ) );
 			}
 
 			if ( docxRunProperties.Lang->Bidi.is_init() )
 			{
-				Docx2Doc::LID lid = lidMap[docxRunProperties.Lang->Bidi];
+				Docx2Doc::LID lid = m_lidMap[docxRunProperties.Lang->Bidi];
 				docRunProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmCLidBi, (BYTE*)lid ) );
 			}
 		}
@@ -1158,11 +1158,11 @@ namespace DOCXTODOC
 			std::string index = docxRunProperties.Index->Tostd::string();
 			BYTE CIss = (BYTE)Docx2Doc::Constants::superSubScriptNormalText;
 
-			if ( index == std::string( "superscript" ) )
+			if ( index == std::wstring( L"superscript" ) )
 			{
 				CIss = (BYTE)Docx2Doc::Constants::superSubScriptSuperscript;
 			}
-			else if ( index == std::string( "subscript" ) )
+			else if ( index == std::wstring( L"subscript" ) )
 			{
 				CIss = (BYTE)Docx2Doc::Constants::superSubScriptSubscript;
 			}
@@ -1276,11 +1276,11 @@ namespace DOCXTODOC
 
 				line = (short)(*docxParagraphProperties.Spacing->Line);
 
-				if ( *docxParagraphProperties.Spacing->LineRule == std::string( "exact" ) )
+				if ( *docxParagraphProperties.Spacing->LineRule == std::wstring( L"exact" ) )
 				{
 					line = -line;
 				}
-				else if ( *docxParagraphProperties.Spacing->LineRule == std::string( "auto" ) )
+				else if ( *docxParagraphProperties.Spacing->LineRule == std::wstring( L"auto" ) )
 				{
 					lineRule = true;
 				}
@@ -1359,7 +1359,7 @@ namespace DOCXTODOC
 			if ( docxParagraphProperties.NumPr->NumId.is_init() )
 			{
 				int nNumID	=	(*docxParagraphProperties.NumPr->NumId);
-				SHORT pIlfo	=	idIndexMap [nNumID];
+				SHORT pIlfo	=	m_idIndexMap [nNumID];
 
 				docParagraphProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmPIlfo, (BYTE*)(&pIlfo) ) );
 			}
@@ -1492,13 +1492,13 @@ namespace DOCXTODOC
 		{
 			if ( docxParagraphProperties.TextFrameProperties->HAnchor.is_init() && docxParagraphProperties.TextFrameProperties->VAnchor.is_init() )
 			{
-				BYTE positionCodeOperand = Docx2Doc::PositionCodeOperand( this->verticalPositionCodeMap[*docxParagraphProperties.TextFrameProperties->VAnchor], this->horizontalPositionCodeMap[*docxParagraphProperties.TextFrameProperties->HAnchor] );
+				BYTE positionCodeOperand = Docx2Doc::PositionCodeOperand( this->m_verticalPositionCodeMap[*docxParagraphProperties.TextFrameProperties->VAnchor], this->m_horizontalPositionCodeMap[*docxParagraphProperties.TextFrameProperties->HAnchor] );
 				docParagraphProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmPPc, &positionCodeOperand ) );
 			}
 
 			if ( docxParagraphProperties.TextFrameProperties->Wrap.is_init() )
 			{
-				BYTE PWr = this->textFrameWrappingMap[*docxParagraphProperties.TextFrameProperties->Wrap];
+				BYTE PWr = this->m_textFrameWrappingMap[*docxParagraphProperties.TextFrameProperties->Wrap];
 				docParagraphProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmPWr, &PWr ) );
 			}
 
@@ -1549,11 +1549,11 @@ namespace DOCXTODOC
 
 			for (size_t i = 0; i < count; ++i)	
 			{			
-				Docx2Doc::Constants::TabJC TabStopAlign = customTabStopAlignment[*(items[i]).Val];
+				Docx2Doc::Constants::TabJC TabStopAlign = m_customTabStopAlignment[*(items[i]).Val];
 				if (0x05 == (int)TabStopAlign)	// 0x05 означает clear, т.е. No Tab Stop
 					continue;
 
-				Docx2Doc::TBD tbd(TabStopAlign, customTabStopLeader[items[i].Leader.get_value_or_default()]);
+				Docx2Doc::TBD tbd(TabStopAlign, m_customTabStopLeader[items[i].Leader.get_value_or_default()]);
 				tbds.push_back(tbd);
 
 				Docx2Doc::XAS xas((short)(*(items[i]).Pos));
@@ -1573,9 +1573,9 @@ namespace DOCXTODOC
 	}
 }
 
-namespace DOCXTODOC	//	LEVELS
+namespace Docx2Doc	//	LEVELS
 {
-	void CFileTransformer::ConvertNumbering (const OOX::Numbering& oXmlNumbering)
+	void CFileTransformer::ConvertNumbering (const OOX::CNumbering& oXmlNumbering)
 	{
 		if (oXmlNumbering.AbstractNums->size() == 0 || oXmlNumbering.Nums->size() == 0)
 			return;
@@ -1584,8 +1584,8 @@ namespace DOCXTODOC	//	LEVELS
 		std::vector<Docx2Doc::LVL> lvls = ConvertLVLs (oXmlNumbering, *oXmlNumbering.AbstractNums);
 		Docx2Doc::ListFormattingInformation lfi (plfLst, lvls);
 
-		m_pDOCFile->SetListFormattingInformation (lfi);
-		m_pDOCFile->SetListFormattingOverrideInformation (ConvertNums(*oXmlNumbering.Nums));
+		m_pDocFile->SetListFormattingInformation (lfi);
+		m_pDocFile->SetListFormattingOverrideInformation (ConvertNums(*oXmlNumbering.Nums));
 	}
 
 	const std::vector<Docx2Doc::LSTF> CFileTransformer::ConvertAbstractNums (const std::vector<OOX::Numbering::AbstractNum>& arrNums)
@@ -1599,7 +1599,7 @@ namespace DOCXTODOC	//	LEVELS
 		size_t count = arrNums.size();
 		for (size_t j = 0; j < count; ++j)
 		{
-			const OOX::Numbering::AbstractNum& number = arrNums[j];
+			const OOX::Numbering::CAbstractNum& number = arrNums[j];
 
 			if (number.Nsid.is_init())
 			{
@@ -1607,7 +1607,7 @@ namespace DOCXTODOC	//	LEVELS
 			}
 			else
 			{
-				for (std::map<int, int>::const_iterator it = idLsidMap.begin(); it != idLsidMap.end(); ++it)
+				for (std::map<int, int>::const_iterator it = m_idLsidMap.begin(); it != m_idLsidMap.end(); ++it)
 				{
 					nId		=	std::max(it->second, nId);
 				}
@@ -1615,7 +1615,7 @@ namespace DOCXTODOC	//	LEVELS
 				++nId;
 			}
 
-			idLsidMap.insert(std::make_pair(number.Id, nId));
+			m_idLsidMap.insert(std::make_pair(number.Id, nId));
 
 			Docx2Doc::Tplc* tplc = Docx2Doc::TplcFactory::CreateTplc (HexString2Int(number.Tmpl.get_value_or_default()));
 
@@ -1636,14 +1636,14 @@ namespace DOCXTODOC	//	LEVELS
 		return arrLSTF;
 	}
 
-	const std::vector<Docx2Doc::LVL> CFileTransformer::ConvertLVLs(const OOX::Numbering& oXmlNumbering, const std::vector<OOX::Numbering::AbstractNum>& arAbstractNums)
+	const std::vector<Docx2Doc::LVL> CFileTransformer::ConvertLVLs(const OOX::CNumbering& oXmlNumbering, const std::vector<OOX::Numbering::CAbstractNum>& arAbstractNums)
 	{
 		std::vector<Docx2Doc::LVL> oLevels;
 
 		size_t numsCount = arAbstractNums.size();
 		for (size_t j = 0; j < numsCount; ++j)
 		{
-			const OOX::Numbering::AbstractNum& oAbstractNum = arAbstractNums[j];
+			const OOX::Numbering::CAbstractNum& oAbstractNum = arAbstractNums[j];
 			size_t levCount = oAbstractNum.Levels->size();
 			for (size_t i = 0; i < levCount; ++i)
 			{
@@ -1661,7 +1661,7 @@ namespace DOCXTODOC	//	LEVELS
 					{
 						for (size_t i = 0; i < numsCount; ++i)
 						{
-							const OOX::Numbering::AbstractNum& oFindNum = arAbstractNums[i];
+							const OOX::Numbering::CAbstractNum& oFindNum = arAbstractNums[i];
 							if (nInd == oFindNum.Id)
 							{
 								size_t levCount = oFindNum.Levels->size();
@@ -1682,21 +1682,21 @@ namespace DOCXTODOC	//	LEVELS
 		return oLevels;
 	}
 
-	const Docx2Doc::LVL CFileTransformer::ConvertLVL (const OOX::Numbering::Level& _level)
+	const Docx2Doc::LVL CFileTransformer::ConvertLVL (const OOX::Numbering::CNumLvl& _level)
 	{
-		Docx2Doc::Constants::MSONFC nfc = this->numFmtMap[_level.NumFmt->Tostd::string()];
+		Docx2Doc::Constants::MSONFC nfc = this->m_numFmtMap[_level.NumFmt->Tostd::string()];
 		Docx2Doc::Constants::LevelJustification jc =
-			(Docx2Doc::Constants::LevelJustification)DOCXDOCUTILS::AlignFromString (_level.Align.get_value_or(OOX::Logic::Align( std::string( "left" ) ) ).Tostd::string());
+			(Docx2Doc::Constants::LevelJustification)DOCXDOCUTILS::AlignFromString (_level.Align.get_value_or(OOX::Logic::Align( std::wstring( L"left" ) ) ).Tostd::string());
 		bool fTentative = ( ( _level.Tentative.get_value_or( 0 ) == 1 ) ? ( true ) : ( false ) );
 		Docx2Doc::Constants::CharacterFollows ixchFollow = Docx2Doc::Constants::characterFollowsTab;
 
 		if ( _level.Suffix.is_init() )
 		{
-			if ( *_level.Suffix == std::string( "tab" ) )
+			if ( *_level.Suffix == std::wstring( L"tab" ) )
 			{
 				ixchFollow = Docx2Doc::Constants::characterFollowsTab;
 			}
-			else if ( *_level.Suffix == std::string( "space" ) )
+			else if ( *_level.Suffix == std::wstring( L"space" ) )
 			{
 				ixchFollow = Docx2Doc::Constants::characterFollowsSpace;
 			}
@@ -1724,7 +1724,7 @@ namespace DOCXTODOC	//	LEVELS
 		return Docx2Doc::LVL( lvlf, grpprlPapx, grpprlChpx, this->ConvertLvlText( *_level.Text, nfc  ) );
 	}
 
-	const Docx2Doc::PlfLfo CFileTransformer::ConvertNums (const std::vector<OOX::Numbering::Num>& oXmlNums)
+	const Docx2Doc::PlfLfo CFileTransformer::ConvertNums (const std::vector<OOX::Numbering::CNum>& oXmlNums)
 	{
 		std::vector<Docx2Doc::LFO> lfos;
 		std::vector<Docx2Doc::LFOData> lfoDatas;
@@ -1734,7 +1734,7 @@ namespace DOCXTODOC	//	LEVELS
 		for (size_t i = 0; i < oXmlNums.size(); ++i)
 		{
 			const OOX::Numbering::Num& oXmlNum = oXmlNums[i];
-			idIndexMap.insert( std::make_pair( *oXmlNum.NumId, listIndex++ ) );
+			m_idIndexMap.insert( std::make_pair( *oXmlNum.NumId, listIndex++ ) );
 
 			std::vector<Docx2Doc::LFOLVL> rgLfoLvl;
 
@@ -1762,7 +1762,7 @@ namespace DOCXTODOC	//	LEVELS
 				rgLfoLvl.push_back( Docx2Doc::LFOLVL(iStartAt, *levelOverride.Ilvl, fStartAt, Docx2Doc::grfhic(), bHaveLVL ? &lvl : NULL));
 			}
 
-			int NumId = idLsidMap[oXmlNum.AbstractNumId];
+			int NumId = m_idLsidMap[oXmlNum.AbstractNumId];
 
 			lfos.push_back(Docx2Doc::LFO(NumId, rgLfoLvl.size(), Docx2Doc::Constants::lfoFieldNotUsed00, Docx2Doc::grfhic()));
 			lfoDatas.push_back(Docx2Doc::LFOData(0xFFFFFFFF, rgLfoLvl));
@@ -1807,9 +1807,9 @@ namespace DOCXTODOC	//	LEVELS
 		return Docx2Doc::Xst(docPlaceHolderValue.c_str(), cch);
 	}
 
-	int CFileTransformer::FindAbstractNumIdWithStyleRef (const OOX::Numbering& oXmlNumbering, const std::string& refLink)	
+	int CFileTransformer::FindAbstractNumIdWithStyleRef (const OOX::CNumbering& oXmlNumbering, const std::string& refLink)
 	{
-		const OOX::Styles::Style& oStyle = inputFolder.find<OOX::Document>().find<OOX::CStyles>().GetStyleById(refLink);
+		const OOX::CStyle& oStyle = m_oDocx.find<OOX::Document>().find<OOX::CStyles>().GetStyleById(refLink);
 		if (oStyle.ParagraphProperty.is_init())
 		{
 			if (oStyle.ParagraphProperty->NumPr.is_init())
@@ -1833,16 +1833,16 @@ namespace DOCXTODOC	//	LEVELS
 	}
 }
 
-namespace DOCXTODOC	//	STYLES
+namespace Docx2Doc	//	STYLES
 {
-	void CFileTransformer::ConvertStyleSheet (const OOX::Styles& oStyleSheet)
+	void CFileTransformer::ConvertStyleSheet (const OOX::CStyles& oStyleSheet)
 	{
 		std::vector<Docx2Doc::LSD> mpstiilsd;
 
 		//if ( _styleSheet.LattentStyles.is_init() )
 		mpstiilsd = ConvertLatentStyles( /**_styleSheet.LattentStyles*/ );
 
-		std::vector<Docx2Doc::LPStd> rglpstd = ConvertStyleDefinitions (*oStyleSheet.Named);
+		std::vector<Docx2Doc::LPStd> rglpstd = ConvertStyleDefinitions (oStyleSheet.m_arrStyle);
 
 		short ftcAsci	= 0;
 		short ftcFE		= 0;
@@ -1870,36 +1870,36 @@ namespace DOCXTODOC	//	STYLES
 
 		Docx2Doc::LPStshi lpStshi (Docx2Doc::STSHI(stshif, 0, stshiLsd, stshib));
 
-		m_pDOCFile->SetStyleSheet (Docx2Doc::STSH(lpStshi, rglpstd));
+		m_pDocFile->SetStyleSheet (Docx2Doc::STSH(lpStshi, rglpstd));
 	}
 
-	std::vector<Docx2Doc::LPStd> CFileTransformer::ConvertStyleDefinitions (const std::vector<OOX::Styles::Style>& arrStyles)
+	std::vector<Docx2Doc::LPStd> CFileTransformer::ConvertStyleDefinitions (const std::vector<OOX::CStyle*>& arrStyles)
 	{
 		std::vector<Docx2Doc::LPStd> styleDefinitions(15);
 		short styleIndex = 15;
 
 		for (size_t i = 0; i < arrStyles.size(); ++i)
 		{
-			const OOX::Styles::Style& oXmlStyle	=	arrStyles[i];
+			const OOX::CStyle& oXmlStyle = *arrStyles[i];
 
-			unsigned short sti	=	predefinedStyleIDMap[*oXmlStyle.StyleId];
+			unsigned short sti	=	m_predefinedStyleIDMap[oXmlStyle.m_sStyleId.get()];
 			short istd			=	DOCXDOCUTILS::StiToIstd ((short)sti);
 
 			if ( istd == -1 )
 				istd = styleIndex++;
 
-			m_mapStyleSheetMap.insert(std::pair<std::string, short>(oXmlStyle.StyleId,istd));
+			m_mapStyleSheetMap.insert(std::pair<std::wstring, short>(oXmlStyle.m_sStyleId.get(), istd));
 		}
 
 		for (size_t i = 0; i < arrStyles.size(); ++i)
 		{
-			const OOX::Styles::Style& oXmlStyle	=	arrStyles[i];
-			unsigned short sti	=	predefinedStyleIDMap[*oXmlStyle.StyleId];
+			const OOX::CStyle& oXmlStyle = *arrStyles[i];
+			unsigned short sti	=	m_predefinedStyleIDMap[oXmlStyle.m_sStyleId.get()];
 			short istd			=	DOCXDOCUTILS::StiToIstd ((short)sti);
 
 			Docx2Doc::Constants::StyleType styleType;
-			std::map<std::string, Docx2Doc::Constants::StyleType>::const_iterator findResult = styleTypeMap.find( *oXmlStyle.Type );
-			if ( findResult != styleTypeMap.end() )
+			std::map<std::wstring, Docx2Doc::Constants::StyleType>::const_iterator findResult = m_styleTypeMap.find( oXmlStyle.m_oType->ToString() );
+			if ( findResult != m_styleTypeMap.end() )
 				styleType = findResult->second;
 			else
 				styleType = Docx2Doc::Constants::styleTypeCharacter;
@@ -2010,57 +2010,57 @@ namespace DOCXTODOC	//	STYLES
 	}
 
 
-	std::string CFileTransformer::GetStyleID (const OOX::Logic::Paragraph& oXmlParagraph) 
+	std::wstring CFileTransformer::GetStyleID (const OOX::Logic::CParagraph& oXmlParagraph)
 	{
-		std::string strStyleID;
+		std::wstring strStyleID;
 
-		if (oXmlParagraph.Property.is_init() && oXmlParagraph.Property->PStyle.is_init())
+		if (oXmlParagraph.m_oParagraphProperty && oXmlParagraph.m_oParagraphProperty->m_oPStyle.is_init())
 		{
-			strStyleID								=	(*oXmlParagraph.Property->PStyle);
+			strStyleID								=	oXmlParagraph.m_oParagraphProperty->m_oPStyle->ToString2();
 		}
-		else
+		/*else
 		{
-			const OOX::Styles::Style defaultStyle	=	inputFolder.find<OOX::Document>().find<OOX::CStyles>().GetDefaultStyle ("paragraph");
+			const OOX::CStyle defaultStyle	=	m_oDocx.find<OOX::Document>().find<OOX::CStyles>().GetDefaultStyle ("paragraph");
 			strStyleID								=	(*defaultStyle.StyleId);
 
 			if (0 == strStyleID.length())
 			{
-				const OOX::Styles::Style oStyle		=	inputFolder.find<OOX::Document>().find<OOX::CStyles>().GetStyleWithTypeAndName ("paragraph", "Normal");
+				const OOX::CStyle oStyle		=	m_oDocx.find<OOX::Document>().find<OOX::CStyles>().GetStyleWithTypeAndName ("paragraph", "Normal");
 				strStyleID							=	(*oStyle.StyleId);
 			}
-		}
+		}*/
 
 		return strStyleID;
 	}
 }
 
-namespace DOCXTODOC
+namespace Docx2Doc
 {
 	// настройки страниц документа
-	Docx2Doc::SectionProperties CFileTransformer::ConvertSectionProperties (const OOX::Logic::SectorProperty& docxSectionProperties)
+	Docx2Doc::SectionProperties CFileTransformer::ConvertSectionProperties (const OOX::Logic::CSectionProperty& docxSectionProperties)
 	{
 		PrlList docSectionProperties;
 
-		unsigned short SXaPage = *docxSectionProperties.PageSize->Width;
-		unsigned short SYaPage = *docxSectionProperties.PageSize->Height;
+		unsigned short SXaPage = docxSectionProperties.m_oPgSz->m_oW->GetValue();	// mm, inches, points ??
+		unsigned short SYaPage = docxSectionProperties.m_oPgSz->m_oH->GetValue();
 
 		docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSXaPage, (BYTE*)&SXaPage ) );
 		docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSYaPage, (BYTE*)&SYaPage ) );
 
-		if ( docxSectionProperties.Type.is_init() )
+		if ( docxSectionProperties.m_oType.is_init() )
 		{
-			docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSBkc, (BYTE*)&(sectionBreakTypeMap[*docxSectionProperties.Type]) ) );
+			docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSBkc, (BYTE*)&(m_sectionBreakTypeMap[docxSectionProperties.m_oType->ToString()]) ) );
 		}
 
-		if ( docxSectionProperties.PageSize->Orient.is_init() )
+		if ( docxSectionProperties.m_oPgSz->m_oOrient.is_init() )
 		{
 			BYTE SBOrientation = (BYTE)Docx2Doc::Constants::dmOrientPortrait;
 
-			if ( *docxSectionProperties.PageSize->Orient == std::string( "portrait" ) )
+			if ( docxSectionProperties.m_oPgSz->m_oOrient->ToString() == std::wstring( L"portrait" ) )
 			{
 				SBOrientation = (BYTE)Docx2Doc::Constants::dmOrientPortrait;
 			}
-			else if ( *docxSectionProperties.PageSize->Orient == std::string( "landscape" ) )
+			else if ( docxSectionProperties.m_oPgSz->m_oOrient->ToString() == std::wstring( L"landscape" ) )
 			{
 				SBOrientation = (BYTE)Docx2Doc::Constants::dmOrientLandscape;
 			}
@@ -2068,69 +2068,69 @@ namespace DOCXTODOC
 			docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSBOrientation, (BYTE*)&SBOrientation ) );
 		}
 
-		unsigned short SDxaLeft = Docx2Doc::XAS_nonNeg( *docxSectionProperties.PageMargin->Left );
-		unsigned short SDxaRight = Docx2Doc::XAS_nonNeg( *docxSectionProperties.PageMargin->Right );
-		short SDyaTop = Docx2Doc::YAS( *docxSectionProperties.PageMargin->Top );
-		short SDyaBottom = Docx2Doc::YAS( *docxSectionProperties.PageMargin->Bottom );
+		unsigned short SDxaLeft = Docx2Doc::XAS_nonNeg( docxSectionProperties.m_oPgMar->m_oLeft->GetValue() );
+		unsigned short SDxaRight = Docx2Doc::XAS_nonNeg( docxSectionProperties.m_oPgMar->m_oRight->GetValue() );
+		short SDyaTop = Docx2Doc::YAS( docxSectionProperties.m_oPgMar->m_oTop->GetValue() );
+		short SDyaBottom = Docx2Doc::YAS( docxSectionProperties.m_oPgMar->m_oBottom->GetValue() );
 
 		docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSDxaLeft, (BYTE*)&SDxaLeft ) );
 		docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSDxaRight, (BYTE*)&SDxaRight ) );
 		docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSDyaTop, (BYTE*)&SDyaTop ) );
 		docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSDyaBottom, (BYTE*)&SDyaBottom ) );
 
-		if ( docxSectionProperties.PageMargin->Gutter.is_init() )
+		if ( docxSectionProperties.m_oPgMar->m_oGutter.is_init() )
 		{
-			unsigned short SDzaGutter = (unsigned short)(*docxSectionProperties.PageMargin->Gutter);
+			unsigned short SDzaGutter = (unsigned short)(docxSectionProperties.m_oPgMar->m_oGutter->GetValue());
 
 			docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSDzaGutter, (BYTE*)&SDzaGutter ) );
 		}
 
-		if ( docxSectionProperties.PageMargin->Header.is_init() )
+		if ( docxSectionProperties.m_oPgMar->m_oHeader.is_init() )
 		{ 
-			unsigned short SDyaHdrTop = Docx2Doc::YAS_nonNeg(*docxSectionProperties.PageMargin->Header);
+			unsigned short SDyaHdrTop = Docx2Doc::YAS_nonNeg(docxSectionProperties.m_oPgMar->m_oHeader->GetValue());
 
 			docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSDyaHdrTop, (BYTE*)&SDyaHdrTop ) );
 		}
 
-		if ( docxSectionProperties.PageMargin->Footer.is_init() )
+		if ( docxSectionProperties.m_oPgMar->m_oFooter.is_init() )
 		{ 
-			unsigned short SDyaHdrBottom = Docx2Doc::YAS_nonNeg(*docxSectionProperties.PageMargin->Footer);
+			unsigned short SDyaHdrBottom = Docx2Doc::YAS_nonNeg(docxSectionProperties.m_oPgMar->m_oFooter->GetValue());
 
 			docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSDyaHdrBottom, (BYTE*)&SDyaHdrBottom ) );
 		}
 
-		if ( docxSectionProperties.Columns.is_init() )
+		if ( docxSectionProperties.m_oCols.is_init() )
 		{
-			if ( docxSectionProperties.Columns->Num.is_init() )
+			if ( docxSectionProperties.m_oCols->m_oNum.is_init() )
 			{
-				unsigned short SCcolumns = ( *docxSectionProperties.Columns->Num - 1 );
+				unsigned short SCcolumns = ( docxSectionProperties.m_oCols->m_oNum->GetValue() - 1 );
 
 				docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSCcolumns, (BYTE*)&SCcolumns ) );
 			}
 
-			if ( docxSectionProperties.Columns->Space.is_init() )
+			if ( docxSectionProperties.m_oCols->m_oSpace.is_init() )
 			{
-				unsigned short SDxaColumns = (unsigned short)Docx2Doc::XAS_nonNeg( (unsigned short)(*docxSectionProperties.Columns->Space) );
+				unsigned short SDxaColumns = (unsigned short)Docx2Doc::XAS_nonNeg( (unsigned short)(docxSectionProperties.m_oCols->m_oSpace->GetValue()) );
 
 				docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSDxaColumns, (BYTE*)&SDxaColumns ) );
 			}
 
 			BYTE index = 0;
 
-			size_t count = (*docxSectionProperties.Columns->Items).size();
-			const std::vector<OOX::Logic::Column>& items = (*docxSectionProperties.Columns->Items);
+			size_t count = (docxSectionProperties.m_oCols->m_arrColumns).size();
+			const std::vector<ComplexTypes::Word::CColumn*>& items = docxSectionProperties.m_oCols->m_arrColumns;
 
 			for (size_t i = 0; i < count; ++i)	
 			{			
-				Docx2Doc::SDxaColWidthOperand SDxaColWidth(index, Docx2Doc::XAS_nonNeg( (unsigned short)(*(items[i]).Width)));
+				Docx2Doc::SDxaColWidthOperand SDxaColWidth(index, Docx2Doc::XAS_nonNeg( (unsigned short)(items[i]->m_oW->GetValue())));
 
 				docSectionProperties.push_back( Docx2Doc::Prl((short)DocFileFormat::sprmSDxaColWidth, (BYTE*)SDxaColWidth));
 
-				if (items[i].Space.is_init())
+				if (items[i]->m_oSpace.is_init())
 				{
 					//TODO: 
 
-					Docx2Doc::SDxaColSpacingOperand SDxaColSpacing( index, Docx2Doc::XAS_nonNeg( (unsigned short)(*items[i].Space) ) );
+					Docx2Doc::SDxaColSpacingOperand SDxaColSpacing( index, Docx2Doc::XAS_nonNeg( (unsigned short)(items[i].m_oSpace->GetValue()) ) );
 
 					docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSDxaColSpacing, (BYTE*)SDxaColSpacing ) );
 				}
@@ -2139,39 +2139,39 @@ namespace DOCXTODOC
 			}
 		}
 
-		if ( docxSectionProperties.DocumentGrid.is_init() )
+		if ( docxSectionProperties.m_oDocGrid.is_init() )
 		{
-			if ( docxSectionProperties.DocumentGrid->LinePitch.is_init() )
+			if ( docxSectionProperties.m_oDocGrid->m_oLinePitch.is_init() )
 			{
-				short SDyaLinePitch = Docx2Doc::YAS( *docxSectionProperties.DocumentGrid->LinePitch );
+				short SDyaLinePitch = Docx2Doc::YAS( docxSectionProperties.m_oDocGrid->m_oLinePitch->GetValue() );
 
 				docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSDyaLinePitch, (BYTE*)(&SDyaLinePitch) ) );
 			}
 
-			if ( docxSectionProperties.DocumentGrid->CharSpace.is_init() )
+			if ( docxSectionProperties.m_oDocGrid->m_oCharSpace.is_init() )
 			{
-				int SDxtCharSpace = *docxSectionProperties.DocumentGrid->CharSpace;
+				int SDxtCharSpace = docxSectionProperties.m_oDocGrid->m_oCharSpace->GetValue();
 
 				docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSDxtCharSpace, (BYTE*)(&SDxtCharSpace) ) );
 			}
 
-			if ( docxSectionProperties.DocumentGrid->Type.is_init() )
+			if ( docxSectionProperties.m_oDocGrid->m_oType.is_init() )
 			{
 				unsigned short SClm = (unsigned short)Docx2Doc::Constants::clmUseDefault;
 
-				if ( *docxSectionProperties.DocumentGrid->Type == std::string( "Default" ) )
+				if ( docxSectionProperties.m_oDocGrid->m_oType->ToString() == std::wstring( L"default" ) )
 				{
 					SClm = (unsigned short)Docx2Doc::Constants::clmUseDefault;
 				}
-				else if ( *docxSectionProperties.DocumentGrid->Type == std::string( "linesAndChars" ) )
+				else if ( docxSectionProperties.m_oDocGrid->m_oType->ToString() == std::wstring( L"linesAndChars" ) )
 				{
 					SClm = (unsigned short)Docx2Doc::Constants::clmCharsAndLines;
 				}
-				else if ( *docxSectionProperties.DocumentGrid->Type == std::string( "lines" ) )
+				else if ( docxSectionProperties.m_oDocGrid->m_oType->ToString() == std::wstring( L"lines" ) )
 				{
 					SClm = (unsigned short)Docx2Doc::Constants::clmLinesOnly;
 				}
-				else if ( *docxSectionProperties.DocumentGrid->Type == std::string( "snapToChars" ) )
+				else if ( docxSectionProperties.m_oDocGrid->m_oType->ToString() == std::wstring( L"snapToChars" ) )
 				{
 					SClm = (unsigned short)Docx2Doc::Constants::clmEnforceGrid;
 				}
@@ -2180,40 +2180,40 @@ namespace DOCXTODOC
 			}
 		}
 
-		if ( docxSectionProperties.FootNoteProperty.is_init() )
+		if ( docxSectionProperties.m_oFootnotePr.is_init() )
 		{
-			unsigned short sNfcFtnRef = (unsigned short)(this->numFmtMap[docxSectionProperties.FootNoteProperty->NumFormat->Tostd::string()]);
+			unsigned short sNfcFtnRef = (unsigned short)(this->m_numFmtMap[docxSectionProperties.m_oFootnotePr->m_oNumFmt->ToString()]);
 			docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSNfcFtnRef, (BYTE*)(&sNfcFtnRef) ) );
 
-			unsigned short sNFtn = (unsigned short)(docxSectionProperties.FootNoteProperty->NumStart);
+			unsigned short sNFtn = (unsigned short)(docxSectionProperties.m_oFootnotePr->m_oNumStart->m_oVal.get());
 			docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSNFtn, (BYTE*)(&sNFtn) ) );
 		}
 
-		if ( docxSectionProperties.EndNoteProperty.is_init() )
+		if ( docxSectionProperties.m_oEndnotePr.is_init() )
 		{
-			unsigned short sNfcEdnRef = (unsigned short)(this->numFmtMap[docxSectionProperties.EndNoteProperty->NumFormat->Tostd::string()]);
+			unsigned short sNfcEdnRef = (unsigned short)(this->m_numFmtMap[docxSectionProperties.m_oEndnotePr->m_oNumFmt->ToString()]);
 			docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSNfcEdnRef, (BYTE*)(&sNfcEdnRef) ) );
 
-			unsigned short sNEdn = (unsigned short)(docxSectionProperties.EndNoteProperty->NumStart);
+			unsigned short sNEdn = (unsigned short)(docxSectionProperties.m_oEndnotePr->m_oNumStart->m_oVal.get());
 			docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSNEdn, (BYTE*)(&sNEdn) ) );
 		}
 
 		AddLineNumberingSettings (docxSectionProperties, docSectionProperties);		//	<w:lnNumType>
 
-		if (*docxSectionProperties.TitlePage)
+		if (docxSectionProperties.m_oTitlePg.is_init())
 		{
-			Bool8 SFTitlePage = ( ( *docxSectionProperties.TitlePage ) ? ( 1 ) : ( 0 ) );
+			DocFileFormat::Bool8 SFTitlePage = ( ( docxSectionProperties.m_oTitlePg->m_oVal.GetValue() ) ? ( 1 ) : ( 0 ) );
 			docSectionProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmSFTitlePage, &SFTitlePage ) );
 		}
 
 		Docx2Doc::Sepx sepx (docSectionProperties);
 		Docx2Doc::SectionProperties oSectionProperties (sepx);
 
-		for ( std::vector<OOX::Logic::HeaderReference>::const_iterator headerReferencesIter = docxSectionProperties.Headers->begin();
-			headerReferencesIter != docxSectionProperties.Headers->end();
+		for ( std::vector<ComplexTypes::Word::CHdrFtrRef*>::const_iterator headerReferencesIter = docxSectionProperties.m_arrHeaderReference->begin();
+			headerReferencesIter != docxSectionProperties.m_arrHeaderReference->end();
 			++headerReferencesIter )
 		{
-			OOX::Header* pHeader = dynamic_cast<OOX::Header*>(inputFolder.find<OOX::Document>()[headerReferencesIter->rId].get()); 
+			OOX::CHdrFtr* pHeader = dynamic_cast<OOX::CHdrFtr*>(m_oDocx.find<OOX::Document>()[headerReferencesIter->rId].get());
 
 			if (pHeader)
 			{
@@ -2232,11 +2232,11 @@ namespace DOCXTODOC
 			}
 		}
 
-		for ( std::vector<OOX::Logic::FooterReference>::const_iterator footerReferencesIter = docxSectionProperties.Footers->begin();
-			footerReferencesIter != docxSectionProperties.Footers->end(); 
+		for ( std::vector<ComplexTypes::Word::CHdrFtrRef*>::const_iterator footerReferencesIter = docxSectionProperties.m_arrFooterReference->begin();
+			footerReferencesIter != docxSectionProperties.m_arrFooterReference->end();
 			++footerReferencesIter )
 		{
-			OOX::Footer* pFooter = dynamic_cast<OOX::Footer*>(inputFolder.find<OOX::Document>()[footerReferencesIter->rId].get());  
+			OOX::CHdrFtr* pFooter = dynamic_cast<OOX::CHdrFtr*>(m_oDocx.find<OOX::Document>()[footerReferencesIter->rId].get());
 			if (pFooter)
 			{
 				if ( footerReferencesIter->Type == "even" )
@@ -2257,27 +2257,27 @@ namespace DOCXTODOC
 		return oSectionProperties;
 	}
 
-	bool CFileTransformer::AddLineNumberingSettings (const OOX::Logic::SectorProperty& oSection, PrlList& arrSettings)
+	bool CFileTransformer::AddLineNumberingSettings (const OOX::Logic::CSectionProperty& oSection, PrlList& arrSettings)
 	{
 		//	Line Numbering Restart Setting
 
-		if (oSection.LnNumType->countBy.is_init())
+		if (oSection.m_oLnNumType->m_oCountBy.is_init())
 		{
 			//	Line Number Increments to Display
 
-			short countBy			=	(unsigned short)(oSection.LnNumType->countBy);
+			short countBy			=	(unsigned short)(oSection.m_oLnNumType->m_oCountBy->GetValue());
 			arrSettings.push_back (Docx2Doc::Prl ((short)DocFileFormat::sprmSNLnnMod, (BYTE*)(&countBy) ) );
 
 			unsigned short mode		=	1;	//
-			if (oSection.LnNumType->restart.is_init())
+			if (oSection.m_oLnNumType->m_oRestart.is_init())
 			{
-				if ("newPage" == oSection.LnNumType->restart)
+				if (L"newPage" == oSection.m_oLnNumType->m_oRestart->ToString())
 					mode			=	0x00;	//	DocFileFormat::lncPerPage;
 
-				if ("newSection" == oSection.LnNumType->restart)
+				if (L"newSection" == oSection.m_oLnNumType->m_oRestart->ToString())
 					mode			=	0x01;	//	DocFileFormat::lncRestart;
 
-				if ("continuous" == oSection.LnNumType->restart)
+				if (L"continuous" == oSection.m_oLnNumType->m_oRestart->ToString())
 					mode			=	0x02;	//	DocFileFormat::lncContinue;
 			}
 
@@ -2286,8 +2286,8 @@ namespace DOCXTODOC
 			//	Line Numbering Starting Value
 
 			unsigned short start	=	0;
-			if (oSection.LnNumType->start.is_init())
-				start				=	(unsigned short)(oSection.LnNumType->start);
+			if (oSection.m_oLnNumType->m_oStart.is_init())
+				start				=	(unsigned short)(oSection.m_oLnNumType->m_oStart->GetValue());
 
 			arrSettings.push_back (Docx2Doc::Prl ((short)DocFileFormat::sprmSLnnMin, (BYTE*)(&start) ) );
 
@@ -2298,57 +2298,57 @@ namespace DOCXTODOC
 	}
 
 	// верхний колонтитул
-	Docx2Doc::Header CFileTransformer::ConvertHeader (const OOX::Header& oXmlDOCXHeader)
+	Docx2Doc::Header CFileTransformer::ConvertHeader (const OOX::CHdrFtr& oXmlDOCXHeader)
 	{
-		m_oOArtBuilder.SetLocation (HEADER_DOCUMENT);
+		//m_oOArtBuilder.SetLocation (HEADER_DOCUMENT);
 
 		Docx2Doc::Header oMSDocHeader;
 
-		for (size_t i = 0; i < oXmlDOCXHeader.Items->size(); ++i)
+		for (size_t i = 0; i < oXmlDOCXHeader.m_arrItems->size(); ++i)
 		{
 			const OOX::Logic::TextItem& oItem					=	oXmlDOCXHeader.Items->operator [](i);
 
-			if (oItem.is<OOX::Logic::Paragraph>())
+			if (oItem.is<OOX::Logic::CParagraph>())
 			{
-				const OOX::Logic::Paragraph& oMSDocXParagraph	=	oItem.as<OOX::Logic::Paragraph>();
+				const OOX::Logic::Paragraph& oMSDocXParagraph	=	oItem.as<OOX::Logic::CParagraph>();
 				if (ValidParagraph(oMSDocXParagraph))
 				{
-					Docx2Doc::Paragraph oMSDocParagraph	=	ConvertParagraph<OOX::Header>(oMSDocXParagraph);
+					Docx2Doc::Paragraph oMSDocParagraph	=	ConvertParagraph<OOX::CHdrFtr>(oMSDocXParagraph);
 					oMSDocHeader.AddTextItem (oMSDocParagraph);
 				}
 			}
-			else if (oItem.is<OOX::Logic::Table>())
+			else if (oItem.is<OOX::Logic::CTbl>())
 			{
-				Docx2Doc::Table oMSDocTable				=	CreateTable<OOX::Header> (oItem.as<OOX::Logic::Table>());
+				Docx2Doc::Table oMSDocTable				=	CreateTable<OOX::CHdrFtr> (oItem.as<OOX::Logic::CTbl>());
 				oMSDocHeader.AddTextItem (oMSDocTable);
 			}
 			else if (oItem.is<OOX::Logic::Sdt>())
 			{
-				const OOX::Logic::SdtContent& oStdC				=	oItem.as<OOX::Logic::Sdt>().Content;
+				const OOX::Logic::CSdtContent& oStdC				=	oItem.as<OOX::Logic::CSdt>().Content;
 
 				for (size_t j = 0; j < oStdC.Items->size(); ++j)
 				{
 					const OOX::Logic::TextItem& oStdItem		=	oStdC.Items->operator [](j);
 
-					if (oStdItem.is<OOX::Logic::Paragraph>())
+					if (oStdItem.is<OOX::Logic::CParagraph>())
 					{
-						const OOX::Logic::Paragraph& oMSDocXParagraph	=	oStdItem.as<OOX::Logic::Paragraph>();
+						const OOX::Logic::CParagraph& oMSDocXParagraph	=	oStdItem.as<OOX::Logic::CParagraph>();
 						if (ValidParagraph(oMSDocXParagraph))
 						{
-							Docx2Doc::Paragraph oMSDocParagraph	=	ConvertParagraph<OOX::Header>(oMSDocXParagraph);
+							Docx2Doc::Paragraph oMSDocParagraph	=	ConvertParagraph<OOX::CHdrFtr>(oMSDocXParagraph);
 							oMSDocHeader.AddTextItem (oMSDocParagraph);
 						}
 					}
-					else if (oStdItem.is<OOX::Logic::Table>())
+					else if (oStdItem.is<OOX::Logic::CTbl>())
 					{
-						Docx2Doc::Table oMSDocTable		=	CreateTable<OOX::Header> (oStdItem.as<OOX::Logic::Table>());
+						Docx2Doc::Table oMSDocTable		=	CreateTable<OOX::CHdrFtr> (oStdItem.as<OOX::Logic::CTbl>());
 						oMSDocHeader.AddTextItem (oMSDocTable);
 					}
 				}
 			}
 		}
 
-		m_oOArtBuilder.SetLocation (MAIN_DOCUMENT);
+		//m_oOArtBuilder.SetLocation (MAIN_DOCUMENT);
 
 #ifdef _DEBUG		
 		// DOCXDOCUTILS::DebugStrPrint (_T("Header : "), oMSDocHeader.GetAllText());
@@ -2357,57 +2357,57 @@ namespace DOCXTODOC
 	}
 
 	// нижний колонтитул
-	Docx2Doc::Footer CFileTransformer::ConvertFooter (const OOX::Footer& oXmlDOCXFooter)
+	Docx2Doc::Footer CFileTransformer::ConvertFooter (const OOX::CHdrFtr& oXmlDOCXFooter)
 	{
-		m_oOArtBuilder.SetLocation (HEADER_DOCUMENT);
+		//m_oOArtBuilder.SetLocation (HEADER_DOCUMENT);
 
 		Docx2Doc::Footer oMSDocFooter;
 
-		for (size_t i = 0; i < oXmlDOCXFooter.Items->size(); ++i)
+		for (size_t i = 0; i < oXmlDOCXFooter.m_arrItems->size(); ++i)
 		{
-			const OOX::Logic::TextItem& oItem					=	oXmlDOCXFooter.Items->operator [](i);
+			const OOX::WritingElement& oItem = *oXmlDOCXFooter.m_arrItems[i];
 
-			if (oItem.is<OOX::Logic::Paragraph>())
+			if (oItem.is<OOX::Logic::CParagraph>())
 			{
-				const OOX::Logic::Paragraph& oMSDocXParagraph	=	oItem.as<OOX::Logic::Paragraph>();
+				const OOX::Logic::CParagraph& oMSDocXParagraph	=	oItem.as<OOX::Logic::CParagraph>();
 				if (ValidParagraph(oMSDocXParagraph))
 				{
-					Docx2Doc::Paragraph oMSDocParagraph	=	ConvertParagraph<OOX::Footer>(oMSDocXParagraph);
+					Docx2Doc::Paragraph oMSDocParagraph	=	ConvertParagraph<OOX::CHdrFtr>(oMSDocXParagraph);
 					oMSDocFooter.AddTextItem (oMSDocParagraph);
 				}
 			}
-			else if (oItem.is<OOX::Logic::Table>())
+			else if (oItem.is<OOX::Logic::CTbl>())
 			{
-				Docx2Doc::Table oMSDocTable				=	CreateTable<OOX::Footer> (oItem.as<OOX::Logic::Table>());
+				Docx2Doc::Table oMSDocTable				=	CreateTable<OOX::CHdrFtr> (oItem.as<OOX::Logic::CTbl>());
 				oMSDocFooter.AddTextItem (oMSDocTable);
 			}
 			else if (oItem.is<OOX::Logic::Sdt>())
 			{
-				const OOX::Logic::SdtContent& oStdC				=	oItem.as<OOX::Logic::Sdt>().Content;
+				const OOX::Logic::CSdtContent& oStdC				=	oItem.as<OOX::Logic::CSdt>().Content;
 
 				for (size_t j = 0; j < oStdC.Items->size(); ++j)
 				{
 					const OOX::Logic::TextItem& oStdItem		=	oStdC.Items->operator [](j);
 
-					if (oStdItem.is<OOX::Logic::Paragraph>())
+					if (oStdItem.is<OOX::Logic::CParagraph>())
 					{
-						const OOX::Logic::Paragraph& oMSDocXParagraph	=	oStdItem.as<OOX::Logic::Paragraph>();
+						const OOX::Logic::CParagraph& oMSDocXParagraph	=	oStdItem.as<OOX::Logic::CParagraph>();
 						if (ValidParagraph(oMSDocXParagraph))
 						{
-							Docx2Doc::Paragraph oMSDocParagraph	=	ConvertParagraph<OOX::Footer>(oMSDocXParagraph);
+							Docx2Doc::Paragraph oMSDocParagraph	=	ConvertParagraph<OOX::CHdrFtr>(oMSDocXParagraph);
 							oMSDocFooter.AddTextItem (oMSDocParagraph);
 						}
 					}
-					else if (oStdItem.is<OOX::Logic::Table>())
+					else if (oStdItem.is<OOX::Logic::CTbl>())
 					{
-						Docx2Doc::Table oMSDocTable		=	CreateTable<OOX::Footer> (oStdItem.as<OOX::Logic::Table>());
+						Docx2Doc::Table oMSDocTable		=	CreateTable<OOX::CHdrFtr> (oStdItem.as<OOX::Logic::CTbl>());
 						oMSDocFooter.AddTextItem (oMSDocTable);
 					}
 				}
 			}
 		}
 
-		m_oOArtBuilder.SetLocation (MAIN_DOCUMENT);
+		//m_oOArtBuilder.SetLocation (MAIN_DOCUMENT);
 
 #ifdef _DEBUG		
 		// DOCXDOCUTILS::DebugStrPrint (_T("Footer : "), oMSDocFooter.GetAllText());
@@ -2417,18 +2417,18 @@ namespace DOCXTODOC
 	}
 }
 
-namespace DOCXTODOC	//	TABLE
+namespace Docx2Doc	//	TABLE
 {
-	template<class T> Docx2Doc::Table CFileTransformer::CreateTable (const OOX::Logic::Table& oXmlTable)
+	template<class T> Docx2Doc::Table CFileTransformer::CreateTable (const OOX::Logic::CTbl& oXmlTable)
 	{
 		static unsigned int tableDepth = 1;
 
 		Docx2Doc::Table table;
 
-		OOX::Styles::Style oTableStyle;
-		if (oXmlTable.tblPr->Style.is_init())
+		OOX::CStyle oTableStyle;
+		if (oXmlTable.m_oTableProperties->m_oTblStyle->is_init())
 		{			
-			oTableStyle	= inputFolder.find<OOX::Document>().find<OOX::CStyles>().GetStyleById(*oXmlTable.tblPr->Style);
+			oTableStyle	= m_oDocx.Find<OOX::Document>().find<OOX::CStyles>().GetStyleById(*oXmlTable.tblPr->Style);
 		}
 
 		DOCXDOCUTILS::CTblBorders oTblBorders (oXmlTable, oTableStyle);
@@ -2454,7 +2454,7 @@ namespace DOCXTODOC	//	TABLE
 
 				Docx2Doc::Constants::VerticalMergeFlag vmf = ConvertTableVerticalMergeFlag( oXmlCell.Properties->VMerge );
 
-				oTblBorders.Append (nX, nY, nXC, nYC, oXmlTable.tblPr->tblBorders, oXmlCell.Properties->tblBorders);
+				oTblBorders.Append (nX, nY, nXC, nYC, oXmlTable.m_oTableProperties->m_oTblBorders, oXmlCell.m_oTableProperties->tblBorders);
 
 				int nCellWidth	= (int)(*oXmlCell.Properties->Width->Width);
 				if (0.0 == nCellWidth)
@@ -2480,19 +2480,19 @@ namespace DOCXTODOC	//	TABLE
 
 				for (size_t i = 0; i < count; ++i)	
 				{		
-					if (items[i].is<OOX::Logic::Paragraph>())
+					if (items[i].is<OOX::Logic::CParagraph>())
 					{
-						const OOX::Logic::Paragraph& oDocxParagraph		=	items[i].as<OOX::Logic::Paragraph>();
+						const OOX::Logic::Paragraph& oDocxParagraph		=	items[i].as<OOX::Logic::CParagraph>();
 						Docx2Doc::Paragraph oDocParagraph		=	ConvertParagraph<T>(oDocxParagraph);
 						tableCell.AddTextItem (oDocParagraph);
 
 						//Docx2Doc::Paragraph oDocParagraph;	//	 ONLY FOR TEST
 						//tableCell.AddTextItem (oDocParagraph);		//	 ONLY FOR TEST
 					}
-					else if (items[i].is<OOX::Logic::Table>())
+					else if (items[i].is<OOX::Logic::CTbl>())
 					{
 						tableDepth++;
-						Docx2Doc::Table docTable = CreateTable<T>(items[i].as<OOX::Logic::Table>());
+						Docx2Doc::Table docTable = CreateTable<T>(items[i].as<OOX::Logic::CTbl>());
 						tableDepth--;
 						tableCell.AddTextItem(docTable);
 					}
@@ -2535,7 +2535,7 @@ namespace DOCXTODOC	//	TABLE
 		return table;
 	}
 
-	PrlList CFileTransformer::ConvertTableProperties (const OOX::Logic::TableProperty& docxTableProperties, unsigned int cellsCount) 
+	PrlList CFileTransformer::ConvertTableProperties (const OOX::Logic::CTableProperty& docxTableProperties, unsigned int cellsCount)
 	{
 		PrlList docTableProperties;
 
@@ -2551,9 +2551,9 @@ namespace DOCXTODOC	//	TABLE
 			short istd = m_mapStyleSheetMap[*docxTableProperties.Style];
 			docTableProperties.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmTIstd, (byte*)(&istd) ) );
 
-			if ( istd < (short)m_pDOCFile->GetStyleSheet().Count() )
+			if ( istd < (short)m_pDocFile->GetStyleSheet().Count() )
 			{
-				PrlList styleTableProperties = m_pDOCFile->GetStyleSheet()[istd].GetProperties();
+				PrlList styleTableProperties = m_pDocFile->GetStyleSheet()[istd].GetProperties();
 
 				for (PrlList::const_iterator iter = styleTableProperties.begin(); iter != styleTableProperties.end(); ++iter)
 				{
@@ -2884,7 +2884,7 @@ namespace DOCXTODOC	//	TABLE
 		return oPrls;
 	}
 
-	const PrlList CFileTransformer::ConvertTableRowCellsProperties (const OOX::Logic::Table& oXmlTable, int nY, int nCY, const std::vector<OOX::Logic::TableCell>& arrXmlCells, const OOX::Styles::Style& oStyle)
+	const PrlList CFileTransformer::ConvertTableRowCellsProperties (const OOX::Logic::Table& oXmlTable, int nY, int nCY, const std::vector<OOX::Logic::TableCell>& arrXmlCells, const OOX::CStyle& oStyle)
 	{
 		PrlList arCellsPrls;
 
@@ -2898,7 +2898,7 @@ namespace DOCXTODOC	//	TABLE
 
 			oTblFill.AddCell (nX, nY, nCX-1, nCY-1, oXmlCell.Properties->Shading);
 
-			Docx2Doc::TableCellWidthOperand tableCellWidthOperand( Docx2Doc::ItcFirstLim( nX, ( nX + 1 ) ), Docx2Doc::FtsWWidth_TablePart( tableCellWidthMap[*oXmlCell.Properties->Width->Type], (unsigned short)(*oXmlCell.Properties->Width->Width) ) );
+			Docx2Doc::TableCellWidthOperand tableCellWidthOperand( Docx2Doc::ItcFirstLim( nX, ( nX + 1 ) ), Docx2Doc::FtsWWidth_TablePart( m_tableCellWidthMap[*oXmlCell.Properties->Width->Type], (unsigned short)(*oXmlCell.Properties->Width->Width) ) );
 			arCellsPrls.push_back( Docx2Doc::Prl( (short)DocFileFormat::sprmTCellWidth, tableCellWidthOperand ) );
 
 			if(oXmlCell.Properties->CellMar.is_init())
@@ -2968,7 +2968,7 @@ namespace DOCXTODOC	//	TABLE
 	}
 }
 
-namespace DOCXTODOC	//	FONTS
+namespace Docx2Doc	//	FONTS
 {
 	void CFileTransformer::AddInternalFont (const std::wstring& strFontName)
 	{	
@@ -3043,7 +3043,7 @@ namespace DOCXTODOC	//	FONTS
 			ffns.push_back(ffn);
 		}
 
-		m_pDOCFile->SetFontTable(Docx2Doc::STTB<Docx2Doc::FFN>(false, &ffns));
+		m_pDocFile->SetFontTable(Docx2Doc::STTB<Docx2Doc::FFN>(false, &ffns));
 	}
 
 	Docx2Doc::PANOSE CFileTransformer::ConvertPanose (const std::string& strPanose)
@@ -3068,7 +3068,7 @@ namespace DOCXTODOC	//	FONTS
 	}
 }
 
-namespace DOCXTODOC // run rule transform
+namespace Docx2Doc // run rule transform
 {
 	template<class T> Docx2Doc::Run CFileTransformer::ConvertRun (const OOX::Logic::Run& oXml, const PrlList& styleDocRunProperties, std::wstring& strRunType)
 	{
@@ -3107,7 +3107,7 @@ namespace DOCXTODOC // run rule transform
 			}
 		}
 
-		oBinRun.AddProperties(ConvertRunProperties(inputFolder.find<OOX::Document>().find<OOX::CStyles>().Default->RunProperty));
+		oBinRun.AddProperties(ConvertRunProperties(m_oDocx.find<OOX::Document>().find<OOX::CStyles>().Default->RunProperty));
 
 		if (oXml.Property.is_init())
 		{
@@ -3122,7 +3122,7 @@ namespace DOCXTODOC // run rule transform
 			}
 			else
 			{
-				const OOX::Styles::Style defaultStyle = inputFolder.find<OOX::Document>().find<OOX::CStyles>().GetDefaultStyle("character");
+				const OOX::CStyle defaultStyle = m_oDocx.find<OOX::Document>().find<OOX::CStyles>().GetDefaultStyle("character");
 				oBinRun.AddOrReplaceProperties (GetRunPropertiesFromStyleHierarchy(*defaultStyle.StyleId));
 			}
 		}
@@ -3311,15 +3311,15 @@ namespace DOCXTODOC // run rule transform
 
 		if ( oXml.Type.is_init() )
 		{
-			if ( *oXml.Type == std::string( "page" ) )
+			if ( *oXml.Type == std::wstring( L"page" ) )
 			{
 				oText.SetText( &TextMark::PageBreakOrSectionMark );
 			}
-			else if ( *oXml.Type == std::string( "column" ) )
+			else if ( *oXml.Type == std::wstring( L"column" ) )
 			{
 				oText.SetText( &TextMark::ColumnBreak );
 			}
-			else if ( *oXml.Type == std::string( "textWrapping" ) )
+			else if ( *oXml.Type == std::wstring( L"textWrapping" ) )
 			{
 				oText.SetText( &TextMark::HardLineBreak );
 			}
@@ -3348,11 +3348,11 @@ namespace DOCXTODOC // run rule transform
 
 	template<class T> int CFileTransformer::FootnoteReferenceXmlRunTransform (const OOX::Logic::CFootnoteReference& oXml, Docx2Doc::Run& oBinRun)
 	{
-		if (inputFolder.find<OOX::Document>().exist<OOX::FootNote>())
+		if (m_oDocx.find<OOX::Document>().exist<OOX::FootNote>())
 		{
 			static short footnoteIndex = 1;
 
-			const OOX::FootNote::Note& footNote = inputFolder.find<OOX::Document>().find<OOX::FootNote>().find(oXml);
+			const OOX::FootNote::Note& footNote = m_oDocx.find<OOX::Document>().find<OOX::FootNote>().find(oXml);
 
 			Docx2Doc::FootnoteReference docFootnoteReference( footnoteIndex );
 			Docx2Doc::Footnote docFootnote( footnoteIndex++ );
@@ -3371,13 +3371,13 @@ namespace DOCXTODOC // run rule transform
 				}
 				else if (items[i].is<OOX::Logic::CTbl>())
 				{
-					Docx2Doc::Table oTable				=	CreateTable<OOX::FootNote>(items[i].as<OOX::Logic::Table>());
+					Docx2Doc::Table oTable				=	CreateTable<OOX::FootNote>(items[i].as<OOX::Logic::CTbl>());
 					docFootnote.AddTextItem (oTable);
 				}
 			}
 
 			oBinRun.AddRunItem (docFootnoteReference);
-			m_pDOCFile->AddFootnote(docFootnote);
+			m_pDocFile->AddFootnote(docFootnote);
 
 			return TRUE;		
 		}
@@ -3387,7 +3387,7 @@ namespace DOCXTODOC // run rule transform
 
 	template<class T> int CFileTransformer::FootnoteRefXmlRunTransform (const OOX::Logic::CFootnoteRef& oXml, Docx2Doc::Run& oBinRun)
 	{
-		if (inputFolder.find<OOX::Document>().exist<OOX::FootNote>())
+		if (m_oDocx.find<OOX::Document>().exist<OOX::FootNote>())
 		{
 			static short footnoteIndex = 1;
 
@@ -3401,11 +3401,11 @@ namespace DOCXTODOC // run rule transform
 
 	template<class T> int CFileTransformer::EndnoteReferenceXmlRunTransform (const OOX::Logic::CEndnoteReference& oXml, Docx2Doc::Run& oBinRun)
 	{
-		if (inputFolder.find<OOX::Document>().exist<OOX::EndNote>())
+		if (m_oDocx.find<OOX::Document>().exist<OOX::EndNote>())
 		{
 			static short endnoteIndex = 1;
 
-			const OOX::EndNote::Note& endNote = inputFolder.find<OOX::Document>().find<OOX::EndNote>().find(oXml);
+			const OOX::EndNote::Note& endNote = m_oDocx.find<OOX::Document>().find<OOX::EndNote>().find(oXml);
 
 			Docx2Doc::EndnoteReference docEndnoteReference(endnoteIndex);
 			Docx2Doc::Endnote docEndnote(endnoteIndex++);
@@ -3422,15 +3422,15 @@ namespace DOCXTODOC // run rule transform
 					Docx2Doc::Paragraph oParagraph		=	ConvertParagraph<OOX::EndNote>(docxParagraph);
 					docEndnote.AddTextItem(oParagraph);
 				}
-				else if (items[j].is<OOX::Logic::Table>())
+				else if (items[j].is<OOX::Logic::CTbl>())
 				{
-					Docx2Doc::Table oTable				=	CreateTable<OOX::EndNote>(items[j].as<OOX::Logic::Table>());
+					Docx2Doc::Table oTable				=	CreateTable<OOX::EndNote>(items[j].as<OOX::Logic::CTbl>());
 					docEndnote.AddTextItem(oTable);
 				}
 			}
 
 			oBinRun.AddRunItem( docEndnoteReference );
-			m_pDOCFile->AddEndnote( docEndnote );
+			m_pDocFile->AddEndnote( docEndnote );
 
 			return TRUE;		
 		}
@@ -3440,7 +3440,7 @@ namespace DOCXTODOC // run rule transform
 
 	template<class T> int CFileTransformer::EndnoteRefXmlRunTransform (const OOX::Logic::CEndnoteRef& oXml, Docx2Doc::Run& oBinRun)
 	{
-		if (inputFolder.find<OOX::Document>().exist<OOX::EndNotes>())
+		if (m_oDocx.find<OOX::Document>().exist<OOX::EndNotes>())
 		{
 			static short endnoteIndex = 1;
 
@@ -3466,7 +3466,7 @@ namespace DOCXTODOC // run rule transform
 	}*/
 }
 
-namespace DOCXTODOC
+namespace Docx2Doc
 {
 	/*template <class T, class TXmlImage> OOX::Image* CFileTransformer::GetImageDOCX (const TXmlImage* pXmlImage)
 	{	
@@ -3765,7 +3765,7 @@ namespace DOCXTODOC
 	}*/
 }
 
-namespace DOCXTODOC
+namespace Docx2Doc
 {
 	/*int CFileTransformer::BuildContentTbRef (const OOX::Logic::Pict& oXml)
 	{
@@ -3814,11 +3814,11 @@ namespace DOCXTODOC
 		return FALSE;
 	}*/
 
-	int CFileTransformer::TransformTb (const std::vector<OOX::Logic::TextItem>& oXmlItems, std::vector<Docx2Doc::TextItem>& oTextItems)
+	int CFileTransformer::TransformTb (const std::vector<OOX::WritingElement*>& oXmlItems, std::vector<Docx2Doc::TextItem>& oTextItems)
 	{
 		for (size_t i = 0; i < oXmlItems.size(); ++i)
 		{
-			const OOX::Logic::TextItem& oXmlItem	=	oXmlItems[i];
+			const OOX::WritingElement& oXmlItem	=	*oXmlItems[i];
 
 			if (oXmlItem.is<OOX::Logic::CParagraph>())
 			{

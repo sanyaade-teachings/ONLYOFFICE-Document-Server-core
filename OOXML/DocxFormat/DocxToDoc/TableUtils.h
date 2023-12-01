@@ -30,6 +30,7 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+
 #pragma once
 
 #include <map>
@@ -271,7 +272,6 @@ namespace DOCXDOCUTILS	//	Help Borders and Fill
 	class CTblBorders
 	{
 	public:
-
 		enum Border
 		{
 			TOP_BORDER		=	0,
@@ -283,15 +283,12 @@ namespace DOCXDOCUTILS	//	Help Borders and Fill
 		};
 
 	public:
-
 		CTblBorders ()
 		{
-
 		}
 
 		CTblBorders (OOX::CStyle oStyle) : m_oStyle (oStyle)
 		{
-
 		}
 
 		CTblBorders (const OOX::Logic::CTbl& oXmlTable, OOX::CStyle oStyle, int bCacheTableStyles = TRUE) : m_oStyle (oStyle)
@@ -617,7 +614,6 @@ namespace DOCXDOCUTILS	//	Help Borders and Fill
 			m_oBrcs.clear ();
 			m_oBrc80s.clear ();
 		}
-
 
 		//
 		inline std::map<std::string, BYTE>& GetBrcMap ()
@@ -1483,18 +1479,18 @@ namespace DOCXDOCUTILS	//	Help Borders and Fill
 
 	private:
 
-		static std::map<std::string, BYTE>		m_oBrcTypeMap;
-		static std::map<std::string, BYTE>		m_oColorsMap;
+		static std::map<std::string, BYTE>			m_oBrcTypeMap;
+		static std::map<std::string, BYTE>			m_oColorsMap;
 
-		OOX::CStyle								m_oStyle;
+		OOX::CStyle									m_oStyle;
 
-		int										m_bHaveBeginRow;
-		int										m_bHaveBeginCol;
-		int										m_bHaveEndRow;
-		int										m_bHaveEndCol;
+		int											m_bHaveBeginRow;
+		int											m_bHaveBeginCol;
+		int											m_bHaveEndRow;
+		int											m_bHaveEndCol;
 
-		int										m_bNoHBand;
-		int										m_bNoVBand;
+		int											m_bNoHBand;
+		int											m_bNoVBand;
 
 		int											m_nIndCellX;
 		int											m_nIndCellY;
@@ -1508,19 +1504,19 @@ namespace DOCXDOCUTILS	//	Help Borders and Fill
 		std::vector<Docx2Doc::TableBrcOperand>		m_oBrcs;
 		std::vector<Docx2Doc::TableBrc80Operand>	m_oBrc80s;
 
-		Docx2Doc::Brc						m_oBrcTop;
-		Docx2Doc::Brc80MayBeNil				m_oBrc80Top;
-		Docx2Doc::Brc						m_oBrcBottom;
-		Docx2Doc::Brc80MayBeNil				m_oBrc80Bottom;
-		Docx2Doc::Brc						m_oBrcLeft;
-		Docx2Doc::Brc80MayBeNil				m_oBrc80Left;
-		Docx2Doc::Brc						m_oBrcRight;
-		Docx2Doc::Brc80MayBeNil				m_oBrc80Right;
+		Docx2Doc::Brc								m_oBrcTop;
+		Docx2Doc::Brc80MayBeNil						m_oBrc80Top;
+		Docx2Doc::Brc								m_oBrcBottom;
+		Docx2Doc::Brc80MayBeNil						m_oBrc80Bottom;
+		Docx2Doc::Brc								m_oBrcLeft;
+		Docx2Doc::Brc80MayBeNil						m_oBrc80Left;
+		Docx2Doc::Brc								m_oBrcRight;
+		Docx2Doc::Brc80MayBeNil						m_oBrc80Right;
 
-		Docx2Doc::Brc80MayBeNil				m_oBrc80MayBeNilTop;
-		Docx2Doc::Brc80MayBeNil				m_oBrc80MayBeNilBottom;
-		Docx2Doc::Brc80MayBeNil				m_oBrc80MayBeNilLeft;
-		Docx2Doc::Brc80MayBeNil				m_oBrc80MayBeNilRight;
+		Docx2Doc::Brc80MayBeNil						m_oBrc80MayBeNilTop;
+		Docx2Doc::Brc80MayBeNil						m_oBrc80MayBeNilBottom;
+		Docx2Doc::Brc80MayBeNil						m_oBrc80MayBeNilLeft;
+		Docx2Doc::Brc80MayBeNil						m_oBrc80MayBeNilRight;
 
 		int										m_bStyleBorders;
 		OOX::Logic::CTblBorders					m_oStyleBorders;
@@ -1561,7 +1557,6 @@ namespace DOCXDOCUTILS	//	Help Borders and Fill
 	class CTblFill
 	{
 	public:
-
 		CTblFill (const OOX::Logic::CTbl& oXmlTable, OOX::CStyle oStyle) : m_oStyle (oStyle)
 		{
 			/*m_bHaveBeginRow		=	oXmlTable.tblPr->firstRow;

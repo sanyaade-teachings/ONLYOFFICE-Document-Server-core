@@ -41,7 +41,7 @@
 
 #include "../../OOXML/PPTXFormat/DrawingConverter/ASCOfficePPTXFile.h"
 #include "../../OOXML/XlsbFormat/Xlsb.h"
-#include "../../OOXML/DocxFormat/DocxToDoc/Converter.h"
+//#include "../../OOXML/DocxFormat/DocxToDoc/FileConverter.h"
 
 #include "../../MsBinaryFile/DocFile/Main/DocFormatLib.h"
 #include "../../MsBinaryFile/PptFile/Main/PPTFormatLib.h"
@@ -2830,8 +2830,10 @@ namespace NExtractTools
 	}
 	_UINT32 docx_dir2doc(const std::wstring &sDocxDir, const std::wstring &sTo, const std::wstring &sTemp, InputParams &params)
 	{
-		Docx2Doc::Converter convert;
-		return convert.SaveToFile(sDocxDir, sTo, params.getXmlOptions());
+		//Docx2Doc::CFileTransformer convert;
+		//return convert.Convert(sDocxDir.c_str(), sTo.c_str());
+
+		return AVS_FILEUTILS_ERROR_CONVERT;
 	}
 
 	// doct -> rtf

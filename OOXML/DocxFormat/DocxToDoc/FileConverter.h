@@ -30,9 +30,9 @@
 
 #include "Prl.h"
 #include "InternalElements.h"
-#include "TableUtils.h"
+//#include "TableUtils.h"
 
-namespace DOCXTODOC
+namespace Docx2Doc
 {
 	class CPrCopier
 	{
@@ -86,12 +86,12 @@ namespace DOCXTODOC
 		long Convert(const WCHAR* ooxFolder, const WCHAR* docFile);
 
 	private:
-		void ConvertDocument (const OOX::Document& oXmlDoc);
-		void ConvertContent  (const std::vector<OOX::Logic::TextItem>& oXmlItems);
+		void ConvertDocument (const OOX::CDocument& oXmlDoc);
+		void ConvertContent  (const std::vector<OOX::WritingElement*>& oXmlItems);		// OOX::Logic::TextItem - похоже это просто WritingElement
 		template<class T> Docx2Doc::Paragraph ConvertParagraph (const OOX::Logic::CParagraph& oXmlParagraph);
 
 		// Document
-		std::string GetFontNameByThemeName(const std::wstring& themeName);
+		std::wstring GetFontNameByThemeName(const std::wstring& themeName);
 		std::vector<Docx2Doc::XAS> BuildXASs(const OOX::Logic::CTbl& docxTable, const std::vector<OOX::Logic::CTableCellProperties>& tableCells);
 
 		int ValidParagraph (const OOX::Logic::CParagraph& oXmlParagraph);
@@ -119,7 +119,7 @@ namespace DOCXTODOC
 		// Table
 
 		template<class T> Docx2Doc::Table CreateTable (const OOX::Logic::CTbl& oXmlTable);
-		const PrlList ConvertTableRowCellsProperties(const OOX::Logic::CTbl& oXmlTable, int nY, int nCY, const std::vector<OOX::Logic::CTableCell>& docxTableCells, const OOX::CStyle& oStyle);
+		const PrlList ConvertTableRowCellsProperties(const OOX::Logic::CTbl& oXmlTable, int nY, int nCY, const std::vector<OOX::Logic::TableCell>& docxTableCells, const OOX::CStyle& oStyle);
 		const PrlList ConvertTableRowProperties(int nY, const OOX::Logic::CTableRowProperties& oXmlRow);
 
 		// Fonts
@@ -130,16 +130,16 @@ namespace DOCXTODOC
 
 		// Styles
 
-		PrlList GetParagraphPropertiesFromStyleHierarchy (const std::string& styleID, PrlList* styleDocRunLinkProperties);
+		PrlList GetParagraphPropertiesFromStyleHierarchy (const std::wstring& styleID, PrlList* styleDocRunLinkProperties);
 		PrlList GetRunPropertiesFromStyleHierarchy (const std::wstring& styleID);
 		PrlList GetTablePropertiesFromStyleHierarchy (const std::wstring& styleID);
 
 		void ConvertStyleSheet (const OOX::CStyles& oStyleSheet);
 		std::vector<Docx2Doc::LSD> ConvertLatentStyles (/*const OOX::Styles::LattentStyles& latentStyles*/);
-		std::vector<Docx2Doc::LPStd> ConvertStyleDefinitions (const std::vector<OOX::CStyle>& arrStyles);
+		std::vector<Docx2Doc::LPStd> ConvertStyleDefinitions (const std::vector<OOX::CStyle*>& arrStyles);
 
 
-		std::string GetStyleID (const OOX::Logic::CParagraph& oXmlParagraph);
+		std::wstring GetStyleID (const OOX::Logic::CParagraph& oXmlParagraph);
 
 		// Numbering
 
@@ -183,32 +183,32 @@ namespace DOCXTODOC
 		// TextBox
 
 		int BuildContentTbRef (const OOX::Logic::CPicture& oXml);
-		int TransformTb (const std::vector<OOX::Logic::TextItem>& oXmlItems, std::vector<Docx2Doc::TextItem>& oTextItems);
+		int TransformTb (const std::vector<OOX::WritingElement*>& oXmlItems, std::vector<Docx2Doc::TextItem>& oTextItems);
 
 	private:
 
 		std::map<std::wstring, short>	m_mapFontTableMap;
 		std::vector<std::wstring>		m_arrInternalFonts;
 
-		std::map<std::string, Docx2Doc::LID> lidMap;
-		std::map<std::string, Docx2Doc::StyleID> predefinedStyleIDMap;
-		std::map<std::string, short>			m_mapStyleSheetMap;
+		std::map<std::wstring, Docx2Doc::LID>		m_lidMap;
+		std::map<std::wstring, Docx2Doc::StyleID>	m_predefinedStyleIDMap;
+		std::map<std::wstring, short>				m_mapStyleSheetMap;
 
-		std::map<std::string, Docx2Doc::Constants::StyleType> styleTypeMap;
-		std::map<std::string, Docx2Doc::Constants::MSONFC> numFmtMap;
-		std::map<int, int> idLsidMap;
-		std::map<int, short> idIndexMap;
-		std::map<std::string, BYTE> kulMap;
-		std::map<std::string, Docx2Doc::Constants::SBkcOperand> sectionBreakTypeMap;
-		std::map<std::string, BYTE> verticalPositionCodeMap;
-		std::map<std::string, BYTE> horizontalPositionCodeMap;
-		std::map<std::string, BYTE> textFrameWrappingMap;
-		std::map<std::string, Docx2Doc::Constants::Fts> tableCellWidthMap;
-		std::map<std::string, Docx2Doc::Constants::TabJC> customTabStopAlignment;
-		std::map<std::string, Docx2Doc::Constants::TabLC> customTabStopLeader;
+		std::map<std::wstring, Docx2Doc::Constants::StyleType>	m_styleTypeMap;
+		std::map<std::wstring, Docx2Doc::Constants::MSONFC>		m_numFmtMap;
+		std::map<int, int> m_idLsidMap;
+		std::map<int, short> m_idIndexMap;
+		std::map<std::wstring, BYTE> m_kulMap;
+		std::map<std::wstring, Docx2Doc::Constants::SBkcOperand> m_sectionBreakTypeMap;
+		std::map<std::wstring, BYTE> m_verticalPositionCodeMap;
+		std::map<std::wstring, BYTE> m_horizontalPositionCodeMap;
+		std::map<std::wstring, BYTE> m_textFrameWrappingMap;
+		std::map<std::wstring, Docx2Doc::Constants::Fts> m_tableCellWidthMap;
+		std::map<std::wstring, Docx2Doc::Constants::TabJC> m_customTabStopAlignment;
+		std::map<std::wstring, Docx2Doc::Constants::TabLC> m_customTabStopLeader;
 
-		OOX::CDocx				inputFolder;
-		Docx2Doc::CDocFile*		m_pDOCFile;
+		OOX::CDocx				m_oDocx;
+		Docx2Doc::CDocFile*		m_pDocFile;
 
 		bool					m_bHaveSeparateFldChar;
 		int						m_bIsInlineShape;

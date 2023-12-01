@@ -4,7 +4,7 @@
 
 typedef std::vector<Docx2Doc::Prl>	PrlList;
 
-namespace DOCXTODOC
+namespace Docx2Doc
 {
 	class CInternalStyle
 	{
