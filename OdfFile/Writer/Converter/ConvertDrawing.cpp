@@ -244,11 +244,11 @@ void OoxConverter::convert(PPTX::Logic::Xfrm *oox_xfrm)
 	if (oox_xfrm->extX.IsInit())	width	= Emu2Pt(*oox_xfrm->extX);
 	if (oox_xfrm->extY.IsInit())	height	= Emu2Pt(*oox_xfrm->extY);
 		
-	// odf_context()->drawing_context()->set_size(width, height);
-	// odf_context()->drawing_context()->set_position(x, y);
+	odf_context()->drawing_context()->set_size(width, height);
+	odf_context()->drawing_context()->set_position(x, y);
 	// odf_context()->drawing_context()->set_rotate(angle);
 
-	odf_context()->drawing_context()->set_orientation(x, y, width, height, angle);
+	//odf_context()->drawing_context()->set_orientation(x, y, width, height, angle);
 
 	if (oox_xfrm->flipH.get_value_or(false))	odf_context()->drawing_context()->set_flip_H(true);
 	if (oox_xfrm->flipV.get_value_or(false))	odf_context()->drawing_context()->set_flip_V(true);

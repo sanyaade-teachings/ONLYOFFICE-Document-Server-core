@@ -2241,19 +2241,6 @@ void odf_drawing_context::set_position(_CP_OPT(double) & x_pt, _CP_OPT(double) &
 
 	//double cx = *impl_->current_drawing_state_.cx_;
 	//double cy = *impl_->current_drawing_state_.cy_;
-
-	//if (impl_->current_drawing_state_.rotateAngle_)
-	//{
-	//	double angle = *impl_->current_drawing_state_.rotateAngle_;
-	//	double x_ = x;
-	//	double y_ = y;
-
-	//	// NOTE(Kamil Kerimov): Apply rotation matrix transformation
-	//	x = x_ * std::cos(angle) + y_ * std::sin(angle);
-	//	y = y_ * std::cos(angle) - x_ * std::sin(angle);
-
-	//	impl_->current_drawing_state_.rotateAngle_ = boost::none;
-	//}
 	
 	if (impl_->current_drawing_state_.in_group_)
 	{
@@ -2314,7 +2301,7 @@ void odf_drawing_context::set_size( _CP_OPT(double) & width_pt, _CP_OPT(double) 
 
 			for( int i = (int)impl_->group_list_.size() - 1; i >= 0 ; i--)
 			{
-				width_pt  = *width_pt * impl_->group_list_[i]->scale_cx;
+				width_pt  = *width_pt * impl_->group_list_[i]->scale_cy;
 			}
 			impl_->current_drawing_state_.svg_width_ = length(length(*width_pt,length::pt).get_value_unit(length::cm), length::cm);
 		}
@@ -2322,7 +2309,7 @@ void odf_drawing_context::set_size( _CP_OPT(double) & width_pt, _CP_OPT(double) 
 		{
 			for( int i = (int)impl_->group_list_.size() - 1; i >= 0 ; i--)
 			{
-				height_pt = *height_pt * impl_->group_list_[i]->scale_cy;
+				height_pt = *height_pt * impl_->group_list_[i]->scale_cx;
 			}
 			impl_->current_drawing_state_.svg_height_= length(length(*height_pt,length::pt).get_value_unit(length::cm), length::cm);	
 		}
@@ -2331,11 +2318,11 @@ void odf_drawing_context::set_size( _CP_OPT(double) & width_pt, _CP_OPT(double) 
 	{
 		if (false == impl_->group_list_.empty())
 		{
-			if (impl_->current_group_->scale_cx)
-				impl_->current_group_->scale_cx = *width_pt / impl_->current_group_->scale_cx;
-			
 			if (impl_->current_group_->scale_cy)
-				impl_->current_group_->scale_cy = *height_pt / impl_->current_group_->scale_cy;
+				impl_->current_group_->scale_cy = *width_pt / impl_->current_group_->scale_cx;
+			
+			if (impl_->current_group_->scale_cx)
+				impl_->current_group_->scale_cx = *height_pt / impl_->current_group_->scale_cy;
 		}
 		else
 		{
