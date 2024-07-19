@@ -41,6 +41,8 @@
 #include "../../DesktopEditor/common/Directory.h"
 
 #include <unordered_map>
+#include <iostream>///---------
+#include <fstream>///-----
 
 namespace DocFileFormat
 {
@@ -532,17 +534,35 @@ namespace DocFileFormat
 		// Build a dictionaries of all PAPX
 		AllPapx			=	new std::map<int, ParagraphPropertyExceptions*>();
 		AllPapxVector	=	new std::vector<int>();
+		///-----------------------------
+		//std::string tmpName_AllPapx = "D:\workRepos\tasks\1\tmp.txt";
+		std::ofstream outTmp;          // поток для записи
+		outTmp.open("D:\\workRepos\\tasks\\1\\tmp.txt");
+		if (outTmp.is_open())///------------------
+		{
+			outTmp << "AllPapxFkps->size()  " << AllPapxFkps->size() << std::endl;
+		}
+		///---------
 
 		for (size_t i = 0; i < AllPapxFkps->size(); ++i)
 		{
 			FormattedDiskPagePAPX*& iter = AllPapxFkps->at(i);
+			///------------------
+			if (outTmp.is_open())
+			{
+			} ///----------------------
 			for (unsigned int j = 0; j < (iter)->grppapxSize; ++j)
 			{
 				int nVal = (iter)->rgfc[j];
 				AllPapx->insert( std::pair<int, ParagraphPropertyExceptions*>( nVal, (iter)->grppapx[j] ) );
 				AllPapxVector->push_back(nVal);
+				if (outTmp.is_open())///------------------
+				{
+					outTmp << "nVal  " << nVal << std::endl;
+				}///----------------------
 			}
 		}
+		outTmp.close();///----------------------
 
 		std::sort (AllPapxVector->begin(), AllPapxVector->end());
 

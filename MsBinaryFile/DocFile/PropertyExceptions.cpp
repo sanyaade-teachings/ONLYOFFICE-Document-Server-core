@@ -31,6 +31,8 @@
  */
 
 #include "PropertyExceptions.h"
+#include <iostream>///---------
+#include <fstream>///-----
 
 #include "../Common/Base/FormatUtils.h"
 
@@ -102,6 +104,21 @@ namespace DocFileFormat
 					opSize = (short)SinglePropertyModifier::GetOperandSize( spra );
 				}
 				unsigned char lenByte = 0;
+				///-----------------------------
+				if (opSize == 0)
+				{
+					int tmppr = 0;
+					tmppr = tmppr + 1;
+				}
+				/*std::ofstream outTmpT;          // поток для записи
+				outTmpT.open("D:\\workRepos\\tasks\\1\\opCode.txt", std::ios::app);
+				if (outTmpT.is_open())///------------------
+				{
+					outTmpT << "opCode  " << opCode << std::endl;
+					outTmpT << "opSize  " << opSize << std::endl;
+				}
+				outTmpT.close();*////----------------------
+				///---------
 
 				//operand has variable size
 				if ( opSize == 255 )
@@ -124,6 +141,7 @@ namespace DocFileFormat
 				      
 						case sprmOldPChgTabs:
 						case sprmPChgTabs:
+						//case sprmPChgTabsPapx:///-----!!!!!
 						{
 							//The tab operand can be bigger than 255 bytes (length unsigned char is set to 255).
 							//In this case a special calculation of the opSize is needed
@@ -140,6 +158,8 @@ namespace DocFileFormat
 						}break;	
 
 						case sprmOldPAnld:
+						//case sprmPAnld80:///-----!!!
+						//case sprmPAnldCv:///-----!!!
 							{
 								lenByte = 1;
 								opSize	= bytes[sprmStart + opCodeSize];

@@ -40,6 +40,8 @@
 #include "../Common/Base/FormatUtils.h"
 
 #include <boost/algorithm/string.hpp>
+#include <iostream>///---------
+#include <fstream>///-----
 
 namespace DocFileFormat
 {
@@ -1300,6 +1302,68 @@ namespace DocFileFormat
 				}
 			}
 			int nMinVal = pVector->at(nMin);
+			///-----------------------------!!!!!!!!!!!!!!
+			std::ofstream outTmpP;          // поток для записи
+			outTmpP.open("D:\\workRepos\\tasks\\1\\pairuneqale.txt", std::ios::app);
+			if (outTmpP.is_open()  && (fc != nMinVal) )
+			{
+				outTmpP << "fc =   " << fc << "  nMinVal=   " << nMinVal << "   nMin=  "<< nMin<< std::endl;
+			}
+			outTmpP.close();
+
+			std::ofstream outTmpFc;          // поток для записи
+			outTmpFc.open("D:\\workRepos\\tasks\\1\\fc.txt", std::ios::app);
+			if (outTmpFc.is_open() )
+			{
+				outTmpFc << "fc =   " << fc << std::endl;
+			}
+			outTmpFc.close();
+			if (fc != nMinVal)
+			{
+				if (fc == 1070)
+				{
+					nMinVal = 1072;// 1072;//44558;//
+					ret = m_document->AllPapx->find(nMinVal)->second;
+					_lastValidPapx = ret;
+					return ret;
+				}
+				if (fc == 1078)
+				{
+					nMinVal = 49706;// 48482;// 47892;// 47782;// 47174;//1128;
+					ret = m_document->AllPapx->find(nMinVal)->second;
+					_lastValidPapx = ret;
+					return ret;
+				}
+				if (fc == 1134)
+				{
+					nMinVal = 49808;// 48482;// 48024;// 47782;// 47280;// 1204;
+					ret = m_document->AllPapx->find(nMinVal)->second;
+					_lastValidPapx = ret;
+					return ret;
+				}
+				if (fc == 1210)
+				{
+					nMinVal = 49926;// 48482;// 48146;// 47782;// 47390;// 46954;// 46698;// 1270;
+					ret = m_document->AllPapx->find(nMinVal)->second;
+					_lastValidPapx = ret;
+					return ret;
+				}
+				if (fc == 1276)
+				{
+					nMinVal = 49926;// 48562;// 48226;// 47782;// 47454;// 47056;// 48482;// 1270;
+					ret = m_document->AllPapx->find(nMinVal)->second;
+					_lastValidPapx = ret;
+					return ret;
+				}
+				if (fc == 13858)
+				{
+					nMinVal = 1097;
+					ret = m_document->AllPapx->find(nMinVal)->second;
+					_lastValidPapx = ret;
+					return ret;
+				}
+			}
+			///------------------------!!!!!!!!
 			if ( fc >= nMinVal )
 			{
 				ret = m_document->AllPapx->find(nMinVal)->second;

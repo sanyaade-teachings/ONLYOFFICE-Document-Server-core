@@ -422,6 +422,8 @@ namespace DocFileFormat
 
 		//numbering
 				case sprmOldPAnld:
+				//case sprmPAnld80:///-----!!!
+				//case sprmPAnldCv:///-----!!!
 				{
 					NumberingDescriptorPtr desc = NumberingDescriptor::create( iter->Arguments, iter->argumentsSize );
 
