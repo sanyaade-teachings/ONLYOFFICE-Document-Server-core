@@ -31,8 +31,6 @@
  */
 
 #include "PieceTable.h"
-#include <iostream>///---------
-#include <fstream>///-----
 
 namespace DocFileFormat
 {
@@ -41,10 +39,6 @@ namespace DocFileFormat
 		if (fib->m_FibWord97.lcbClx < 1/* || !fib->m_FibBase.fComplex*/) return;
 
 		// Read the bytes of complex file information
-		///-----------------!!
-		//fib->m_FibWord97.lcbClx = 33;
-		//fib->m_FibWord97.fcClx = 274;
-		///---!!!
 		unsigned char* clx	=	new unsigned char[fib->m_FibWord97.lcbClx];
 
 		if (tableStream)
@@ -133,33 +127,6 @@ namespace DocFileFormat
 
 					FileCharacterPositions->insert( Int_Pair( maxCp, fib->m_FibBase.fcMac ) );
 					CharacterPositions->insert( Int_Pair( fib->m_FibBase.fcMac, maxCp ) );
-					///-----------------------------!!!!!!!!!!!!!!
-					std::ofstream outFCP;          // поток для записи
-					outFCP.open("D:\\workRepos\\tasks\\2\\FileCharacterPositions.txt");
-					if (outFCP.is_open() )
-					{
-						outFCP << " c :      " <<  "  f :   " << std::endl;
-						for (auto elem : *FileCharacterPositions)
-						{
-							outFCP << "c =   " << elem.first << "  f=   " << elem.second << std::endl;
-						}
-						
-					}
-					outFCP.close();
-
-					std::ofstream outCP;          // поток для записи
-					outCP.open("D:\\workRepos\\tasks\\2\\CharacterPositions.txt");
-					if (outCP.is_open())
-					{
-						outCP << " f :      " << "  c :   " << std::endl;
-						for (auto elem : *CharacterPositions)
-						{
-							outCP << "f =   " << elem.first << "  c=   " << elem.second << std::endl;
-						}
-
-					}
-					outCP.close();
-					///-------------------
 
 					RELEASEARRAYOBJECTS(piecetable);
 				}				

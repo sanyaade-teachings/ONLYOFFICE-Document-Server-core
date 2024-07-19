@@ -116,7 +116,6 @@ namespace DocFileFormat
 
 			case sprmOldPChgTabs:
 			case sprmPChgTabs:
-			//case sprmPChgTabsPapx:///-----!!!!!
 				{
 					argumentsSize = bytes[2];
 					Arguments = new unsigned char[argumentsSize];

@@ -73,7 +73,7 @@
     <LibraryPath>..\..\..\..\Common\3dParty\boost\build\win_32\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>D:\workRepos\rep\core\build\lib\win_64\debug</OutDir>
+    <OutDir>$(Platform)\$(Configuration)\DocFormat\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\DocFormat\</IntDir>
     <IncludePath>..\..\..\..\Common\3dParty\boost\build\win_64\include;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\..\..\Common\3dParty\boost\build\win_64\lib;$(LibraryPath)</LibraryPath>
