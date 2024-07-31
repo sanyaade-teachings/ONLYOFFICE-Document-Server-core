@@ -50,6 +50,10 @@
 #include "IMapping.h"
 #include "FormFieldData.h"
 #include "FormFieldDataMapping.h"
+#define START_PARAGRAPH           0x1/// ---!!!
+#define END_PARAGRAPH             0x2/// ---!!!
+#define START_END_PARAGRAPH       0x3/// ---!!!
+#define NOSTART_NOEND_PARAGRAPH   0x0/// ---!!!
 
 namespace DocFileFormat
 {
@@ -87,7 +91,7 @@ namespace DocFileFormat
 		bool isSectionEnd		( int cp );
 
 		int writeParagraph( int cp, int cpEnd ); 
-		int writeParagraph( int initialCp, int cpEnd, bool sectionEnd, bool lastBad = false );
+		int writeParagraph( int initialCp, int cpEnd, bool sectionEnd, bool lastBad = false, int paragraphState = 0 );///---!!!!!
 		int writeRun( std::vector<wchar_t>* chars, CharacterPropertyExceptions* chpx, int initialCp );
 		int	writeText			( std::vector<wchar_t>* chars, int initialCp, CharacterPropertyExceptions* chpx, bool writeDeletedText );
 		void writeParagraphRsid	( const ParagraphPropertyExceptions* papx );

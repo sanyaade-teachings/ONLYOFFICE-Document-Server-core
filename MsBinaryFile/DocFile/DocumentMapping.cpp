@@ -178,13 +178,80 @@ namespace DocFileFormat
 				bool sectionEnd = isSectionEnd(cpParaEnd);
 				cpParaEnd++;
 				
-				return writeParagraph(cp, cpParaEnd, sectionEnd);
+				return writeParagraph(cp, cpParaEnd, sectionEnd, false, START_END_PARAGRAPH);//return writeParagraph(cp, cpParaEnd, sectionEnd);///---!!!
 			}
 			else
 			{
 				cpParaEnd++;
 				
-                return writeParagraph(cp, (std::min)(cpEnd, cpParaEnd), false);
+                //return writeParagraph(cp, (std::min)(cpEnd, cpParaEnd), false);///-----!!!!!
+				///-----------------------------------------!!!
+				int inpCpEnd = (std::min)(cpEnd, cpParaEnd);
+				int		fc = m_document->FindFileCharPos(cp);
+				int		fcEnd = m_document->FindFileCharPos(inpCpEnd);
+
+				if (fc < 0 || fcEnd < 0 || fc == fcEnd)
+					return -1;
+
+				int currentFc = fc;
+				int currentCp = cp;
+				int oldCp     = cp;
+				int oldElem   = fc;
+				int currentStart = fc;
+				int currentStartcp = cp;
+				std::vector<std::pair<int, int>> fcStartFcEnd;
+				std::vector<std::pair<int, int>> cpStartFcEnd;
+				while (inpCpEnd > currentCp)
+				{
+					currentCp++;
+					currentFc = m_document->FindFileCharPos(currentCp);
+					if (currentFc < oldElem)
+					{
+						fcStartFcEnd.emplace_back(currentStart, oldElem);
+						currentStart = currentFc;
+						//cps.emplace_back(currentCp);
+						cpStartFcEnd.emplace_back(currentStartcp, currentCp-1);
+						currentStartcp = currentCp;
+					}
+					else if (currentFc > oldElem)
+					{
+					}
+					else
+					{
+						// -1 //че-нить в лог написать
+					}
+
+					oldElem = currentFc;
+				}
+				fcStartFcEnd.emplace_back(currentStart, oldElem);
+				cpStartFcEnd.emplace_back(currentStartcp, currentCp);
+
+				if (cpStartFcEnd.size() == 1)
+				{
+					return writeParagraph(cpStartFcEnd.front().first, cpStartFcEnd.front().second, false, false, START_END_PARAGRAPH);
+				}
+				int retCp = cpParaEnd;
+				for (auto elem : cpStartFcEnd)
+				{
+					int curCpStart = elem.first;
+					int curCpEnd = elem.second;
+
+					if (elem == cpStartFcEnd.front())
+					{
+						retCp = writeParagraph(curCpStart, curCpEnd, false, false, START_PARAGRAPH);
+					}
+					else if (elem == cpStartFcEnd.back())
+					{
+						retCp = writeParagraph(curCpStart, curCpEnd, false, false, END_PARAGRAPH);
+					}
+					else
+					{
+						retCp = writeParagraph(curCpStart, curCpEnd, false, false, NOSTART_NOEND_PARAGRAPH);
+					}
+
+				}
+				return retCp;
+				///-----------------------------------------!!!
 			}
 		}
 
@@ -194,19 +261,19 @@ namespace DocFileFormat
 	// Writes a Paragraph that starts at the given cpStart and 
 	// ends at the given cpEnd
 	
-	int DocumentMapping::writeParagraph (int initialCp, int cpEnd, bool sectionEnd, bool lastBad)
+	int DocumentMapping::writeParagraph(int initialCp, int cpEnd, bool sectionEnd, bool lastBad, int paragraphState)///-----!!!!!
 	{
 		int		cp							=	initialCp;
 		int		fc							=	m_document->FindFileCharPos(cp); 
 		int		fcEnd						=	m_document->FindFileCharPos(cpEnd);
 
-		if (fc < 0 || fcEnd < 0 || fc == fcEnd) 
-			return -1;
-		
-		ParagraphPropertyExceptions* papx	=	findValidPapx(fc);
+		/*if (fc < 0 || fcEnd < 0 || fc == fcEnd)///--------!!!!!
+			return -1;*/ ///----------!!!!!
+
+		ParagraphPropertyExceptions* papx = findValidPapx(fc);
 
 		// get all CHPX between these boundaries to determine the count of runs
-		
+
 		std::vector<CharacterPropertyExceptions*>* chpxs = m_document->GetCharacterPropertyExceptions(fc, fcEnd);
 		std::vector<int>* chpxFcs = m_document->GetFileCharacterPositions(fc, fcEnd);
 
@@ -224,31 +291,34 @@ namespace DocFileFormat
 		}
 
 		// start paragraph
-		
-        m_pXmlWriter->WriteNodeBegin(L"w:p", true);
+		if (paragraphState & START_PARAGRAPH)///---!!!
+		{///---!!!
+			m_pXmlWriter->WriteNodeBegin(L"w:p", true);
 
-		if (false == _paraId.empty())
-		{
-			m_pXmlWriter->WriteAttribute(L"w14:paraId", _paraId);
-		}
-		writeParagraphRsid(papx);
+			if (false == _paraId.empty())
+			{
+				m_pXmlWriter->WriteAttribute(L"w14:paraId", _paraId);
+			}
+			writeParagraphRsid(papx);
+		}///---!!!
 
-// ----------- check for section properties
+
+		// ----------- check for section properties
 		bool isBidi = false;
 		SectionPropertyExceptions* currentSection = findValidSepx(getCurrentSection(cp));
 		if (currentSection)
 		{
 			isBidi = currentSection->isBidi;
 		}
-//-----------------------------------------------------------		
-		//_cacheListNum		= getListNumCache(fc, fcEnd);
+		//-----------------------------------------------------------		
+				//_cacheListNum		= getListNumCache(fc, fcEnd);
 		m_context->_docx->_isSectionPageBreak = 0;
 		if (sectionEnd)
 		{
 			// this is the last paragraph of this section
 			// write properties with section properties
-			
-			if (papx)
+
+			if (papx && (paragraphState & START_PARAGRAPH))//if (papx)
 			{
 				ParagraphPropertiesMapping oMapping(m_pXmlWriter, m_context, m_document, paraEndChpx, isBidi, findValidSepx(cpEnd), _sectionNr);
 				papx->Convert(&oMapping);
@@ -261,8 +331,8 @@ namespace DocFileFormat
 		else
 		{
 			// write properties
-			
-			if (papx)
+
+			if (papx && (paragraphState & START_PARAGRAPH))//if (papx)///---!!!
 			{
 				ParagraphPropertiesMapping oMapping(m_pXmlWriter, m_context, m_document, paraEndChpx, isBidi);
 				papx->Convert(&oMapping);
@@ -280,7 +350,7 @@ namespace DocFileFormat
 
 				int fcChpxStart	=	chpxFcs ? chpxFcs->at(i) : fc;
 				int fcChpxEnd	=	fcEnd;
-				
+
 				if ((chpxFcs) && ( i < chpxFcs->size() - 1))
 					fcChpxEnd = chpxFcs->at(i + 1);
 
@@ -365,24 +435,23 @@ namespace DocFileFormat
 						}
 					}
 				}
-
 				RELEASEOBJECT(chpxChars);
 
 				i++;
 			}
 
 			//end paragraph
-            m_pXmlWriter->WriteNodeEnd(L"w:p");
+			if (paragraphState & END_PARAGRAPH) m_pXmlWriter->WriteNodeEnd(L"w:p");///-----!!!!!
 		}
 		else
 		{
 			//end paragraph
-            m_pXmlWriter->WriteNodeEnd(L"w:p");
+			if (paragraphState & END_PARAGRAPH) m_pXmlWriter->WriteNodeEnd(L"w:p");///-----!!!!!
 		}
 
 		RELEASEOBJECT(chpxFcs);
 		RELEASEOBJECT(chpxs);
-		
+
 		return cpEnd;
 
 		return (std::max)(cp, cpEnd); //ralph_scovile.doc
