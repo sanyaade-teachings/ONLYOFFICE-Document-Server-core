@@ -124,8 +124,8 @@ public:
     virtual void SetSwapRGB(bool bValue){ if (m_pRenderer) m_pRenderer->m_bSwapRGB = bValue; }
     virtual void SetTileImageDpi(const double& dDpi) { if (m_pRenderer) m_pRenderer->m_dDpiTile = dDpi; }
 
-    void Save();
-    void Restore();
+    virtual void Save();
+    virtual void Restore();
 
 public:
 // тип рендерера-----------------------------------------------------------------------------
@@ -350,10 +350,12 @@ public:
 	inline double GetPixH() { return m_pRenderer->GetPixH(); }
 
 	// alpha mask methods
-        void SetAlphaMask(Aggplus::CAlphaMask* pAlphaMask);
+	void SetAlphaMask(Aggplus::CAlphaMask* pAlphaMask);
+	virtual Aggplus::CSoftMask* CreateSoftMask(bool bAlpha) override;
+	virtual void SetSoftMask(Aggplus::CSoftMask* pSoftMask) override;
 
 	// layer methods
-	HRESULT put_LayerOpacity(double dValue);
+	virtual HRESULT put_LayerOpacity(double dValue) override;
 
 	// smart methods
 	void drawHorLine(BYTE align, double y, double x, double r, double penW)

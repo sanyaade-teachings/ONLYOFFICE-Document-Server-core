@@ -38,8 +38,6 @@
 #include "../../../../Common/OfficeFileErrorDescription.h"
 
 #include "../../Presentation/FontCutter.h"
-#include "../../../PPTXFormat/App.h"
-#include "../../../PPTXFormat/Core.h"
 #include "../../../PPTXFormat/Logic/HeadingVariant.h"
 
 #include "../../../XlsxFormat/Xlsx.h"
@@ -75,6 +73,7 @@
 
 #include "../../../../DesktopEditor/common/Directory.h"
 #include "../../../../Common/OfficeFileFormatChecker.h"
+#include "../../../../OfficeUtils/src/OfficeUtils.h"
 
 namespace BinXlsxRW 
 {
@@ -8540,12 +8539,12 @@ _UINT32 BinaryFileWriter::Open(const std::wstring& sInputDir, const std::wstring
 {
 	_UINT32 result = 0;
 
-	OOX::CPath path(sFileDst);
+	OOX::CPath pathDst(sFileDst);
 //создаем папку для media
-    std::wstring mediaDir = path.GetDirectory() + L"media";
+    std::wstring mediaDir = pathDst.GetDirectory() + L"media";
 	NSDirectory::CreateDirectory(mediaDir);
 
-    pOfficeDrawingConverter->SetDstPath(path.GetDirectory() + FILE_SEPARATOR_STR + L"word");
+    pOfficeDrawingConverter->SetDstPath(pathDst.GetDirectory() + FILE_SEPARATOR_STR + L"word");
     pOfficeDrawingConverter->SetMediaDstPath(mediaDir);
 
 	NSBinPptxRW::CBinaryFileWriter& oBufferedStream = *pOfficeDrawingConverter->m_pBinaryWriter;
@@ -8692,7 +8691,7 @@ _UINT32 BinaryFileWriter::Open(const std::wstring& sInputDir, const std::wstring
 		else
 		{
 			int nBase64BufferLen = Base64::Base64EncodeGetRequiredLength(nBinBufferLen, Base64::B64_BASE64_FLAG_NOCRLF);
-			BYTE* pbBase64Buffer = new BYTE[nBase64BufferLen+64];
+			BYTE* pbBase64Buffer = new BYTE[nBase64BufferLen + 64];
 			if(true == Base64_1::Base64Encode(pbBinBuffer, nBinBufferLen, pbBase64Buffer, &nBase64BufferLen))
 			{
 				NSFile::CFileBinary oFile;
@@ -8706,6 +8705,23 @@ _UINT32 BinaryFileWriter::Open(const std::wstring& sInputDir, const std::wstring
 				result = AVS_FILEUTILS_ERROR_CONVERT;
 			}
 			RELEASEARRAYOBJECTS(pbBase64Buffer);
+		}
+		
+		if (fileType == BinXlsxRW::c_oFileTypes::XLSB && pXlsx->hasPivot())
+		{
+			std::wstring sDstFileXlsx = pathDst.GetDirectory() + FILE_SEPARATOR_STR + L"Editor.xlsx";
+			std::wstring sTempUnpackedXLSX = pathDst.GetDirectory() + FILE_SEPARATOR_STR + L"xlsx_unpacked";
+			NSDirectory::CreateDirectory(sTempUnpackedXLSX);
+
+			OOX::CContentTypes oContentTypes;
+			dynamic_cast<OOX::Spreadsheet::CXlsb*>(pXlsx)->SetPropForWriteSheet(sTempUnpackedXLSX, oContentTypes);
+
+			if (true == pXlsx->WriteNative(sTempUnpackedXLSX, oContentTypes))
+			{
+				COfficeUtils oOfficeUtils(NULL);
+				oOfficeUtils.CompressFileOrDirectory(sTempUnpackedXLSX, sDstFileXlsx, true);
+			}
+			NSDirectory::DeleteDirectory(sTempUnpackedXLSX);
 		}
 	}
 
@@ -8759,14 +8775,14 @@ void BinaryFileWriter::WriteContent(OOX::Document *pDocument, NSFontCutter::CEmb
 	if(pXlsx && pXlsx->m_pApp)
 	{
 		nCurPos = this->WriteTableStart(c_oSerTableTypes::App);
-		pXlsx->m_pApp->ToPptxApp()->toPPTY(&m_oBcw->m_oStream);
+		pXlsx->m_pApp->toPPTY(&m_oBcw->m_oStream);
 		this->WriteTableEnd(nCurPos);
 	}
 
 	if(pXlsx && pXlsx->m_pCore)
 	{
 		nCurPos = this->WriteTableStart(c_oSerTableTypes::Core);
-		pXlsx->m_pCore->ToPptxCore()->toPPTY(&m_oBcw->m_oStream);
+		pXlsx->m_pCore->toPPTY(&m_oBcw->m_oStream);
 		this->WriteTableEnd(nCurPos);
 	}
 

@@ -36,8 +36,6 @@
 #include "../../../../Common/OfficeFileFormatChecker.h"
 
 #include "../../Presentation/FontCutter.h"
-#include "../../../PPTXFormat/App.h"
-#include "../../../PPTXFormat/Core.h"
 #include "../../../PPTXFormat/Logic/HeadingVariant.h"
 #include "../../Sheets/Reader/BinaryWriter.h"
 #include "BinEquationWriter.h"
@@ -175,12 +173,10 @@ void BinaryCommonWriter::WriteBorder(const ComplexTypes::Word::CBorder& border)
 	//Val
 		m_oStream.WriteBYTE(c_oSerBorderType::Value);
 		m_oStream.WriteBYTE(c_oSerPropLenType::Byte);
-		switch(border.m_oVal.get().GetValue())
-		{
-		case SimpleTypes::bordervalueNone:
-		case SimpleTypes::bordervalueNil:   m_oStream.WriteBYTE(border_None);   break;
-		default:                            m_oStream.WriteBYTE(border_Single); break;
-		}
+
+		int border_type = border.m_oVal.get().GetValue(); 
+		if (border_type > 0x0ff) border_type = 1;
+		m_oStream.WriteBYTE((BYTE)border_type); // todooo change to long type
 	}
 }
 void BinaryCommonWriter::WriteTblBorders(const OOX::Logic::CTblBorders& Borders)
@@ -832,7 +828,7 @@ void Binary_rPrWriter::Write_rPr(OOX::Logic::CRunProperty* rPr)
 		m_oBcw.WriteTrackRevision(rPr->m_oMoveTo.get());
 		m_oBcw.WriteItemWithLengthEnd(nCurPos);
 	}
-	if (rPr->m_oW.IsInit())
+	if (rPr->m_oW.IsInit() && rPr->m_oW->m_oVal.IsInit())
 	{
 		m_oBcw.m_oStream.WriteBYTE(c_oSerProp_rPrType::CompressText);
 		m_oBcw.m_oStream.WriteBYTE(c_oSerPropLenType::Long);
@@ -1240,6 +1236,18 @@ void Binary_pPrWriter::WriteSpacing(const ComplexTypes::Word::CSpacing& Spacing)
 		m_oBcw.m_oStream.WriteBYTE(c_oSerPropLenType::Long);
 		m_oBcw.m_oStream.WriteLONG(Spacing.m_oAfter->ToTwips());
 	}
+	if (false != Spacing.m_oAfterLines.IsInit())
+	{
+		m_oBcw.m_oStream.WriteBYTE(c_oSerProp_pPrType::Spacing_AfterLines);
+		m_oBcw.m_oStream.WriteBYTE(c_oSerPropLenType::Long);
+		m_oBcw.m_oStream.WriteLONG(Spacing.m_oAfterLines->GetValue());
+	}
+	if (false != Spacing.m_oBeforeLines.IsInit())
+	{
+		m_oBcw.m_oStream.WriteBYTE(c_oSerProp_pPrType::Spacing_BeforeLines);
+		m_oBcw.m_oStream.WriteBYTE(c_oSerPropLenType::Long);
+		m_oBcw.m_oStream.WriteLONG(Spacing.m_oBeforeLines->GetValue());
+	}	
 }
 void Binary_pPrWriter::WriteTabs(const OOX::Logic::CTabs& Tab, const nullable<ComplexTypes::Word::CInd>& oInd)
 {
@@ -1526,6 +1534,12 @@ void Binary_pPrWriter::WriteSectPr (OOX::Logic::CSectionProperty* pSectPr)
 			m_oBcw.m_oStream.WriteBOOL(pSectPr->m_oRtlGutter->m_oVal.ToBool());
 		m_oBcw.WriteItemEnd(nCurPos);
 	}
+	if (pSectPr->m_oDocGrid.IsInit())
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSerProp_secPrType::docGrid);
+		WriteDocGrid(pSectPr->m_oDocGrid.get());
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
 }
 void Binary_pPrWriter::WritePageSettings(OOX::Logic::CSectionProperty* pSectPr)
 {
@@ -1772,6 +1786,29 @@ void Binary_pPrWriter::WriteColumns(const OOX::Logic::CColumns& columns)
 	{
 		nCurPos = m_oBcw.WriteItemStart(c_oSerProp_Columns::Column);
 		WriteColumn(*columns.m_arrColumns[i]);
+		m_oBcw.WriteItemWithLengthEnd(nCurPos);
+	}
+}
+void Binary_pPrWriter::WriteDocGrid(const ComplexTypes::Word::CDocGrid& docGrid)
+{
+	int nCurPos = 0;
+
+	if (docGrid.m_oType.IsInit())
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSerProp_DocGrid::Type);
+		m_oBcw.m_oStream.WriteBYTE(docGrid.m_oType->GetValue());
+		m_oBcw.WriteItemWithLengthEnd(nCurPos);
+	}
+	if (docGrid.m_oCharSpace.IsInit())
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSerProp_DocGrid::CharSpace);
+		m_oBcw.m_oStream.WriteLONG(docGrid.m_oCharSpace->GetValue());
+		m_oBcw.WriteItemWithLengthEnd(nCurPos);
+	}
+	if (docGrid.m_oLinePitch.IsInit())
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSerProp_DocGrid::LinePitch);
+		m_oBcw.m_oStream.WriteLONG(docGrid.m_oLinePitch->GetValue());
 		m_oBcw.WriteItemWithLengthEnd(nCurPos);
 	}
 }
@@ -2266,7 +2303,7 @@ void Binary_tblPrWriter::WriteRowPr(const OOX::Logic::CTableRowProperties& rowPr
 		m_oBcw.WriteItemWithLengthEnd(nCurPos);
 	}
 	//Jc
-	if (rowPr.m_oJc.IsInit())
+	if (rowPr.m_oJc.IsInit() && rowPr.m_oJc->m_oVal.IsInit())
 	{
 		m_oBcw.m_oStream.WriteBYTE(c_oSerProp_rowPrType::Jc);
 		m_oBcw.m_oStream.WriteBYTE(c_oSerPropLenType::Byte);
@@ -8772,6 +8809,42 @@ void BinarySettingsTableWriter::WriteSettingsContent(OOX::CSettings& oSettings, 
 		m_oBcw.m_oStream.WriteLONG(*oSettings.m_oConsecutiveHyphenLimit->m_oVal);
 		m_oBcw.WriteItemEnd(nCurPos);
 	}
+	if ((oSettings.m_oDrawingGridHorizontalOrigin.IsInit()) && (oSettings.m_oDrawingGridHorizontalOrigin->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DrawingGridHorizontalOrigin);
+		m_oBcw.m_oStream.WriteLONG(oSettings.m_oDrawingGridHorizontalOrigin->m_oVal->ToTwips());
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
+	if ((oSettings.m_oDrawingGridHorizontalSpacing.IsInit()) && (oSettings.m_oDrawingGridHorizontalSpacing->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DrawingGridHorizontalSpacing);
+		m_oBcw.m_oStream.WriteLONG(oSettings.m_oDrawingGridHorizontalSpacing->m_oVal->ToTwips());
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
+	if ((oSettings.m_oDrawingGridVerticalOrigin.IsInit()) && (oSettings.m_oDrawingGridVerticalOrigin->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DrawingGridVerticalOrigin);
+		m_oBcw.m_oStream.WriteLONG(oSettings.m_oDrawingGridVerticalOrigin->m_oVal->ToTwips());
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
+	if ((oSettings.m_oDrawingGridVerticalSpacing.IsInit()) && (oSettings.m_oDrawingGridVerticalSpacing->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DrawingGridVerticalSpacing);
+		m_oBcw.m_oStream.WriteLONG(oSettings.m_oDrawingGridVerticalSpacing->m_oVal->ToTwips());
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
+	if ((oSettings.m_oDisplayHorizontalDrawingGridEvery.IsInit()) && (oSettings.m_oDisplayHorizontalDrawingGridEvery->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DisplayHorizontalDrawingGridEvery);
+		m_oBcw.m_oStream.WriteLONG(*oSettings.m_oDisplayHorizontalDrawingGridEvery->m_oVal);
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
+	if ((oSettings.m_oDisplayVerticalDrawingGridEvery.IsInit()) && (oSettings.m_oDisplayVerticalDrawingGridEvery->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DisplayVerticalDrawingGridEvery);
+		m_oBcw.m_oStream.WriteLONG(*oSettings.m_oDisplayVerticalDrawingGridEvery->m_oVal);
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
 };
 void BinarySettingsTableWriter::WriteMathPr(const OOX::Logic::CMathPr &pMathPr)
 {
@@ -9624,18 +9697,14 @@ void BinaryFileWriter::intoBindoc(const std::wstring& sSrcPath)
 	if ((pDocx) && (pDocx->m_pApp))
 	{
 		nCurPos = this->WriteTableStart(BinDocxRW::c_oSerTableTypes::App);
-		PPTX::App* pAppTmp = pDocx->m_pApp->ToPptxApp();
-		pAppTmp->toPPTY(&oBufferedStream);
-		delete pAppTmp;
+		pDocx->m_pApp->toPPTY(&oBufferedStream);
 		this->WriteTableEnd(nCurPos);
 	}
 
 	if ((pDocx) && (pDocx->m_pCore))
 	{
 		nCurPos = this->WriteTableStart(BinDocxRW::c_oSerTableTypes::Core);
-		PPTX::Core* pCoreTmp = pDocx->m_pCore->ToPptxCore();
-		pCoreTmp->toPPTY(&oBufferedStream);
-		delete pCoreTmp;
+		pDocx->m_pCore->toPPTY(&oBufferedStream);
 		this->WriteTableEnd(nCurPos);
 	}
 	if (NULL != m_oParamsWriter.m_pTheme)
