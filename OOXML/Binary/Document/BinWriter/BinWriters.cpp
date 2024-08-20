@@ -36,8 +36,6 @@
 #include "../../../../Common/OfficeFileFormatChecker.h"
 
 #include "../../Presentation/FontCutter.h"
-#include "../../../PPTXFormat/App.h"
-#include "../../../PPTXFormat/Core.h"
 #include "../../../PPTXFormat/Logic/HeadingVariant.h"
 #include "../../Sheets/Reader/BinaryWriter.h"
 #include "BinEquationWriter.h"
@@ -1240,6 +1238,18 @@ void Binary_pPrWriter::WriteSpacing(const ComplexTypes::Word::CSpacing& Spacing)
 		m_oBcw.m_oStream.WriteBYTE(c_oSerPropLenType::Long);
 		m_oBcw.m_oStream.WriteLONG(Spacing.m_oAfter->ToTwips());
 	}
+	if (false != Spacing.m_oAfterLines.IsInit())
+	{
+		m_oBcw.m_oStream.WriteBYTE(c_oSerProp_pPrType::Spacing_AfterLines);
+		m_oBcw.m_oStream.WriteBYTE(c_oSerPropLenType::Long);
+		m_oBcw.m_oStream.WriteLONG(Spacing.m_oAfterLines->GetValue());
+	}
+	if (false != Spacing.m_oBeforeLines.IsInit())
+	{
+		m_oBcw.m_oStream.WriteBYTE(c_oSerProp_pPrType::Spacing_BeforeLines);
+		m_oBcw.m_oStream.WriteBYTE(c_oSerPropLenType::Long);
+		m_oBcw.m_oStream.WriteLONG(Spacing.m_oBeforeLines->GetValue());
+	}	
 }
 void Binary_pPrWriter::WriteTabs(const OOX::Logic::CTabs& Tab, const nullable<ComplexTypes::Word::CInd>& oInd)
 {
@@ -8801,6 +8811,42 @@ void BinarySettingsTableWriter::WriteSettingsContent(OOX::CSettings& oSettings, 
 		m_oBcw.m_oStream.WriteLONG(*oSettings.m_oConsecutiveHyphenLimit->m_oVal);
 		m_oBcw.WriteItemEnd(nCurPos);
 	}
+	if ((oSettings.m_oDrawingGridHorizontalOrigin.IsInit()) && (oSettings.m_oDrawingGridHorizontalOrigin->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DrawingGridHorizontalOrigin);
+		m_oBcw.m_oStream.WriteLONG(oSettings.m_oDrawingGridHorizontalOrigin->m_oVal->ToTwips());
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
+	if ((oSettings.m_oDrawingGridHorizontalSpacing.IsInit()) && (oSettings.m_oDrawingGridHorizontalSpacing->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DrawingGridHorizontalSpacing);
+		m_oBcw.m_oStream.WriteLONG(oSettings.m_oDrawingGridHorizontalSpacing->m_oVal->ToTwips());
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
+	if ((oSettings.m_oDrawingGridVerticalOrigin.IsInit()) && (oSettings.m_oDrawingGridVerticalOrigin->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DrawingGridVerticalOrigin);
+		m_oBcw.m_oStream.WriteLONG(oSettings.m_oDrawingGridVerticalOrigin->m_oVal->ToTwips());
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
+	if ((oSettings.m_oDrawingGridVerticalSpacing.IsInit()) && (oSettings.m_oDrawingGridVerticalSpacing->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DrawingGridVerticalSpacing);
+		m_oBcw.m_oStream.WriteLONG(oSettings.m_oDrawingGridVerticalSpacing->m_oVal->ToTwips());
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
+	if ((oSettings.m_oDisplayHorizontalDrawingGridEvery.IsInit()) && (oSettings.m_oDisplayHorizontalDrawingGridEvery->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DisplayHorizontalDrawingGridEvery);
+		m_oBcw.m_oStream.WriteLONG(*oSettings.m_oDisplayHorizontalDrawingGridEvery->m_oVal);
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
+	if ((oSettings.m_oDisplayVerticalDrawingGridEvery.IsInit()) && (oSettings.m_oDisplayVerticalDrawingGridEvery->m_oVal.IsInit()))
+	{
+		nCurPos = m_oBcw.WriteItemStart(c_oSer_SettingsType::DisplayVerticalDrawingGridEvery);
+		m_oBcw.m_oStream.WriteLONG(*oSettings.m_oDisplayVerticalDrawingGridEvery->m_oVal);
+		m_oBcw.WriteItemEnd(nCurPos);
+	}
 };
 void BinarySettingsTableWriter::WriteMathPr(const OOX::Logic::CMathPr &pMathPr)
 {
@@ -9653,18 +9699,14 @@ void BinaryFileWriter::intoBindoc(const std::wstring& sSrcPath)
 	if ((pDocx) && (pDocx->m_pApp))
 	{
 		nCurPos = this->WriteTableStart(BinDocxRW::c_oSerTableTypes::App);
-		PPTX::App* pAppTmp = pDocx->m_pApp->ToPptxApp();
-		pAppTmp->toPPTY(&oBufferedStream);
-		delete pAppTmp;
+		pDocx->m_pApp->toPPTY(&oBufferedStream);
 		this->WriteTableEnd(nCurPos);
 	}
 
 	if ((pDocx) && (pDocx->m_pCore))
 	{
 		nCurPos = this->WriteTableStart(BinDocxRW::c_oSerTableTypes::Core);
-		PPTX::Core* pCoreTmp = pDocx->m_pCore->ToPptxCore();
-		pCoreTmp->toPPTY(&oBufferedStream);
-		delete pCoreTmp;
+		pDocx->m_pCore->toPPTY(&oBufferedStream);
 		this->WriteTableEnd(nCurPos);
 	}
 	if (NULL != m_oParamsWriter.m_pTheme)
