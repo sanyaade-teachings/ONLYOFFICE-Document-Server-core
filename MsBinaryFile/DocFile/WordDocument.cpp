@@ -536,6 +536,7 @@ namespace DocFileFormat
 		for (size_t i = 0; i < AllPapxFkps->size(); ++i)
 		{
 			FormattedDiskPagePAPX*& iter = AllPapxFkps->at(i);
+
 			for (unsigned int j = 0; j < (iter)->grppapxSize; ++j)
 			{
 				int nVal = (iter)->rgfc[j];
@@ -958,6 +959,10 @@ namespace DocFileFormat
 		{
 			RELEASEOBJECT( intVector );
 		}
+		else 
+		{
+			intVector->push_back(fcMax);
+		}
 
 		return intVector;
 	}
@@ -973,6 +978,7 @@ namespace DocFileFormat
 			FormattedDiskPageCHPX *fkp = AllChpxFkps->at(i);
 
 // get the CHPX
+
 			for (unsigned int j = 0; j < fkp->grpchpxSize; ++j)
 			{
 				if ( ( fkp->rgfc[j] < fcMin ) && ( fkp->rgfc[j + 1] > fcMin ) )

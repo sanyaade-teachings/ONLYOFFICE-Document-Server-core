@@ -347,11 +347,16 @@ namespace DocFileFormat
 				//this piece is before the requested range
 				continue;
 			}
-			if (pcdFcEnd == fcStart)///---!!!
+			if (pcdFcEnd == fcStart)
 			{
-				if (!ReadSymbolsBuffer((int)fcStart, 1, pcd.code_page, word, encodingChars))
+				int getB = 1;
+				if (pcd.code_page == ENCODING_UTF16)
+				{
+					getB *= 2;///----1!!!??????
+				}
+				if (!ReadSymbolsBuffer((int)fcStart, getB, pcd.code_page, word, encodingChars))
 					break;
-			}///---!!!
+			}
 			else if ((fcStart >= (int)pcd.fc) && (fcEnd > pcdFcEnd))
 			{
 				//requested char range starts at this piece
