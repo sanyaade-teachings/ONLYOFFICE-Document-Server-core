@@ -106,6 +106,7 @@ METAFILE_PATH = $$PWD/../../raster/Metafile
 			$$METAFILE_PATH/svg/SvgObjects/CMask.h \
 			$$METAFILE_PATH/svg/SvgObjects/CPattern.h \
 			$$METAFILE_PATH/svg/SvgObjects/CSymbol.h \
+			$$METAFILE_PATH/svg/SvgObjects/CSwitch.h \
 			$$METAFILE_PATH/svg/SvgObjects/CMarker.h \
 			$$METAFILE_PATH/svg/SvgObjects/CImage.h \
 			$$METAFILE_PATH/svg/SvgObjects/CLine.h \
@@ -116,6 +117,7 @@ METAFILE_PATH = $$PWD/../../raster/Metafile
 			$$METAFILE_PATH/svg/SvgObjects/CText.h \
 			$$METAFILE_PATH/svg/SvgObjects/CUse.h \
 			$$METAFILE_PATH/svg/SvgObjects/CPolyline.h \
+			$$METAFILE_PATH/svg/SvgObjects/CFont.h \
 			$$METAFILE_PATH/svg/SvgObjects/CStyle.h \
 			$$METAFILE_PATH/svg/SvgObjects/CObjectBase.h \
 			$$METAFILE_PATH/svg/SvgUtils.h
@@ -130,6 +132,7 @@ METAFILE_PATH = $$PWD/../../raster/Metafile
 			$$METAFILE_PATH/svg/SvgObjects/CMarker.cpp \
 			$$METAFILE_PATH/svg/SvgObjects/CPattern.cpp \
 			$$METAFILE_PATH/svg/SvgObjects/CSymbol.cpp \
+			$$METAFILE_PATH/svg/SvgObjects/CSwitch.cpp \
 			$$METAFILE_PATH/svg/SvgObjects/CImage.cpp \
 			$$METAFILE_PATH/svg/SvgObjects/CLine.cpp \
 			$$METAFILE_PATH/svg/SvgObjects/CRect.cpp \
@@ -139,6 +142,7 @@ METAFILE_PATH = $$PWD/../../raster/Metafile
 			$$METAFILE_PATH/svg/SvgObjects/CText.cpp \
 			$$METAFILE_PATH/svg/SvgObjects/CUse.cpp \
 			$$METAFILE_PATH/svg/SvgObjects/CPolyline.cpp \
+			$$METAFILE_PATH/svg/SvgObjects/CFont.cpp \
 			$$METAFILE_PATH/svg/SvgObjects/CObjectBase.cpp \
 			$$METAFILE_PATH/svg/SvgObjects/CStyle.cpp
 

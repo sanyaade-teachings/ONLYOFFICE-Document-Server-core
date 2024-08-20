@@ -3,8 +3,6 @@
 
 #include "CObjectBase.h"
 
-#include "../../../../graphics/pro/Fonts.h"
-
 class CSvgFile;
 
 namespace SVG
@@ -70,6 +68,7 @@ namespace SVG
 		friend class CMask;
 		friend class CTSpan;
 		friend class CMarker;
+		friend class CSwitch;
 		friend class CPattern;
 		friend class CGradient;
 		friend class CClipPath;

@@ -88,6 +88,8 @@ namespace NSGraphics
 
 		virtual void SetSwapRGB(bool bValue) = 0;
 		virtual void SetTileImageDpi(const double& dDpi) = 0;
+		virtual void Save() = 0;
+		virtual void Restore() = 0;
 
 	public:
 		virtual void CreateFromBgraFrame(CBgraFrame* pFrame) = 0;
@@ -120,6 +122,8 @@ namespace NSGraphics
 
 		//alpha mask methods
 		virtual void SetAlphaMask(Aggplus::CAlphaMask* pAlphaMask) = 0;
+		virtual Aggplus::CSoftMask* CreateSoftMask(bool bAlpha) = 0;
+		virtual void SetSoftMask(Aggplus::CSoftMask* pSoftMask) = 0;
 
 		// smart methods
 		virtual void drawHorLine(BYTE align, double y, double x, double r, double penW) = 0;
