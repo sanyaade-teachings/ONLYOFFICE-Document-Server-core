@@ -1381,6 +1381,13 @@ namespace Aggplus
 			return WrongState;
 		}
 
+		//CImage oImg;
+		//oImg.Create(pCurrentGraphicsLayer->GetBuffer(), m_frame_buffer.ren_buf().width(), m_frame_buffer.ren_buf().height(), m_frame_buffer.ren_buf().stride(), true);
+		//oImg.SaveFile(NSFile::GetProcessDirectory() + L"/L.png", 4);
+
+		//oImg.Create(pBuffer, m_frame_buffer.ren_buf().width(), m_frame_buffer.ren_buf().height(), m_frame_buffer.ren_buf().stride(), true);
+		//oImg.SaveFile(NSFile::GetProcessDirectory() + L"/1.png", 4);
+
 		m_frame_buffer.ren_buf().attach(pBuffer, m_frame_buffer.ren_buf().width(), m_frame_buffer.ren_buf().height(), m_frame_buffer.ren_buf().stride());
 
 		if (m_pAlphaMask)
@@ -1401,6 +1408,9 @@ namespace Aggplus
 		}
 		else if (m_pSoftMask)
 		{
+			//oImg.Create(m_pSoftMask->GetBuffer(), m_frame_buffer.ren_buf().width(), m_frame_buffer.ren_buf().height(), m_frame_buffer.ren_buf().stride(), true);
+			//oImg.SaveFile(NSFile::GetProcessDirectory() + L"/M.png", 4);
+
 			switch(m_pSoftMask->GetDataType())
 			{
 			case EMaskDataType::ImageBuffer:
@@ -1425,6 +1435,9 @@ namespace Aggplus
 			else
 				Aggplus::BlendTo(pCurrentGraphicsLayer, m_frame_buffer.pixfmt());
 		}
+
+		//oImg.Create(pBuffer, m_frame_buffer.ren_buf().width(), m_frame_buffer.ren_buf().height(), m_frame_buffer.ren_buf().stride(), true);
+		//oImg.SaveFile(NSFile::GetProcessDirectory() + L"/2.png", 4);
 
 		RELEASEINTERFACE(pCurrentGraphicsLayer);
 		return Ok;
@@ -1494,32 +1507,29 @@ namespace Aggplus
 	template<class Rasterizer, class Renderer, class Scanline>
 	void CGraphics::render_scanlines_3(Rasterizer& ras, Renderer& ren, Scanline& sl)
 	{
+		//CImage oImg;
+		//oImg.Create(m_frame_buffer.ren_buf().buf(), m_frame_buffer.ren_buf().width(), m_frame_buffer.ren_buf().height(), m_frame_buffer.ren_buf().stride(), true);
+		//oImg.SaveFile(NSFile::GetProcessDirectory() + L"/1.png", 4);
+
 		if (!m_oClip.IsClip())
 		{
 			agg::render_scanlines(ras, sl, ren);
 		}
 		else
 		{
+			typedef agg::scanline_p8 sbool_scanline_type;
+
+			sbool_scanline_type sl1;
+			sbool_scanline_type sl2;
+
 			if (!m_oClip.IsClip2())
-			{
-				typedef agg::scanline_p8 sbool_scanline_type;
-
-				sbool_scanline_type sl1;
-				sbool_scanline_type sl2;
-
 				agg::sbool_combine_shapes_aa(agg::sbool_and, ras, m_oClip.m_rasterizer, sl1, sl2, sl, ren);
-			}
 			else
-			{
-
-				typedef agg::scanline_p8 sbool_scanline_type;
-
-				sbool_scanline_type sl1;
-				sbool_scanline_type sl2;
-
 				agg::sbool_combine_shapes_aa(agg::sbool_and, ras, (1 == m_oClip.m_lCurStorage) ? m_oClip.m_storage1 : m_oClip.m_storage2, sl1, sl2, sl, ren);
-			}
 		}
+
+		//oImg.Create(m_frame_buffer.ren_buf().buf(), m_frame_buffer.ren_buf().width(), m_frame_buffer.ren_buf().height(), m_frame_buffer.ren_buf().stride(), true);
+		//oImg.SaveFile(NSFile::GetProcessDirectory() + L"/2.png", 4);
 	}
 
 	template<class Renderer>

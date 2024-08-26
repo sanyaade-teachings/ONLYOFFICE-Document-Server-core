@@ -812,6 +812,17 @@ namespace agg
                 calc_type dr = p[Order::R];
                 calc_type dg = p[Order::G];
                 calc_type db = p[Order::B];
+                if (p[Order::A] == 0 && dr == 0 && dg == 0 && db == 0)
+                {
+                    // происходит серая граница
+                    // TODO нужно иначе вычислить граничные пикселы
+                    d1a = 0;
+                    dr = 255;
+                    dg = 255;
+                    db = 255;
+                    if (sa != base_mask)
+                        return;
+                }
                 p[Order::R] = (value_type)((sr * dr + sr * d1a + dr * s1a + base_mask) >> base_shift);
                 p[Order::G] = (value_type)((sg * dg + sg * d1a + dg * s1a + base_mask) >> base_shift);
                 p[Order::B] = (value_type)((sb * db + sb * d1a + db * s1a + base_mask) >> base_shift);
