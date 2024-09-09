@@ -5301,6 +5301,8 @@ void CDrawingConverter::CheckBrushShape(PPTX::Logic::SpTreeElem* oElem, XmlUtils
 					oElem->m_binaryData = pFind->second;
 				}
 			}
+			nullable_string sTitle;
+			XmlMacroReadAttributeBase(oNodeFillID, L"o:title", sTitle);
 
 			nullable_string sRid;
             XmlMacroReadAttributeBase(oNodeFillID, L"r:id", sRid);
@@ -5311,7 +5313,7 @@ void CDrawingConverter::CheckBrushShape(PPTX::Logic::SpTreeElem* oElem, XmlUtils
 			nullable_string sPictId;
             XmlMacroReadAttributeBase(oNodeFillID, L"r:pict", sPictId);
 
-			if (sRid.is_init() || sRelid.is_init() || sPictId.is_init() || oElem->m_binaryData.IsInit())
+			if (sRid.is_init() || sRelid.is_init() || sPictId.is_init() || oElem->m_binaryData.IsInit() || sTitle.IsInit())
 			{			
 				nullable_string sType;
                 XmlMacroReadAttributeBase(oNodeFillID, L"type", sType);
@@ -5320,6 +5322,8 @@ void CDrawingConverter::CheckBrushShape(PPTX::Logic::SpTreeElem* oElem, XmlUtils
 				
 				if (pPicture)
 				{
+					pPicture->nvPicPr.cNvPr.descr = sTitle;
+
 					pBlipFill = &pPicture->blipFill;
 				}
 				else
@@ -5332,7 +5336,7 @@ void CDrawingConverter::CheckBrushShape(PPTX::Logic::SpTreeElem* oElem, XmlUtils
                 pBlipFill->m_namespace = L"a";
 
 				pBlipFill->blip = new PPTX::Logic::Blip();
-				
+
 				if (oElem->m_binaryData.IsInit() && oElem->m_binaryData->m_sData.IsInit())
 				{
 					pBlipFill->blip->dataFilepathImageA = "data:base64," + *oElem->m_binaryData->m_sData;
@@ -5394,13 +5398,13 @@ void CDrawingConverter::CheckBrushShape(PPTX::Logic::SpTreeElem* oElem, XmlUtils
 	if (pPicture)
 	{
 		pSpPr->Fill.m_type = PPTX::Logic::UniFill::notInit;
-
+		
 		if (false == pPicture->blipFill.blip.is_init())
-		{//MSF_Lec3-4.docx
-			oElem->InitElem(NULL);
+		{			
+			oElem->InitElem(NULL); //MSF_Lec3-4.docx
 		}
 	}
-	else
+	else // Shape, ..
 	{
 		// default params for fill shape
 		if (!pSpPr->Fill.Fill.is_init())
@@ -5663,9 +5667,10 @@ void CDrawingConverter::CheckPenShape(PPTX::Logic::SpTreeElem* oElem, XmlUtils::
 			if (!pSpPr->ln.is_init())
 				pSpPr->ln = new PPTX::Logic::Ln();
 
-            if		(*sLineJoin == L"bevel")	pSpPr->ln->Join.type = PPTX::Logic::JoinBevel;
-            else if (*sLineJoin == L"miter")	pSpPr->ln->Join.type = PPTX::Logic::JoinMiter;
-            else if (*sLineJoin == L"round")	pSpPr->ln->Join.type = PPTX::Logic::JoinRound;
+			pSpPr->ln->Join.Init();
+            if		(*sLineJoin == L"bevel")	pSpPr->ln->Join->type = PPTX::Logic::JoinBevel;
+            else if (*sLineJoin == L"miter")	pSpPr->ln->Join->type = PPTX::Logic::JoinMiter;
+            else if (*sLineJoin == L"round")	pSpPr->ln->Join->type = PPTX::Logic::JoinRound;
 		}		
 	}
 	nullable_string sStroked;

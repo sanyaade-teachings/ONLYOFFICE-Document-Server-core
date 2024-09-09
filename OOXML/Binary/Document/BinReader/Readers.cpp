@@ -1364,10 +1364,16 @@ int Binary_pPrReader::ReadBorder(BYTE type, long length, void* poResult)
 	else if ( c_oSerBorderType::Value == type )
 	{
 		pBorder->m_oVal.Init();
-		if (border_Single == m_oBufferedStream.GetUChar())
+
+		if (0 != m_oBufferedStream.GetUChar())
 			pBorder->m_oVal->SetValue(SimpleTypes::bordervalueSingle);
 		else
 			pBorder->m_oVal->SetValue(SimpleTypes::bordervalueNone);
+	}
+	else if (c_oSerBorderType::ValueType == type)
+	{
+		pBorder->m_oVal.Init();
+		pBorder->m_oVal->SetValue((SimpleTypes::EBorder)m_oBufferedStream.GetLong());
 	}
 	else if ( c_oSerBorderType::ColorTheme == type )
 	{
