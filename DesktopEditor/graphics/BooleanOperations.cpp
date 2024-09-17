@@ -706,20 +706,20 @@ CBooleanOperations::CBooleanOperations(CGraphicsPath* path1,
 	Path1(path1),
 	Path2(path2),
 	Result(new CGraphicsPath),
-	IsDeleted(false)
+	IsDeleted(true)
 {
 	TraceBoolean();
 }
 
 CBooleanOperations::~CBooleanOperations()
 {
-	if (!IsDeleted)
+	if (IsDeleted)
 		delete Result;
 }
 
-CGraphicsPath *CBooleanOperations::GetResult()
+CGraphicsPath *CBooleanOperations::GetResult(const bool& isDeleted)
 {
-	IsDeleted = true;
+	IsDeleted = isDeleted;
 	return Result;
 }
 
@@ -1866,8 +1866,8 @@ std::vector<CGraphicsPath*> GetSubPaths(CGraphicsPath* path)
 				PointD firstPoint = subPath->GetPoints(0, 1)[0];
 				subPath->LineTo(firstPoint.X, firstPoint.Y);
 				subPath->CloseFigure();
-				result.push_back(subPath->Clone());
-				subPath->Reset();
+				result.push_back(subPath);
+				subPath = new CGraphicsPath();
 			}
 			subPath->StartFigure();
 			std::vector<PointD> points = path->GetPoints(i, 1);
@@ -1892,8 +1892,8 @@ std::vector<CGraphicsPath*> GetSubPaths(CGraphicsPath* path)
 			PointD firstPoint = subPath->GetPoints(0, 1)[0];
 			subPath->LineTo(firstPoint.X, firstPoint.Y);
 			subPath->CloseFigure();
-			result.push_back(subPath->Clone());
-			subPath->Reset();
+			result.push_back(subPath);
+			subPath = new CGraphicsPath();
 			close = true;
 		}
 	}
@@ -1951,9 +1951,20 @@ CGraphicsPath* CalcBooleanOperation(CGraphicsPath *path1, CGraphicsPath *path2, 
 		for (size_t j = 0; j < paths2.size(); j++)
 		{
 			CBooleanOperations operation(paths1[i], paths2[j], op);
-			paths.push_back(operation.GetResult());
+			CGraphicsPath* result = operation.GetResult(false);
+
+			if (result == paths1[i] || result == paths2[j])
+				paths.push_back(result->Clone());
+			else
+				paths.push_back(result);
 		}
 	}
+
+	for (std::vector<CGraphicsPath*>::iterator i = paths1.begin(); i != paths1.end(); i++)
+		delete (*i);
+
+	for (std::vector<CGraphicsPath*>::iterator i = paths2.begin(); i != paths2.end(); i++)
+		delete (*i);
 
 	return CollectPath(paths);
 }

@@ -102,7 +102,7 @@ namespace Aggplus
 	public:
 		CBooleanOperations(CGraphicsPath* path1, CGraphicsPath* path2, BooleanOpType op);
 		~CBooleanOperations();
-		CGraphicsPath* GetResult();
+		CGraphicsPath* GetResult(const bool& isDeleted = true);
 
 		// BooleanOp
 		void TraceBoolean();
@@ -162,7 +162,7 @@ namespace Aggplus
 
 		std::vector<std::shared_ptr<Location>> Locations;
 
-		bool IsDeleted = false;
+		bool IsDeleted = true;
 	};
 } // namespace Aggplus
 
